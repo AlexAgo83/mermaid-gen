@@ -1,8 +1,267 @@
+import CodeMirror from "@uiw/react-codemirror";
+import {
+  startTransition,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type {
+  PointerEvent as ReactPointerEvent,
+  WheelEvent as ReactWheelEvent,
+} from "react";
 import "./App.css";
+import { downloadDiagramAsPng, downloadDiagramAsSvg } from "./lib/exporters";
+import {
+  DEFAULT_MERMAID_SOURCE,
+  extractSvgMetrics,
+  renderMermaidDiagram,
+  type SvgMetrics,
+} from "./lib/mermaid";
+
+type Viewport = {
+  scale: number;
+  x: number;
+  y: number;
+};
+
+type RenderState =
+  | {
+      status: "loading";
+      error: null;
+      svg: string;
+      metrics: SvgMetrics | null;
+    }
+  | {
+      status: "ready";
+      error: null;
+      svg: string;
+      metrics: SvgMetrics;
+    }
+  | {
+      status: "error";
+      error: string;
+      svg: string;
+      metrics: null;
+    };
+
+const MIN_SCALE = 0.35;
+const MAX_SCALE = 2.4;
+
+function clampScale(nextScale: number) {
+  return Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
+}
+
+function centerViewport(
+  container: HTMLElement,
+  metrics: SvgMetrics,
+  scale: number,
+): Viewport {
+  const x = (container.clientWidth - metrics.width * scale) / 2;
+  const y = (container.clientHeight - metrics.height * scale) / 2;
+
+  return { scale, x, y };
+}
+
+function fitViewport(container: HTMLElement, metrics: SvgMetrics): Viewport {
+  const widthScale = container.clientWidth / metrics.width;
+  const heightScale = container.clientHeight / metrics.height;
+  const scale = clampScale(Math.min(widthScale, heightScale) * 0.92);
+
+  return centerViewport(container, metrics, scale);
+}
 
 function App() {
+  const [source, setSource] = useState(DEFAULT_MERMAID_SOURCE);
+  const [prompt, setPrompt] = useState("");
+  const [isPreviewFocused, setIsPreviewFocused] = useState(false);
+  const [isRendering, setIsRendering] = useState(true);
+  const [viewport, setViewport] = useState<Viewport>({
+    scale: 1,
+    x: 0,
+    y: 0,
+  });
+  const [renderState, setRenderState] = useState<RenderState>({
+    status: "loading",
+    error: null,
+    svg: "",
+    metrics: null,
+  });
+  const deferredSource = useDeferredValue(source);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    originX: number;
+    originY: number;
+  } | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    void renderMermaidDiagram(deferredSource)
+      .then((svg) => {
+        if (!active) {
+          return;
+        }
+
+        const metrics = extractSvgMetrics(svg);
+        setRenderState({
+          status: "ready",
+          error: null,
+          svg,
+          metrics,
+        });
+        setIsRendering(false);
+      })
+      .catch((error: unknown) => {
+        if (!active) {
+          return;
+        }
+
+        const message =
+          error instanceof Error ? error.message : "Unable to render Mermaid.";
+
+        setRenderState({
+          status: "error",
+          error: message,
+          svg: "",
+          metrics: null,
+        });
+        setIsRendering(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [deferredSource]);
+
+  useEffect(() => {
+    if (renderState.status !== "ready" || !previewRef.current) {
+      return;
+    }
+
+    const container = previewRef.current;
+    const applyFit = () => {
+      setViewport(fitViewport(container, renderState.metrics));
+    };
+
+    applyFit();
+
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      applyFit();
+    });
+
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+    };
+  }, [renderState]);
+
+  const canExport = renderState.status === "ready";
+
+  const previewTransform = useMemo(
+    () =>
+      `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.scale})`,
+    [viewport],
+  );
+
+  const handleZoom = (delta: number) => {
+    if (renderState.status !== "ready" || !previewRef.current) {
+      return;
+    }
+
+    const container = previewRef.current;
+    const nextScale = clampScale(viewport.scale + delta);
+    setViewport(centerViewport(container, renderState.metrics, nextScale));
+  };
+
+  const handleReset = () => {
+    if (renderState.status !== "ready" || !previewRef.current) {
+      return;
+    }
+
+    setViewport(centerViewport(previewRef.current, renderState.metrics, 1));
+  };
+
+  const handleFit = () => {
+    if (renderState.status !== "ready" || !previewRef.current) {
+      return;
+    }
+
+    setViewport(fitViewport(previewRef.current, renderState.metrics));
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (renderState.status !== "ready") {
+      return;
+    }
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: viewport.x,
+      originY: viewport.y,
+    };
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    setViewport((current) => ({
+      ...current,
+      x: drag.originX + deltaX,
+      y: drag.originY + deltaY,
+    }));
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId === event.pointerId) {
+      dragRef.current = null;
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  const handleWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
+    if (renderState.status !== "ready" || !previewRef.current) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const rect = previewRef.current.getBoundingClientRect();
+    const cursorX = event.clientX - rect.left;
+    const cursorY = event.clientY - rect.top;
+    const nextScale = clampScale(
+      viewport.scale + (event.deltaY < 0 ? 0.12 : -0.12),
+    );
+    const ratio = nextScale / viewport.scale;
+    const nextX = cursorX - (cursorX - viewport.x) * ratio;
+    const nextY = cursorY - (cursorY - viewport.y) * ratio;
+
+    setViewport({
+      scale: nextScale,
+      x: nextX,
+      y: nextY,
+    });
+  };
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell${isPreviewFocused ? " is-preview-focused" : ""}`}>
       <header className="topbar">
         <div className="brand">
           <img className="brand-mark" src="/icon.svg" alt="" />
@@ -18,39 +277,154 @@ function App() {
         </div>
       </header>
 
-      <main className="foundation-layout">
-        <section className="panel panel-side">
-          <div className="panel-header">
-            <h2>Editor lane</h2>
-            <span>Wave 2</span>
-          </div>
-          <div className="placeholder-block">
-            Mermaid source editing will land in the next delivery wave.
+      <main className="workspace-layout">
+        <section className="left-rail">
+          <div className="panel panel-editor">
+            <div className="panel-header">
+              <div>
+                <h2>Mermaid source</h2>
+                <p className="panel-subtitle">
+                  Paste or refine diagram code directly.
+                </p>
+              </div>
+              <span>{source.split("\n").length} lines</span>
+            </div>
+            <div className="editor-surface">
+              <CodeMirror
+                basicSetup={{
+                  foldGutter: false,
+                  dropCursor: false,
+                }}
+                value={source}
+                height="100%"
+                theme="light"
+                onChange={(value) => {
+                  startTransition(() => {
+                    setIsRendering(true);
+                    setSource(value);
+                  });
+                }}
+              />
+            </div>
           </div>
 
-          <div className="panel-header">
-            <h2>Prompt lane</h2>
-            <span>Wave 3</span>
-          </div>
-          <div className="placeholder-block muted">
-            Local OpenAI configuration and prompt gating will be added after the
-            authoring workspace is in place.
+          <div className="panel panel-prompt">
+            <div className="panel-header">
+              <div>
+                <h2>Prompt draft</h2>
+                <p className="panel-subtitle">
+                  Visible now, unlocked once local OpenAI settings arrive.
+                </p>
+              </div>
+              <span>Wave 3</span>
+            </div>
+            <textarea
+              className="prompt-textarea"
+              value={prompt}
+              onChange={(event) => {
+                setPrompt(event.target.value);
+              }}
+              placeholder="Describe a system, process, or architecture to generate Mermaid from text."
+              disabled
+            />
+            <div className="prompt-locked">
+              Prompt generation is locked until the local OpenAI key flow lands
+              in Settings.
+            </div>
           </div>
         </section>
 
-        <section className="panel panel-main">
+        <section className="panel panel-preview">
           <div className="panel-header">
-            <h2>Preview workspace</h2>
-            <span>Foundation ready</span>
-          </div>
-          <div className="placeholder-preview">
-            <div className="placeholder-card">
-              <p>Static React, Vite, and PWA baseline is active.</p>
-              <p>
-                Branding, docs, release workflow, and MVP orchestration are now
-                connected to the application shell.
+            <div>
+              <h2>Preview</h2>
+              <p className="panel-subtitle">
+                Preview stays primary. Drag to pan and use the toolbar to zoom.
               </p>
             </div>
+            <div className="preview-toolbar">
+              <button type="button" onClick={() => handleZoom(-0.1)}>
+                -
+              </button>
+              <button type="button" onClick={() => handleZoom(0.1)}>
+                +
+              </button>
+              <button type="button" onClick={handleReset}>
+                Reset
+              </button>
+              <button type="button" onClick={handleFit}>
+                Fit
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPreviewFocused((current) => !current);
+                }}
+              >
+                {isPreviewFocused ? "Exit focus" : "Focus preview"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (renderState.status === "ready") {
+                    void downloadDiagramAsSvg(renderState.svg, "mermaid-diagram");
+                  }
+                }}
+                disabled={!canExport}
+              >
+                Export SVG
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (renderState.status === "ready") {
+                    void downloadDiagramAsPng(
+                      renderState.svg,
+                      renderState.metrics,
+                      "mermaid-diagram",
+                    );
+                  }
+                }}
+                disabled={!canExport}
+              >
+                Export PNG
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={previewRef}
+            className={`preview-stage${
+              renderState.status === "ready" ? " is-draggable" : ""
+            }`}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onWheel={handleWheel}
+          >
+            {isRendering ? (
+              <div className="preview-message">Rendering Mermaid preview…</div>
+            ) : null}
+
+            {renderState.status === "error" && !isRendering ? (
+              <div className="preview-message preview-error">
+                <h3>Unable to render this Mermaid source</h3>
+                <p>{renderState.error}</p>
+              </div>
+            ) : null}
+
+            {renderState.status === "ready" ? (
+              <div
+                className="preview-diagram"
+                style={{
+                  width: renderState.metrics.width,
+                  height: renderState.metrics.height,
+                  transform: previewTransform,
+                }}
+                dangerouslySetInnerHTML={{ __html: renderState.svg }}
+              />
+            ) : null}
           </div>
         </section>
       </main>

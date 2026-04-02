@@ -1,10 +1,10 @@
 ## item_002_build_mermaid_authoring_workspace_and_export_flow - Build Mermaid authoring workspace and export flow
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -86,6 +86,7 @@ flowchart LR
 
 # Notes
 - This item owns the core UX of the product and should explicitly follow the layout and UI steering guidance already documented in the product brief.
+- Completed in wave 2 with the dominant-preview workspace, Mermaid editing, focus mode, preview navigation, and full-diagram export now implemented in the app shell.
 
 # Notes
 - Derived from request `req_000_launch_mermaid_generator_web_app`.

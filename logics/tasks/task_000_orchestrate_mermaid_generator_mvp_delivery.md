@@ -4,7 +4,7 @@
 > Status: In progress
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 40%
+> Progress: 70%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -34,7 +34,7 @@ flowchart LR
 # Plan
 - [x] 1. Confirm the completed documentation and asset baseline from `item_000` and carry it into the app bootstrap where needed.
 - [x] 2. Implement `item_001` by bootstrapping the static React, TypeScript, Vite, and PWA baseline plus the delivery scripts and hosting configuration.
-- [ ] 3. Implement `item_002` by building the dominant-preview workspace, Mermaid editing flow, preview navigation, focus mode, and full-diagram export.
+- [x] 3. Implement `item_002` by building the dominant-preview workspace, Mermaid editing flow, preview navigation, focus mode, and full-diagram export.
 - [ ] 4. Implement `item_003` by adding the `Settings` modal, local OpenAI key persistence, and prompt gating plus explanatory locked states.
 - [ ] 5. Validate the integrated MVP, update linked Logics docs, and leave the repository in a commit-ready state.
 
@@ -94,3 +94,4 @@ flowchart LR
 # Report
 - Pending.
 - Wave 1: foundation bootstrap completed with React, Vite, TypeScript, PWA config, Render blueprint, CI workflow, and baseline test/build/quality commands. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.
+- Wave 2: authoring workspace completed with dominant preview layout, CodeMirror editing, Mermaid rendering, focus mode, zoom/pan, and SVG/PNG export. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.

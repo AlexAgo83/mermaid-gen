@@ -18,6 +18,7 @@
   --accent-color: #0f6c73;
   --accent-strong: #0b5056;
   --accent-warm: #c57d43;
+  --mono-font: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 }
 
 * {
