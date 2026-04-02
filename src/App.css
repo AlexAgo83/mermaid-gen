@@ -174,7 +174,7 @@
   grid-template-areas: "rail preview";
   align-items: start;
   gap: 20px;
-  padding: 20px;
+  padding: 20px 20px 8px;
 }
 
 .left-rail {
@@ -694,7 +694,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 10px 20px 14px;
+  padding: 0 20px 10px;
   color: var(--muted-text);
   font-size: 0.82rem;
 }
@@ -847,7 +847,7 @@
     grid-template-areas:
       "preview"
       "rail";
-    padding: 16px;
+    padding: 16px 16px 6px;
   }
 
   .left-rail {
@@ -928,7 +928,7 @@
 
   .workspace-layout {
     gap: 16px;
-    padding: 12px;
+    padding: 12px 12px 4px;
   }
 
   .left-rail {

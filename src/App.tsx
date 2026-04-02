@@ -1316,7 +1316,7 @@ function App() {
           target="_blank"
           rel="noreferrer"
         >
-          Mermaid Generator © 2026
+          Mermaid Generator v{__APP_VERSION__} © 2026
         </a>
       </footer>
 
