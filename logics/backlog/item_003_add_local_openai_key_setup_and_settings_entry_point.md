@@ -1,10 +1,10 @@
 ## item_003_add_local_openai_key_setup_and_settings_entry_point - Add local OpenAI key setup and settings entry point
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -85,3 +85,4 @@ flowchart LR
 - Source file: `logics/request/req_002_add_local_openai_key_setup_and_settings_entry_point.md`.
 - This item owns the gate between prompt UX and provider availability; it should land together with clear explanatory states, not as a hidden configuration mechanic.
 - Request context seeded into this backlog item from `logics/request/req_002_add_local_openai_key_setup_and_settings_entry_point.md`.
+- Completed in wave 3 with a settings modal, local browser persistence for the OpenAI API key, locked prompt messaging, and client-side Mermaid generation through the stored key path.

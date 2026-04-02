@@ -44,7 +44,13 @@
 
 .topbar-actions {
   display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.settings-status {
+  color: var(--muted-text);
+  font-size: 0.92rem;
 }
 
 .workspace-layout {
@@ -140,6 +146,29 @@
   font-size: 0.92rem;
 }
 
+.prompt-locked-actions,
+.prompt-actions,
+.settings-actions,
+.settings-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.prompt-locked-actions {
+  margin-top: 12px;
+}
+
+.prompt-actions {
+  justify-content: space-between;
+}
+
+.prompt-error {
+  margin: 0;
+  color: #9c4f2b;
+  font-size: 0.92rem;
+}
+
 .panel-preview {
   min-height: 0;
 }
@@ -215,6 +244,51 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 32, 36, 0.22);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.settings-modal {
+  width: min(520px, 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--surface-color);
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(15, 42, 48, 0.12);
+}
+
+.settings-form {
+  display: grid;
+  gap: 12px;
+}
+
+.settings-field {
+  font-weight: 600;
+}
+
+.settings-input {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.settings-help {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.92rem;
+}
+
+.settings-actions {
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
 @media (max-width: 1100px) {
   .workspace-layout {
     grid-template-columns: 320px minmax(0, 1fr);
@@ -239,5 +313,12 @@
 
   .preview-toolbar {
     justify-content: flex-start;
+  }
+
+  .settings-actions,
+  .prompt-actions,
+  .settings-actions-right {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

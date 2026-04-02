@@ -8,11 +8,14 @@ import {
   useState,
 } from "react";
 import type {
+  FormEvent,
   PointerEvent as ReactPointerEvent,
   WheelEvent as ReactWheelEvent,
 } from "react";
 import "./App.css";
 import { downloadDiagramAsPng, downloadDiagramAsSvg } from "./lib/exporters";
+import { generateMermaidFromPrompt } from "./lib/openai";
+import { useLocalStorageState } from "./lib/useLocalStorageState";
 import {
   DEFAULT_MERMAID_SOURCE,
   extractSvgMetrics,
@@ -72,11 +75,23 @@ function fitViewport(container: HTMLElement, metrics: SvgMetrics): Viewport {
   return centerViewport(container, metrics, scale);
 }
 
+function maskApiKey(value: string) {
+  if (value.length < 10) {
+    return "Saved locally";
+  }
+
+  return `${value.slice(0, 7)}…${value.slice(-4)}`;
+}
+
 function App() {
   const [source, setSource] = useState(DEFAULT_MERMAID_SOURCE);
   const [prompt, setPrompt] = useState("");
   const [isPreviewFocused, setIsPreviewFocused] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState("");
   const [isRendering, setIsRendering] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [promptError, setPromptError] = useState<string | null>(null);
   const [viewport, setViewport] = useState<Viewport>({
     scale: 1,
     x: 0,
@@ -88,6 +103,7 @@ function App() {
     svg: "",
     metrics: null,
   });
+  const [apiKey, setApiKey] = useLocalStorageState("mermaid-gen.openai-key", "");
   const deferredSource = useDeferredValue(source);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{
@@ -139,6 +155,12 @@ function App() {
   }, [deferredSource]);
 
   useEffect(() => {
+    if (!isSettingsOpen) {
+      setSettingsDraft(apiKey);
+    }
+  }, [apiKey, isSettingsOpen]);
+
+  useEffect(() => {
     if (renderState.status !== "ready" || !previewRef.current) {
       return;
     }
@@ -165,6 +187,7 @@ function App() {
   }, [renderState]);
 
   const canExport = renderState.status === "ready";
+  const hasApiKey = apiKey.trim().length > 0;
 
   const previewTransform = useMemo(
     () =>
@@ -260,6 +283,41 @@ function App() {
     });
   };
 
+  const handleSaveSettings = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setApiKey(settingsDraft.trim());
+    setIsSettingsOpen(false);
+  };
+
+  const handleGenerate = async () => {
+    if (!hasApiKey || prompt.trim().length === 0) {
+      return;
+    }
+
+    setIsGenerating(true);
+    setPromptError(null);
+
+    try {
+      const nextSource = await generateMermaidFromPrompt({
+        apiKey,
+        prompt,
+      });
+
+      startTransition(() => {
+        setIsRendering(true);
+        setSource(nextSource);
+      });
+    } catch (error) {
+      setPromptError(
+        error instanceof Error
+          ? error.message
+          : "Unable to generate Mermaid from this prompt.",
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className={`app-shell${isPreviewFocused ? " is-preview-focused" : ""}`}>
       <header className="topbar">
@@ -271,7 +329,16 @@ function App() {
           </div>
         </div>
         <div className="topbar-actions">
-          <button type="button" disabled>
+          <div className="settings-status">
+            {hasApiKey ? `OpenAI key: ${maskApiKey(apiKey)}` : "Prompt locked"}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSettingsDraft(apiKey);
+              setIsSettingsOpen(true);
+            }}
+          >
             Settings
           </button>
         </div>
@@ -313,10 +380,11 @@ function App() {
               <div>
                 <h2>Prompt draft</h2>
                 <p className="panel-subtitle">
-                  Visible now, unlocked once local OpenAI settings arrive.
+                  Generate Mermaid from context once your local OpenAI key is
+                  saved.
                 </p>
               </div>
-              <span>Wave 3</span>
+              <span>{hasApiKey ? "Ready" : "Locked"}</span>
             </div>
             <textarea
               className="prompt-textarea"
@@ -325,12 +393,40 @@ function App() {
                 setPrompt(event.target.value);
               }}
               placeholder="Describe a system, process, or architecture to generate Mermaid from text."
-              disabled
+              disabled={!hasApiKey || isGenerating}
             />
-            <div className="prompt-locked">
-              Prompt generation is locked until the local OpenAI key flow lands
-              in Settings.
-            </div>
+            {hasApiKey ? (
+              <div className="prompt-actions">
+                <button
+                  type="button"
+                  onClick={() => {
+                    void handleGenerate();
+                  }}
+                  disabled={prompt.trim().length === 0 || isGenerating}
+                >
+                  {isGenerating ? "Generating…" : "Generate Mermaid"}
+                </button>
+                {promptError ? (
+                  <p className="prompt-error">{promptError}</p>
+                ) : null}
+              </div>
+            ) : (
+              <div className="prompt-locked">
+                Configure an OpenAI API key in Settings to unlock prompt-based
+                generation on this device.
+                <div className="prompt-locked-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSettingsDraft(apiKey);
+                      setIsSettingsOpen(true);
+                    }}
+                  >
+                    Open Settings
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -428,6 +524,70 @@ function App() {
           </div>
         </section>
       </main>
+
+      {isSettingsOpen ? (
+        <div className="modal-backdrop" role="presentation">
+          <div
+            className="settings-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+          >
+            <div className="panel-header">
+              <div>
+                <h2 id="settings-title">Settings</h2>
+                <p className="panel-subtitle">
+                  The MVP stores your OpenAI key locally on this device.
+                </p>
+              </div>
+            </div>
+
+            <form className="settings-form" onSubmit={handleSaveSettings}>
+              <label className="settings-field" htmlFor="openai-key">
+                OpenAI API key
+              </label>
+              <input
+                id="openai-key"
+                className="settings-input"
+                type="password"
+                value={settingsDraft}
+                onChange={(event) => {
+                  setSettingsDraft(event.target.value);
+                }}
+                placeholder="sk-..."
+                autoComplete="off"
+              />
+              <p className="settings-help">
+                This key is not sent to project-managed storage. It is kept in
+                local browser storage for this MVP.
+              </p>
+              <div className="settings-actions">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setApiKey("");
+                    setSettingsDraft("");
+                    setIsSettingsOpen(false);
+                  }}
+                >
+                  Clear key
+                </button>
+                <div className="settings-actions-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSettingsOpen(false);
+                    }}
+                  >
+                    Close
+                  </button>
+                  <button type="submit">Save settings</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
