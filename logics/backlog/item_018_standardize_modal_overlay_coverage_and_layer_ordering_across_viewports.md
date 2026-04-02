@@ -1,10 +1,10 @@
 ## item_018_standardize_modal_overlay_coverage_and_layer_ordering_across_viewports - Standardize modal overlay coverage and layer ordering across viewports
-> From version: 0.1.0
+> From version: 0.1.0+wave2
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,3 +74,4 @@ flowchart LR
 # Notes
 - Derived from request `req_013_standardize_modal_scrolling_and_overlay_layering_across_viewports`.
 - This split isolates backdrop and z-index behavior from modal content scrolling so the shell-layer model can be validated independently.
+- Delivered in `task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery` wave 2 by making desktop backdrops start below the preserved sticky header, keeping mobile backdrops full-screen above the page, and validating the responsive layer ownership in browser flows.

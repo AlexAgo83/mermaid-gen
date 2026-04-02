@@ -147,6 +147,44 @@ test("keeps modal content reachable on a short mobile viewport", async ({
   ).resolves.toBe(true);
 });
 
+test("keeps modal overlay coverage responsive across desktop and mobile", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 980 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
+  await expect(
+    page.evaluate(
+      () => !!document.elementFromPoint(window.innerWidth / 2, 10)?.closest(".topbar"),
+    ),
+  ).resolves.toBe(true);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    window.localStorage.clear();
+  });
+  await page.goto("/");
+
+  const mobileBackdrop = page.locator(".modal-backdrop");
+  await expect(page.getByRole("dialog", { name: "Welcome" })).toBeVisible();
+  await expect(
+    mobileBackdrop.evaluate(
+      (element) => element.getBoundingClientRect().top === 0,
+    ),
+  ).resolves.toBe(true);
+  await expect(
+    page.evaluate(
+      () =>
+        !!document
+          .elementFromPoint(window.innerWidth / 2, 10)
+          ?.closest(".modal-backdrop"),
+    ),
+  ).resolves.toBe(true);
+});
+
 test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
