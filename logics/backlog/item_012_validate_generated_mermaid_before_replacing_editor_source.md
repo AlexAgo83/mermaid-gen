@@ -1,10 +1,10 @@
 ## item_012_validate_generated_mermaid_before_replacing_editor_source - Validate generated Mermaid before replacing editor source
-> From version: 0.1.0
+> From version: 0.1.0+wave1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -89,3 +89,4 @@ flowchart LR
 - Derived from request `req_007_harden_generated_mermaid_validation_and_error_handling`.
 - Source file: `logics/request/req_007_harden_generated_mermaid_validation_and_error_handling.md`.
 - Request context seeded into this backlog item from `logics/request/req_007_harden_generated_mermaid_validation_and_error_handling.md`.
+- Implemented by validating normalized generated Mermaid before any source replacement and keeping the current editor source unchanged when validation fails.

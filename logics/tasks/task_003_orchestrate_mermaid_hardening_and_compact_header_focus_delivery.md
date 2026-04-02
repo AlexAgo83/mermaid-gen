@@ -1,10 +1,10 @@
 ## task_003_orchestrate_mermaid_hardening_and_compact_header_focus_delivery - Orchestrate Mermaid hardening and compact header focus delivery
-> From version: 0.1.0+focus-docs
+> From version: 0.1.0+wave1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 5%
+> Status: In progress
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 20%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,8 +37,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and acceptance criteria for `item_012`, `item_013`, `item_014`, `item_015`, and `item_016`.
-- [ ] 2. Wave 1: implement generated Mermaid validation before replacing editor source from `item_012`, then update linked docs and checkpoint the wave.
+- [x] 1. Confirm scope, dependencies, and acceptance criteria for `item_012`, `item_013`, `item_014`, `item_015`, and `item_016`.
+- [x] 2. Wave 1: implement generated Mermaid validation before replacing editor source from `item_012`, then update linked docs and checkpoint the wave.
 - [ ] 3. Wave 2: replace Mermaid-native syntax fallback with app-owned error handling from `item_014`, then update linked docs and checkpoint the wave.
 - [ ] 4. Wave 3: move preview controls into a compact icon-based desktop header from `item_013`, then update linked docs and checkpoint the wave.
 - [ ] 5. Wave 4: add mobile burger navigation for header and preview controls from `item_015`, then update linked docs and checkpoint the wave.

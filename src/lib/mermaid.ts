@@ -3,6 +3,22 @@ export type SvgMetrics = {
   height: number;
 };
 
+type MermaidValidator = (source: string) => Promise<unknown>;
+
+export type GeneratedMermaidValidationResult =
+  | {
+      ok: true;
+      source: string;
+    }
+  | {
+      ok: false;
+      source: string;
+      error: string;
+    };
+
+export const GENERATED_MERMAID_VALIDATION_ERROR =
+  "The generated Mermaid could not be validated. Your current diagram was kept unchanged. Refine the prompt and try again.";
+
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -113,6 +129,27 @@ export function normalizeGeneratedMermaid(source: string) {
   }
 
   return normalizedSource;
+}
+
+export async function prepareGeneratedMermaidSource(
+  source: string,
+  validator: MermaidValidator = renderMermaidDiagram,
+): Promise<GeneratedMermaidValidationResult> {
+  const normalizedSource = normalizeGeneratedMermaid(source);
+
+  try {
+    await validator(normalizedSource);
+    return {
+      ok: true,
+      source: normalizedSource,
+    };
+  } catch {
+    return {
+      ok: false,
+      source: normalizedSource,
+      error: GENERATED_MERMAID_VALIDATION_ERROR,
+    };
+  }
 }
 
 let mermaidReady = false;

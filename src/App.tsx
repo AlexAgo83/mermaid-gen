@@ -21,7 +21,7 @@ import {
 import {
   DEFAULT_MERMAID_SOURCE,
   extractSvgMetrics,
-  normalizeGeneratedMermaid,
+  prepareGeneratedMermaidSource,
   renderMermaidDiagram,
   type SvgMetrics,
 } from "./lib/mermaid";
@@ -564,11 +564,17 @@ function App() {
         apiKey: activeProviderKey,
         prompt,
       });
-      const normalizedSource = normalizeGeneratedMermaid(nextSource);
+
+      const preparedSource = await prepareGeneratedMermaidSource(nextSource);
+
+      if (!preparedSource.ok) {
+        setPromptError(preparedSource.error);
+        return;
+      }
 
       setIsRendering(true);
       setSourceOrigin("generated");
-      setSource(normalizedSource);
+      setSource(preparedSource.source);
     } catch (error) {
       setPromptError(
         error instanceof Error
