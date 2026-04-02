@@ -1,10 +1,10 @@
 ## item_001_bootstrap_static_pwa_foundation_and_delivery_baseline - Bootstrap static PWA foundation and delivery baseline
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -85,6 +85,7 @@ flowchart LR
 
 # Notes
 - This item is the foundation wave. Complete it before deeper workspace and provider work so later slices build on a stable shell.
+- Completed in wave 1 with the React, TypeScript, Vite, PWA, Render, CI, and test baseline now present in the repository.
 
 # Notes
 - Derived from request `req_000_launch_mermaid_generator_web_app`.

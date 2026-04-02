@@ -1,0 +1,16 @@
+{
+  "name": "Mermaid Generator",
+  "short_name": "Mermaid Gen",
+  "description": "A focused workspace for editing, previewing, generating, and exporting Mermaid diagrams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f7f6",
+  "theme_color": "#0f3a44",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

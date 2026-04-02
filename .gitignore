@@ -3,6 +3,11 @@ logics/.cache/
 logics/hybrid_assist_audit.jsonl
 logics/hybrid_assist_measurements.jsonl
 logics/mutation_audit.jsonl
-.env.example
 .env.local
 .env.production
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+tmp/

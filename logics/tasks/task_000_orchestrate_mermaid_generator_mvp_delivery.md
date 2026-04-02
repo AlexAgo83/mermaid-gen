@@ -1,10 +1,10 @@
 ## task_000_orchestrate_mermaid_generator_mvp_delivery - Orchestrate Mermaid Generator MVP delivery
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In progress
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 40%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -32,8 +32,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the completed documentation and asset baseline from `item_000` and carry it into the app bootstrap where needed.
-- [ ] 2. Implement `item_001` by bootstrapping the static React, TypeScript, Vite, and PWA baseline plus the delivery scripts and hosting configuration.
+- [x] 1. Confirm the completed documentation and asset baseline from `item_000` and carry it into the app bootstrap where needed.
+- [x] 2. Implement `item_001` by bootstrapping the static React, TypeScript, Vite, and PWA baseline plus the delivery scripts and hosting configuration.
 - [ ] 3. Implement `item_002` by building the dominant-preview workspace, Mermaid editing flow, preview navigation, focus mode, and full-diagram export.
 - [ ] 4. Implement `item_003` by adding the `Settings` modal, local OpenAI key persistence, and prompt gating plus explanatory locked states.
 - [ ] 5. Validate the integrated MVP, update linked Logics docs, and leave the repository in a commit-ready state.
@@ -93,3 +93,4 @@ flowchart LR
 
 # Report
 - Pending.
+- Wave 1: foundation bootstrap completed with React, Vite, TypeScript, PWA config, Render blueprint, CI workflow, and baseline test/build/quality commands. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.
