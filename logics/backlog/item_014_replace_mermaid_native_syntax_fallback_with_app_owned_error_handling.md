@@ -1,10 +1,10 @@
 ## item_014_replace_mermaid_native_syntax_fallback_with_app_owned_error_handling - Replace Mermaid native syntax fallback with app owned error handling
-> From version: 0.1.0
+> From version: 0.1.0+wave2
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -89,3 +89,4 @@ flowchart LR
 - Derived from request `req_007_harden_generated_mermaid_validation_and_error_handling`.
 - Source file: `logics/request/req_007_harden_generated_mermaid_validation_and_error_handling.md`.
 - Request context seeded into this backlog item from `logics/request/req_007_harden_generated_mermaid_validation_and_error_handling.md`.
+- Implemented by replacing raw Mermaid syntax text in the preview with app-owned render error copy that directs users toward correction or regeneration paths.

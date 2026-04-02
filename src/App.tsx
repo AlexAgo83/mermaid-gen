@@ -32,6 +32,11 @@ type Viewport = {
   y: number;
 };
 
+type RenderErrorCopy = {
+  title: string;
+  message: string;
+};
+
 type RenderState =
   | {
       status: "loading";
@@ -47,7 +52,7 @@ type RenderState =
     }
   | {
       status: "error";
-      error: string;
+      error: RenderErrorCopy;
       svg: string;
       metrics: null;
     };
@@ -232,6 +237,22 @@ function getProvider(providerId: ProviderId) {
   return PROVIDERS.find((provider) => provider.id === providerId)!;
 }
 
+function getRenderErrorCopy(sourceOrigin: SourceOrigin): RenderErrorCopy {
+  if (sourceOrigin === "generated") {
+    return {
+      title: "Generated Mermaid needs another pass",
+      message:
+        "This generated draft could not be rendered. Refine the prompt or edit the source directly, then try again.",
+    };
+  }
+
+  return {
+    title: "Preview unavailable",
+    message:
+      "This Mermaid source could not be rendered. Review the editor content and correct the syntax to restore the preview.",
+  };
+}
+
 function App() {
   const [source, setSource] = useState(DEFAULT_MERMAID_SOURCE);
   const [prompt, setPrompt] = useState("");
@@ -320,17 +341,14 @@ function App() {
         });
         setIsRendering(false);
       })
-      .catch((error: unknown) => {
+      .catch(() => {
         if (!active) {
           return;
         }
 
-        const message =
-          error instanceof Error ? error.message : "Unable to render Mermaid.";
-
         setRenderState({
           status: "error",
-          error: message,
+          error: getRenderErrorCopy(sourceOrigin),
           svg: "",
           metrics: null,
         });
@@ -340,7 +358,7 @@ function App() {
     return () => {
       active = false;
     };
-  }, [deferredSource]);
+  }, [deferredSource, sourceOrigin]);
 
   useEffect(() => {
     if (!isSettingsOpen) {
@@ -822,8 +840,8 @@ function App() {
 
             {renderState.status === "error" && !isRendering ? (
               <div className="preview-message preview-error">
-                <h3>Unable to render this Mermaid source</h3>
-                <p>{renderState.error}</p>
+                <h3>{renderState.error.title}</h3>
+                <p>{renderState.error.message}</p>
               </div>
             ) : null}
 
