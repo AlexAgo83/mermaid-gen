@@ -1,9 +1,9 @@
 ## prod_000_mermaid_generator_product_direction - Mermaid Generator product direction
 > Date: 2026-04-02
-> Status: Draft
-> Related request: `req_000_launch_mermaid_generator_web_app`
-> Related backlog: (none yet)
-> Related task: (none yet)
+> Status: Active
+> Related request: `req_000_launch_mermaid_generator_web_app`, `req_004_refine_workspace_chrome_help_export_footer_and_preview_focus_behavior`, `req_005_add_first_run_onboarding_modal_with_reactivation_from_settings`, `req_006_add_multi_provider_llm_support_and_expand_settings_management`
+> Related backlog: `item_005_polish_sticky_workspace_chrome_contextual_help_and_footer`, `item_006_add_first_run_onboarding_modal_and_settings_reactivation`, `item_007_create_multi_provider_llm_adapter_boundary`, `item_008_expand_settings_for_provider_selection_and_local_keys`, `item_009_fix_preview_focus_editor_continuity_and_export_modal_flow`, `item_010_enable_initial_multi_provider_prompt_generation_rollout`, `item_011_add_prompt_generation_diagram_shape_guardrails`
+> Related task: `task_002_orchestrate_workspace_polish_onboarding_and_multi_provider_rollout`
 > Related architecture: `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 
@@ -65,13 +65,14 @@ The product should reduce that friction by giving users one tight loop: describe
 - Future frontend implementation work for this product should explicitly use the `logics-ui-steering` skill as a guardrail for UI generation and refinement.
 
 # Implementation defaults
-- Store the user-provided OpenAI API key in local browser persistence for the MVP, with explicit UX messaging that the key is stored locally on that device.
-- Keep the prompt generation area visible when no key is configured, but lock it with a short explanation and a clear call to action toward `Settings`.
-- Implement the first `Settings` surface as a modal, because it currently hosts one focused option and should expand later without forcing a full page flow.
-- Prefer a dedicated code editor experience such as CodeMirror for the Mermaid source rather than a plain textarea in the first usable implementation.
-- Start the AI generation flow with one default OpenAI model and do not expose model selection in the first settings iteration.
+- Store user-provided provider keys in local browser persistence for the MVP, with explicit UX messaging that the keys stay on that device.
+- Keep the prompt generation area visible when the active provider has no key configured, but lock it with a short explanation and a clear call to action toward `Settings`.
+- Keep `Settings` modal-based while it acts as a compact provider-management surface with one active provider and multiple saved local keys.
+- Prefer a dedicated code editor experience such as CodeMirror for the Mermaid source rather than a plain textarea in a later refinement wave.
+- Start the AI generation flow with an initial browser-safe provider set built around `OpenAI`, `OpenRouter`, and `Anthropic`, while keeping model selection hidden in the first provider-management iteration.
 - Treat zoom and pan as preview navigation only; exports should capture the full diagram rather than the current viewport framing.
-- The first preview toolbar should cover zoom in, zoom out, reset, fit to screen, wheel zoom, and drag-to-pan; a minimap can wait.
+- The preview toolbar should cover zoom in, zoom out, reset, fit to screen, wheel zoom, preview focus, and a single export entry point; a minimap can wait.
+- Support first-run onboarding and contextual help without turning the workspace into a coach-mark-heavy guided product.
 - Treat desktop and tablet landscape as the primary layout targets first, with a clean responsive fallback rather than a full mobile-first authoring experience in the MVP.
 
 # Success signals

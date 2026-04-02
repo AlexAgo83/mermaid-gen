@@ -1,10 +1,10 @@
 ## item_009_fix_preview_focus_editor_continuity_and_export_modal_flow - Fix preview focus editor continuity and export modal flow
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 99%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

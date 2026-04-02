@@ -1,10 +1,10 @@
 ## adr_000_choose_a_static_pwa_architecture_for_mermaid_generator - Choose a static PWA architecture for Mermaid Generator
 > Date: 2026-04-02
-> Status: Draft
+> Status: Accepted
 > Drivers: Static hosting, PWA eligibility, local-first authoring, fast iteration, provider flexibility, and alignment with the reference stack.
-> Related request: `req_000_launch_mermaid_generator_web_app`
-> Related backlog: (none yet)
-> Related task: (none yet)
+> Related request: `req_000_launch_mermaid_generator_web_app`, `req_006_add_multi_provider_llm_support_and_expand_settings_management`
+> Related backlog: `item_007_create_multi_provider_llm_adapter_boundary`, `item_008_expand_settings_for_provider_selection_and_local_keys`, `item_010_enable_initial_multi_provider_prompt_generation_rollout`
+> Related task: `task_002_orchestrate_workspace_polish_onboarding_and_multi_provider_rollout`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
@@ -41,8 +41,8 @@ Adopt a static SPA architecture aligned with the reference project:
 - `vite-plugin-pwa` for installability and offline shell behavior.
 - Static hosting on Render or an equivalent static platform.
 - Client-side Mermaid rendering and client-side export flow for SVG and PNG.
-- A provider adapter contract for AI generation, with an initial browser-compatible OpenAI path if users bring their own key, and a future-compatible hook for an optional proxy service when managed secrets or policy controls are required.
-- Local browser persistence for the user-provided OpenAI key in the MVP, rather than a project-managed secret path, with product UX making that storage model explicit.
+- A provider adapter contract for AI generation, with an initial browser-compatible provider set if users bring their own keys, and a future-compatible hook for an optional proxy service when managed secrets or policy controls are required.
+- Local browser persistence for user-provided provider keys in the MVP, rather than a project-managed secret path, with product UX making that storage model explicit.
 
 This direction keeps the core value proposition simple to host and fast to iterate on while isolating the only likely server-shaped concern: managed LLM credentials and policy enforcement.
 
@@ -57,12 +57,13 @@ This direction keeps the core value proposition simple to host and fast to itera
 - AI generation remains online-only and needs explicit UX around provider configuration, connectivity, and failures.
 - The MVP accepts the trade-off of local browser key persistence because it keeps the product static and removes the need for a managed backend secret path.
 - If the product later needs centrally managed API keys, quotas, or audit controls, an additional proxy layer will be required behind the same provider contract.
+- The provider boundary can now grow without reshaping the main workspace because the UI depends on one normalized app-facing generation contract.
 - Frontend implementation quality now has an explicit delivery guardrail: use the `logics-ui-steering` skill whenever generating or refining product UI code for this app.
 
 # Migration and rollout
 - Bootstrap the repo with the same baseline stack profile as the reference app: React, TypeScript, Vite, PWA plugin, Render static blueprint, and Logics workflow.
 - Implement the core local editor, live preview, and export path first so the product is usable without AI.
-- Add a provider adapter and a first OpenAI integration path without leaking project-managed secrets into the client bundle.
+- Add a provider adapter and the first browser-safe provider rollout without leaking project-managed secrets into the client bundle.
 - Add an optional proxy mode later only if shared provider credentials, rate governance, or provider normalization becomes necessary.
 
 # References

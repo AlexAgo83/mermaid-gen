@@ -3,6 +3,118 @@ export type SvgMetrics = {
   height: number;
 };
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function sanitizeMermaidIdentifier(value: string) {
+  const asciiValue = value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/_+/g, "_");
+
+  if (!asciiValue) {
+    return "group";
+  }
+
+  if (/^[0-9]/.test(asciiValue)) {
+    return `group_${asciiValue}`;
+  }
+
+  return asciiValue;
+}
+
+function ensureUniqueIdentifier(
+  candidate: string,
+  usedIdentifiers: Set<string>,
+  fallbackIndex: number,
+) {
+  let nextCandidate = candidate || `group_${fallbackIndex}`;
+  let suffix = 2;
+
+  while (usedIdentifiers.has(nextCandidate)) {
+    nextCandidate = `${candidate}_${suffix}`;
+    suffix += 1;
+  }
+
+  usedIdentifiers.add(nextCandidate);
+  return nextCandidate;
+}
+
+export function normalizeGeneratedMermaid(source: string) {
+  const lines = source.split("\n");
+  const replacements = new Map<string, string>();
+  const usedIdentifiers = new Set<string>();
+  let fallbackIndex = 1;
+
+  const normalizedLines = lines.map((line) => {
+    const subgraphMatch = line.match(/^(\s*)subgraph\s+(.+?)\s*$/);
+
+    if (!subgraphMatch) {
+      return line;
+    }
+
+    const indent = subgraphMatch[1];
+    const definition = subgraphMatch[2].trim();
+
+    if (!definition) {
+      return line;
+    }
+
+    const explicitIdMatch = definition.match(/^([^\[\s]+)\s*(\[.*\])$/);
+
+    if (explicitIdMatch) {
+      const originalId = explicitIdMatch[1];
+      const labelExpression = explicitIdMatch[2];
+      const safeId = ensureUniqueIdentifier(
+        sanitizeMermaidIdentifier(originalId),
+        usedIdentifiers,
+        fallbackIndex,
+      );
+
+      if (safeId !== originalId) {
+        replacements.set(originalId, safeId);
+      }
+
+      fallbackIndex += 1;
+      return `${indent}subgraph ${safeId}${labelExpression}`;
+    }
+
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(definition)) {
+      usedIdentifiers.add(definition);
+      return line;
+    }
+
+    const safeId = ensureUniqueIdentifier(
+      sanitizeMermaidIdentifier(definition),
+      usedIdentifiers,
+      fallbackIndex,
+    );
+
+    replacements.set(definition, safeId);
+    fallbackIndex += 1;
+
+    return `${indent}subgraph ${safeId}["${definition.replace(/"/g, '\\"')}"]`;
+  });
+
+  let normalizedSource = normalizedLines.join("\n");
+
+  for (const [originalValue, safeValue] of replacements) {
+    const escapedOriginalValue = escapeRegExp(originalValue);
+    normalizedSource = normalizedSource.replace(
+      new RegExp(
+        `^(\\s*(?:style|class|click)\\s+)${escapedOriginalValue}(?=(?:\\s|$))`,
+        "gm",
+      ),
+      `$1${safeValue}`,
+    );
+  }
+
+  return normalizedSource;
+}
+
 let mermaidReady = false;
 let mermaidModulePromise: Promise<typeof import("mermaid")["default"]> | null =
   null;

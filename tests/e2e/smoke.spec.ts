@@ -3,6 +3,9 @@ import { expect, test } from "@playwright/test";
 test("loads the foundation shell", async ({ page }) => {
   await page.goto("/");
 
+  await expect(page.getByRole("dialog", { name: "Welcome" })).toBeVisible();
+  await page.getByRole("button", { name: "Skip" }).click();
+
   await expect(
     page.getByRole("heading", { name: "Mermaid Generator" }),
   ).toBeVisible();
@@ -15,6 +18,7 @@ test("loads the foundation shell", async ({ page }) => {
 test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
 
   await expect(
     page.getByRole("button", { name: "Settings", exact: true }),
@@ -24,12 +28,16 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
   const previewHeading = page.getByRole("heading", { name: "Preview" });
   await previewHeading.scrollIntoViewIfNeeded();
   await expect(previewHeading).toBeVisible();
-  await expect(page.getByText(/Wheel zoom: hold Shift while scrolling/i)).toBeVisible();
+  await page.getByRole("button", { name: "Show preview help" }).click();
+  await expect(page.getByRole("note")).toContainText(
+    /Hold Shift while scrolling to zoom/i,
+  );
 });
 
 test("requires Shift for wheel-based preview zoom", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 980 });
   await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
 
   const previewStage = page.locator(".preview-stage");
   const previewDiagram = page.locator(".preview-diagram");
@@ -55,4 +63,24 @@ test("requires Shift for wheel-based preview zoom", async ({ page }) => {
   await page.keyboard.up("Shift");
 
   await expect.poll(getTransform).not.toBe(before);
+});
+
+test("opens the export modal from a single entry point", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await page.getByRole("button", { name: "Export" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Export diagram" })).toBeVisible();
+  await expect(page.getByText(/Choose the output format/i)).toBeVisible();
+});
+
+test("lets the user reopen onboarding from settings", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByRole("button", { name: "Reopen onboarding" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Welcome" })).toBeVisible();
 });

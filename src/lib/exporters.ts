@@ -20,7 +20,11 @@ export async function downloadDiagramAsPng(
   svgMarkup: string,
   metrics: SvgMetrics,
   filename: string,
+  options?: {
+    scale?: number;
+  },
 ) {
+  const scale = Math.max(1, Math.min(4, options?.scale ?? 2));
   const blob = new Blob([svgMarkup], {
     type: "image/svg+xml;charset=utf-8",
   });
@@ -35,8 +39,8 @@ export async function downloadDiagramAsPng(
   });
 
   const canvas = document.createElement("canvas");
-  canvas.width = Math.round(metrics.width * 2);
-  canvas.height = Math.round(metrics.height * 2);
+  canvas.width = Math.round(metrics.width * scale);
+  canvas.height = Math.round(metrics.height * scale);
   const context = canvas.getContext("2d");
 
   if (!context) {
@@ -44,7 +48,7 @@ export async function downloadDiagramAsPng(
     throw new Error("PNG export failed to create a canvas context.");
   }
 
-  context.setTransform(2, 0, 0, 2, 0, 0);
+  context.setTransform(scale, 0, 0, scale, 0, 0);
   context.drawImage(image, 0, 0, metrics.width, metrics.height);
 
   const pngBlob = await new Promise<Blob | null>((resolve) => {
