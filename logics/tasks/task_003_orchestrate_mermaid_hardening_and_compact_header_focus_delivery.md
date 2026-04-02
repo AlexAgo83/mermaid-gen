@@ -1,10 +1,10 @@
 ## task_003_orchestrate_mermaid_hardening_and_compact_header_focus_delivery - Orchestrate Mermaid hardening and compact header focus delivery
-> From version: 0.1.0+wave5
+> From version: 0.1.0+final
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
-> Progress: 90%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -43,9 +43,9 @@ flowchart LR
 - [x] 4. Wave 3: move preview controls into a compact icon-based desktop header from `item_013`, then update linked docs and checkpoint the wave.
 - [x] 5. Wave 4: add mobile burger navigation for header and preview controls from `item_015`, then update linked docs and checkpoint the wave.
 - [x] 6. Wave 5: make preview focus feel full page and remove panel chrome from `item_016`, leaving only the main header above the preview surface, then update linked docs and checkpoint the wave.
-- [ ] 7. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
+- [x] 7. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
 - [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: update related Logics docs and README before closure
+- [x] FINAL: update related Logics docs and README before closure
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -90,12 +90,14 @@ flowchart LR
 - Browser validation for invalid generated Mermaid fallback handling, compact desktop header controls, mobile burger navigation, and focus-preview takeover behavior
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] `README.md` is refreshed if the visible shell or focus-mode behavior changes materially.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] `README.md` is refreshed if the visible shell or focus-mode behavior changes materially.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Wave 5 completed: focus mode now removes preview-local headings and panel framing, stretches the preview stage across the content area below the sticky header, and keeps the mobile header menu closable while open by keeping the header interaction layer above the mobile backdrop.
+- Finalization completed: README now reflects header-owned controls, mobile burger navigation, focus mode as a header-plus-preview surface, generated Mermaid validation before source replacement, and app-owned preview fallback copy.
+- Validation completed on the final state with `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run test:e2e`.

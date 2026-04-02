@@ -59,11 +59,14 @@ Describe the system, process, or flow you want to visualize. Mermaid Generator t
 ## Current Workspace Behavior
 
 - Sticky workspace header that keeps shell controls available while the page scrolls.
-- Contextual help popovers for Mermaid source, prompt draft, and preview.
-- Preview-first toolbar with fit, reset, focus mode, and a single export entry point.
+- Compact header actions for fit, reset, zoom, focus mode, export, and settings.
+- Mobile collapses those header actions into a single burger menu rather than duplicating preview-local controls.
+- Focus mode keeps the main header and turns everything below it into the preview surface.
+- Contextual help popovers for Mermaid source, prompt draft, and preview when focus mode is not active.
 - Modal export flow with SVG output plus PNG scale selection.
 - First-run onboarding with five steps: welcome, editor, prompt, preview, and export.
 - Browser-first multi-provider settings for OpenAI, OpenRouter, and Anthropic keys.
+- Generated Mermaid is validated before it can replace the editor source, and failed preview renders fall back to app-owned error copy rather than raw Mermaid parser output.
 - Light generation guardrails that bias prompts toward balanced diagrams and warn when the result is still unusually wide or tall.
 
 ## Provider Setup
@@ -79,7 +82,7 @@ The active provider controls whether the prompt surface is unlocked and which ad
 
 ## Export Flow
 
-- Use `Export` from the preview toolbar.
+- Use `Export` from the main header.
 - Choose `SVG` for vector output.
 - Choose `PNG` when you need a raster image, then pick the output scale.
 - Downloads always use the full rendered diagram rather than the current pan or zoom position.
