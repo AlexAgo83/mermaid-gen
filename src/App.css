@@ -135,6 +135,28 @@
   transform: translateY(0);
 }
 
+.topbar-menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 10px;
+  place-items: center;
+  background: #f6fbfa;
+  color: var(--accent-strong);
+}
+
+.topbar-menu-toggle svg,
+.mobile-menu-action-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
 .focus-pill {
   padding: 6px 10px;
   border-radius: 999px;
@@ -448,6 +470,14 @@
   display: none;
 }
 
+.mobile-menu-backdrop {
+  display: none;
+}
+
+.mobile-menu-sheet {
+  display: none;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -612,13 +642,84 @@
 
 @media (max-width: 920px) {
   .topbar {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
     padding: 16px;
   }
 
   .topbar-actions {
-    justify-content: space-between;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  .topbar-action-row {
+    display: none;
+  }
+
+  .topbar-menu-toggle {
+    display: inline-grid;
+  }
+
+  .mobile-menu-backdrop {
+    position: fixed;
+    inset: 71px 0 0;
+    z-index: 24;
+    display: block;
+    width: 100%;
+    border: 0;
+    background: rgba(15, 32, 36, 0.12);
+  }
+
+  .mobile-menu-sheet {
+    position: fixed;
+    top: 72px;
+    left: 12px;
+    right: 12px;
+    z-index: 25;
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 14px 30px rgba(15, 42, 48, 0.12);
+    backdrop-filter: blur(14px);
+  }
+
+  .mobile-menu-group {
+    display: grid;
+    gap: 8px;
+  }
+
+  .mobile-menu-action {
+    width: 100%;
+    justify-content: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-align: left;
+    background: #f6fbfa;
+    color: var(--accent-strong);
+  }
+
+  .mobile-menu-action.is-active {
+    background: #e7f4f0;
+    border-color: #8db3a9;
+  }
+
+  .mobile-menu-action.is-primary {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
+  }
+
+  .mobile-menu-action-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-grid;
+    place-items: center;
   }
 
   .workspace-layout {
@@ -671,6 +772,10 @@
 
   .topbar-actions {
     gap: 8px;
+  }
+
+  .topbar {
+    padding: 12px;
   }
 
   .workspace-layout {

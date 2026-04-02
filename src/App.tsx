@@ -220,6 +220,17 @@ function loadOnboardingState(): OnboardingState {
   return "pending";
 }
 
+function loadIsMobileHeader() {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
+    return false;
+  }
+
+  return window.matchMedia("(max-width: 920px)").matches;
+}
+
 function describeDiagramBalance(metrics: SvgMetrics) {
   const ratio = metrics.width / metrics.height;
 
@@ -291,6 +302,40 @@ function HeaderActionButton({
   );
 }
 
+type MobileMenuActionButtonProps = {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  variant?: "default" | "primary";
+  children: ReactNode;
+};
+
+function MobileMenuActionButton({
+  label,
+  onClick,
+  disabled = false,
+  active = false,
+  variant = "default",
+  children,
+}: MobileMenuActionButtonProps) {
+  return (
+    <button
+      type="button"
+      className={`mobile-menu-action${
+        variant === "primary" ? " is-primary" : ""
+      }${active ? " is-active" : ""}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <span className="mobile-menu-action-icon" aria-hidden="true">
+        {children}
+      </span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
 function PlusIcon() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -352,6 +397,14 @@ function SettingsIcon() {
   );
 }
 
+function BurgerIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M3 4.25h10M3 8h10M3 11.75h10" />
+    </svg>
+  );
+}
+
 function App() {
   const [source, setSource] = useState(DEFAULT_MERMAID_SOURCE);
   const [prompt, setPrompt] = useState("");
@@ -380,6 +433,8 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [promptError, setPromptError] = useState<string | null>(null);
   const [generationNotice, setGenerationNotice] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileHeader, setIsMobileHeader] = useState(loadIsMobileHeader);
   const [sourceOrigin, setSourceOrigin] = useState<SourceOrigin>("manual");
   const [viewport, setViewport] = useState<Viewport>({
     scale: 1,
@@ -403,7 +458,10 @@ function App() {
   } | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
       return;
     }
 
@@ -415,12 +473,42 @@ function App() {
   }, [providerSettings]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
       return;
     }
 
     window.localStorage.setItem(ONBOARDING_STATE_STORAGE_KEY, onboardingState);
   }, [onboardingState]);
+
+  useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 920px)");
+    const syncHeaderMode = (event: MediaQueryList | MediaQueryListEvent) => {
+      setIsMobileHeader(event.matches);
+    };
+
+    syncHeaderMode(mediaQuery);
+    mediaQuery.addEventListener("change", syncHeaderMode);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncHeaderMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileHeader) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isMobileHeader]);
 
   useEffect(() => {
     let active = true;
@@ -528,9 +616,14 @@ function App() {
 
   const openSettings = () => {
     setHelpTopic(null);
+    setIsMobileMenuOpen(false);
     setSettingsDraft(providerSettings);
     setIsDraftKeyVisible(false);
     setIsSettingsOpen(true);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   const handleZoom = (delta: number) => {
@@ -714,70 +807,181 @@ function App() {
         </div>
         <div className="topbar-actions">
           {isPreviewFocused ? <div className="focus-pill">Preview focus</div> : null}
-          <div className="topbar-action-row">
-            <HeaderActionButton
-              label="Zoom out"
-              onClick={() => {
-                handleZoom(-0.1);
-              }}
-              disabled={!canExport}
-            >
-              <MinusIcon />
-            </HeaderActionButton>
-            <HeaderActionButton
-              label="Zoom in"
-              onClick={() => {
-                handleZoom(0.1);
-              }}
-              disabled={!canExport}
-            >
-              <PlusIcon />
-            </HeaderActionButton>
-            <HeaderActionButton
-              label="Reset preview position"
-              onClick={handleReset}
-              disabled={!canExport}
-            >
-              <ResetIcon />
-            </HeaderActionButton>
-            <HeaderActionButton
-              label="Fit preview"
-              onClick={handleFit}
-              disabled={!canExport}
-            >
-              <FitIcon />
-            </HeaderActionButton>
-            <HeaderActionButton
-              label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
-              onClick={() => {
-                setHelpTopic(null);
-                setIsPreviewFocused((current) => !current);
-              }}
-              disabled={!canExport}
-              active={isPreviewFocused}
-            >
-              <FocusIcon />
-            </HeaderActionButton>
-            <HeaderActionButton
-              label="Open export dialog"
-              onClick={() => {
-                if (canExport) {
-                  setExportError(null);
+          {!isMobileHeader ? (
+            <div className="topbar-action-row">
+              <HeaderActionButton
+                label="Zoom out"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleZoom(-0.1);
+                }}
+                disabled={!canExport}
+              >
+                <MinusIcon />
+              </HeaderActionButton>
+              <HeaderActionButton
+                label="Zoom in"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleZoom(0.1);
+                }}
+                disabled={!canExport}
+              >
+                <PlusIcon />
+              </HeaderActionButton>
+              <HeaderActionButton
+                label="Reset preview position"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleReset();
+                }}
+                disabled={!canExport}
+              >
+                <ResetIcon />
+              </HeaderActionButton>
+              <HeaderActionButton
+                label="Fit preview"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleFit();
+                }}
+                disabled={!canExport}
+              >
+                <FitIcon />
+              </HeaderActionButton>
+              <HeaderActionButton
+                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
+                onClick={() => {
+                  closeMobileMenu();
                   setHelpTopic(null);
-                  setIsExportOpen(true);
-                }
+                  setIsPreviewFocused((current) => !current);
+                }}
+                disabled={!canExport}
+                active={isPreviewFocused}
+              >
+                <FocusIcon />
+              </HeaderActionButton>
+              <HeaderActionButton
+                label="Open export dialog"
+                onClick={() => {
+                  closeMobileMenu();
+                  if (canExport) {
+                    setExportError(null);
+                    setHelpTopic(null);
+                    setIsExportOpen(true);
+                  }
+                }}
+                disabled={!canExport}
+                variant="primary"
+              >
+                <ExportIcon />
+              </HeaderActionButton>
+              <HeaderActionButton label="Open settings" onClick={openSettings}>
+                <SettingsIcon />
+              </HeaderActionButton>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="topbar-menu-toggle"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => {
+                setIsMobileMenuOpen((current) => !current);
               }}
-              disabled={!canExport}
-              variant="primary"
             >
-              <ExportIcon />
-            </HeaderActionButton>
-            <HeaderActionButton label="Open settings" onClick={openSettings}>
-              <SettingsIcon />
-            </HeaderActionButton>
-          </div>
+              <BurgerIcon />
+            </button>
+          )}
         </div>
       </header>
+
+      {isMobileHeader && isMobileMenuOpen ? (
+        <>
+          <button
+            type="button"
+            className="mobile-menu-backdrop"
+            aria-label="Close navigation menu"
+            onClick={closeMobileMenu}
+          />
+          <div className="mobile-menu-sheet" role="dialog" aria-label="Navigation menu">
+            <div className="mobile-menu-group">
+              <MobileMenuActionButton label="Open settings" onClick={openSettings}>
+                <SettingsIcon />
+              </MobileMenuActionButton>
+              <MobileMenuActionButton
+                label="Open export dialog"
+                onClick={() => {
+                  closeMobileMenu();
+                  if (canExport) {
+                    setExportError(null);
+                    setHelpTopic(null);
+                    setIsExportOpen(true);
+                  }
+                }}
+                disabled={!canExport}
+                variant="primary"
+              >
+                <ExportIcon />
+              </MobileMenuActionButton>
+            </div>
+            <div className="mobile-menu-group">
+              <MobileMenuActionButton
+                label="Zoom out"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleZoom(-0.1);
+                }}
+                disabled={!canExport}
+              >
+                <MinusIcon />
+              </MobileMenuActionButton>
+              <MobileMenuActionButton
+                label="Zoom in"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleZoom(0.1);
+                }}
+                disabled={!canExport}
+              >
+                <PlusIcon />
+              </MobileMenuActionButton>
+              <MobileMenuActionButton
+                label="Reset preview position"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleReset();
+                }}
+                disabled={!canExport}
+              >
+                <ResetIcon />
+              </MobileMenuActionButton>
+              <MobileMenuActionButton
+                label="Fit preview"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleFit();
+                }}
+                disabled={!canExport}
+              >
+                <FitIcon />
+              </MobileMenuActionButton>
+              <MobileMenuActionButton
+                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
+                onClick={() => {
+                  closeMobileMenu();
+                  setHelpTopic(null);
+                  setIsPreviewFocused((current) => !current);
+                }}
+                disabled={!canExport}
+                active={isPreviewFocused}
+              >
+                <FocusIcon />
+              </MobileMenuActionButton>
+            </div>
+          </div>
+        </>
+      ) : null}
 
       <main className="workspace-layout">
         <section className="left-rail">

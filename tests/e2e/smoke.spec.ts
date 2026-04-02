@@ -18,7 +18,17 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
 
+  await expect(
+    page.getByRole("button", { name: "Open navigation menu" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await expect(page.getByRole("dialog", { name: "Navigation menu" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open export dialog" })).toBeVisible();
+  await page
+    .getByRole("banner")
+    .getByRole("button", { name: "Close navigation menu" })
+    .click();
   await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeVisible();
 
   const previewHeading = page.getByRole("heading", { name: "Preview" });
