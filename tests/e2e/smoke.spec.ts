@@ -10,9 +10,7 @@ test("loads the foundation shell", async ({ page }) => {
     page.getByRole("heading", { name: "Mermaid Generator" }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Preview" })).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Settings", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
 });
 
 test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
@@ -20,9 +18,7 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
 
-  await expect(
-    page.getByRole("button", { name: "Settings", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeVisible();
 
   const previewHeading = page.getByRole("heading", { name: "Preview" });
@@ -69,7 +65,7 @@ test("opens the export modal from a single entry point", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
 
-  await page.getByRole("button", { name: "Export" }).click();
+  await page.getByRole("button", { name: "Open export dialog" }).click();
 
   await expect(page.getByRole("dialog", { name: "Export diagram" })).toBeVisible();
   await expect(page.getByText(/Choose the output format/i)).toBeVisible();
@@ -79,7 +75,7 @@ test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
 
-  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
   await page.getByRole("button", { name: "Reopen onboarding" }).click();
 
   await expect(page.getByRole("dialog", { name: "Welcome" })).toBeVisible();

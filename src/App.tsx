@@ -8,6 +8,7 @@ import {
 import type {
   FormEvent,
   PointerEvent as ReactPointerEvent,
+  ReactNode,
   WheelEvent as ReactWheelEvent,
 } from "react";
 import "./App.css";
@@ -251,6 +252,104 @@ function getRenderErrorCopy(sourceOrigin: SourceOrigin): RenderErrorCopy {
     message:
       "This Mermaid source could not be rendered. Review the editor content and correct the syntax to restore the preview.",
   };
+}
+
+type HeaderActionButtonProps = {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  variant?: "default" | "primary";
+  children: ReactNode;
+};
+
+function HeaderActionButton({
+  label,
+  onClick,
+  disabled = false,
+  active = false,
+  variant = "default",
+  children,
+}: HeaderActionButtonProps) {
+  return (
+    <div className="topbar-action-item">
+      <button
+        type="button"
+        className={`topbar-icon-button${
+          variant === "primary" ? " is-primary" : ""
+        }${active ? " is-active" : ""}`}
+        aria-label={label}
+        onClick={onClick}
+        disabled={disabled}
+      >
+        {children}
+      </button>
+      <span className="topbar-action-tooltip" role="tooltip">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 3.25v9.5M3.25 8h9.5" />
+    </svg>
+  );
+}
+
+function MinusIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M3.25 8h9.5" />
+    </svg>
+  );
+}
+
+function ResetIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M4.2 6.1A4.55 4.55 0 1 1 4.9 10.9" />
+      <path d="M4.25 3.75v2.9h2.9" />
+    </svg>
+  );
+}
+
+function FitIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M5.25 2.75h-2.5v2.5M10.75 2.75h2.5v2.5M5.25 13.25h-2.5v-2.5M10.75 13.25h2.5v-2.5" />
+      <path d="M6.1 6.1h3.8v3.8H6.1z" />
+    </svg>
+  );
+}
+
+function FocusIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M5.25 2.75h-2.5v2.5M10.75 2.75h2.5v2.5M5.25 13.25h-2.5v-2.5M10.75 13.25h2.5v-2.5" />
+    </svg>
+  );
+}
+
+function ExportIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 2.75v6.5" />
+      <path d="M5.6 6.85 8 9.25l2.4-2.4" />
+      <path d="M3.25 11.25v2h9.5v-2" />
+    </svg>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 4.9a3.1 3.1 0 1 1 0 6.2 3.1 3.1 0 0 1 0-6.2Z" />
+      <path d="M8 2.5v1.3M8 12.2v1.3M13.5 8h-1.3M3.8 8H2.5M11.9 4.1l-.9.9M5 11l-.9.9M11.9 11.9l-.9-.9M5 5l-.9-.9" />
+    </svg>
+  );
 }
 
 function App() {
@@ -615,9 +714,68 @@ function App() {
         </div>
         <div className="topbar-actions">
           {isPreviewFocused ? <div className="focus-pill">Preview focus</div> : null}
-          <button type="button" onClick={openSettings}>
-            Settings
-          </button>
+          <div className="topbar-action-row">
+            <HeaderActionButton
+              label="Zoom out"
+              onClick={() => {
+                handleZoom(-0.1);
+              }}
+              disabled={!canExport}
+            >
+              <MinusIcon />
+            </HeaderActionButton>
+            <HeaderActionButton
+              label="Zoom in"
+              onClick={() => {
+                handleZoom(0.1);
+              }}
+              disabled={!canExport}
+            >
+              <PlusIcon />
+            </HeaderActionButton>
+            <HeaderActionButton
+              label="Reset preview position"
+              onClick={handleReset}
+              disabled={!canExport}
+            >
+              <ResetIcon />
+            </HeaderActionButton>
+            <HeaderActionButton
+              label="Fit preview"
+              onClick={handleFit}
+              disabled={!canExport}
+            >
+              <FitIcon />
+            </HeaderActionButton>
+            <HeaderActionButton
+              label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
+              onClick={() => {
+                setHelpTopic(null);
+                setIsPreviewFocused((current) => !current);
+              }}
+              disabled={!canExport}
+              active={isPreviewFocused}
+            >
+              <FocusIcon />
+            </HeaderActionButton>
+            <HeaderActionButton
+              label="Open export dialog"
+              onClick={() => {
+                if (canExport) {
+                  setExportError(null);
+                  setHelpTopic(null);
+                  setIsExportOpen(true);
+                }
+              }}
+              disabled={!canExport}
+              variant="primary"
+            >
+              <ExportIcon />
+            </HeaderActionButton>
+            <HeaderActionButton label="Open settings" onClick={openSettings}>
+              <SettingsIcon />
+            </HeaderActionButton>
+          </div>
         </div>
       </header>
 
@@ -750,7 +908,7 @@ function App() {
                 prompt-based generation on this device.
                 <div className="prompt-locked-actions">
                   <button type="button" onClick={openSettings}>
-                    Open Settings
+                    Configure provider
                   </button>
                 </div>
               </div>
@@ -783,44 +941,6 @@ function App() {
                 </div>
               ) : null}
             </div>
-          </div>
-
-          <div className="preview-toolbar">
-            <button type="button" onClick={() => handleZoom(-0.1)}>
-              -
-            </button>
-            <button type="button" onClick={() => handleZoom(0.1)}>
-              +
-            </button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
-            <button type="button" onClick={handleFit}>
-              Fit
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setHelpTopic(null);
-                setIsPreviewFocused((current) => !current);
-              }}
-            >
-              {isPreviewFocused ? "Exit focus" : "Focus preview"}
-            </button>
-            <button
-              className="button-primary"
-              type="button"
-              onClick={() => {
-                if (canExport) {
-                  setExportError(null);
-                  setHelpTopic(null);
-                  setIsExportOpen(true);
-                }
-              }}
-              disabled={!canExport}
-            >
-              Export
-            </button>
           </div>
 
           <div

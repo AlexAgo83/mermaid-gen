@@ -37,7 +37,7 @@ describe("App foundation shell", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
-    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
 
     expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe("App foundation shell", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
-    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
     fireEvent.click(screen.getByRole("button", { name: "Reopen onboarding" }));
 
     expect(screen.getByRole("dialog", { name: "Welcome" })).toBeInTheDocument();

@@ -1,10 +1,10 @@
 ## item_013_move_preview_controls_into_a_compact_icon_based_header - Move preview controls into a compact icon based header
-> From version: 0.1.0
+> From version: 0.1.0+wave3
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -89,3 +89,4 @@ flowchart LR
 - Derived from request `req_008_compact_header_and_move_preview_controls_into_icon_based_navigation`.
 - Source file: `logics/request/req_008_compact_header_and_move_preview_controls_into_icon_based_navigation.md`.
 - Request context seeded into this backlog item from `logics/request/req_008_compact_header_and_move_preview_controls_into_icon_based_navigation.md`.
+- Implemented by moving preview actions into a compact icon-led desktop header with hover and focus labels, while removing the duplicate preview toolbar from the panel.
