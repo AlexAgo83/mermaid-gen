@@ -1,10 +1,10 @@
 ## item_019_add_keyboard_dismissal_semantics_to_the_settings_modal - Add keyboard dismissal semantics to the settings modal
-> From version: 0.1.0
+> From version: 0.1.0+wave3
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -71,3 +71,4 @@ flowchart LR
 # Notes
 - Derived from request `req_010_make_settings_modal_scrollable_and_dismissible_with_escape`.
 - This split isolates the keyboard close behavior so it can ship independently of the broader cross-modal scrolling and overlay standardization.
+- Delivered in `task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery` wave 3 by giving `Settings` a reliable `Escape` close path that matches `Close`, with keyboard-focused browser validation on the live modal surface.

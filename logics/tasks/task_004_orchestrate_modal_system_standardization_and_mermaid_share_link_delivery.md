@@ -1,10 +1,10 @@
 ## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
-> From version: 0.1.0+wave2
+> From version: 0.1.0+wave3
 > Schema version: 1.0
 > Status: In progress
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 28%
+> Progress: 42%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -42,7 +42,7 @@ flowchart LR
 - [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
 - [x] 2. Wave 1: standardize modal internal scrolling across current modal surfaces from `item_017`, then update linked docs and checkpoint the wave.
 - [x] 3. Wave 2: standardize modal overlay coverage and layer ordering across viewports from `item_018`, then update linked docs and checkpoint the wave.
-- [ ] 4. Wave 3: add keyboard dismissal semantics to the settings modal from `item_019`, then update linked docs and checkpoint the wave.
+- [x] 4. Wave 3: add keyboard dismissal semantics to the settings modal from `item_019`, then update linked docs and checkpoint the wave.
 - [ ] 5. Wave 4: align preview panel header spacing with the workspace panel system from `item_020`, then update linked docs and checkpoint the wave.
 - [ ] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
 - [ ] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
@@ -104,3 +104,4 @@ flowchart LR
 # Report
 - Wave 1 completed: current modal surfaces now use a shared viewport-bounded container with internal scroll regions so onboarding, settings, and export remain reachable on short mobile viewports without relying on page scroll behind the modal.
 - Wave 2 completed: modal backdrops now preserve the sticky header area on desktop while still covering the rest of the page, and mobile keeps the modal overlay full-screen above the page chrome.
+- Wave 3 completed: the Settings modal now closes on `Escape` through the same state path as the explicit `Close` action, with validation covering both unit-level and browser-level keyboard interaction.

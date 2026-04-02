@@ -7,6 +7,7 @@ import {
 } from "react";
 import type {
   FormEvent,
+  KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
   ReactNode,
   WheelEvent as ReactWheelEvent,
@@ -265,6 +266,10 @@ function getRenderErrorCopy(sourceOrigin: SourceOrigin): RenderErrorCopy {
   };
 }
 
+function isEscapeDismissalKey(key: string, code: string) {
+  return key === "Escape" || key === "Esc" || code === "Escape";
+}
+
 type HeaderActionButtonProps = {
   label: string;
   onClick: () => void;
@@ -449,6 +454,7 @@ function App() {
   });
   const deferredSource = useDeferredValue(source);
   const previewRef = useRef<HTMLDivElement | null>(null);
+  const settingsDialogRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -553,6 +559,30 @@ function App() {
       setIsDraftKeyVisible(false);
     }
   }, [providerSettings, isSettingsOpen]);
+
+  useEffect(() => {
+    if (!isSettingsOpen) {
+      return;
+    }
+
+    const handleSettingsEscape = (event: KeyboardEvent) => {
+      if (isEscapeDismissalKey(event.key, event.code)) {
+        setIsSettingsOpen(false);
+      }
+    };
+
+    const focusTarget =
+      settingsDialogRef.current?.querySelector<HTMLElement>("#provider-key") ??
+      settingsDialogRef.current?.querySelector<HTMLElement>("button, input");
+
+    focusTarget?.focus();
+
+    document.addEventListener("keydown", handleSettingsEscape, true);
+
+    return () => {
+      document.removeEventListener("keydown", handleSettingsEscape, true);
+    };
+  }, [isSettingsOpen]);
 
   useEffect(() => {
     if (renderState.status !== "ready" || !previewRef.current) {
@@ -793,6 +823,14 @@ function App() {
       );
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleSettingsEscapeDismiss = (
+    event: Pick<ReactKeyboardEvent<HTMLElement>, "key" | "code">,
+  ) => {
+    if (isEscapeDismissalKey(event.key, event.code)) {
+      setIsSettingsOpen(false);
     }
   };
 
@@ -1200,10 +1238,13 @@ function App() {
       {isSettingsOpen ? (
         <div className="modal-backdrop" role="presentation">
           <div
+            ref={settingsDialogRef}
             className="settings-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="settings-title"
+            tabIndex={-1}
+            onKeyDownCapture={handleSettingsEscapeDismiss}
           >
             <div className="modal-scroll-content">
               <div className="panel-header">
@@ -1271,9 +1312,10 @@ function App() {
                         },
                       }));
                     }}
-                    placeholder={activeDraftProvider.keyPlaceholder}
-                    autoComplete="off"
-                  />
+                  placeholder={activeDraftProvider.keyPlaceholder}
+                  autoComplete="off"
+                  onKeyDown={handleSettingsEscapeDismiss}
+                />
                   <button
                     type="button"
                     onClick={() => {

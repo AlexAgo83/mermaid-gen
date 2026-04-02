@@ -185,6 +185,16 @@ test("keeps modal overlay coverage responsive across desktop and mobile", async 
   ).resolves.toBe(true);
 });
 
+test("closes settings with Escape", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
+  await page.locator("#provider-key").press("Escape");
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeHidden();
+});
+
 test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();

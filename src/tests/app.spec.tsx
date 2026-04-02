@@ -51,4 +51,18 @@ describe("App foundation shell", () => {
 
     expect(screen.getByRole("dialog", { name: "Welcome" })).toBeInTheDocument();
   });
+
+  it("closes settings with Escape", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
+    fireEvent.keyDown(screen.getByRole("dialog", { name: "Settings" }), {
+      key: "Escape",
+    });
+
+    expect(
+      screen.queryByRole("dialog", { name: "Settings" }),
+    ).not.toBeInTheDocument();
+  });
 });
