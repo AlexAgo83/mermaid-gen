@@ -1,10 +1,10 @@
 ## item_004_improve_responsive_workspace_and_require_shift_for_preview_zoom - Improve responsive workspace and require shift for preview zoom
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -86,3 +86,4 @@ flowchart LR
 - Derived from request `req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom`.
 - Source file: `logics/request/req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom.md`.
 - Request context seeded into this backlog item from `logics/request/req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom.md`.
+- Completed in `task_001_improve_responsive_workspace_and_require_shift_for_preview_zoom` with responsive workspace refinements, preview-first mobile ordering, and `Shift`-gated wheel zoom.

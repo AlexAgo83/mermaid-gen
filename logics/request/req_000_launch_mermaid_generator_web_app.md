@@ -1,9 +1,9 @@
 ## req_000_launch_mermaid_generator_web_app - Launch Mermaid Generator web app
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 90%
-> Confidence: 86%
+> Status: Done
+> Understanding: 96%
+> Confidence: 95%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

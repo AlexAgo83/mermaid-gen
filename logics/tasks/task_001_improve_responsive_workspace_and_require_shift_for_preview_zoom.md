@@ -1,10 +1,10 @@
 ## task_001_improve_responsive_workspace_and_require_shift_for_preview_zoom - Improve responsive workspace and require shift for preview zoom
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -29,12 +29,12 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Rework the workspace layout for desktop, tablet, and mobile so core panels and actions remain usable without clipping or overlap.
-- [ ] 3. Update preview wheel interaction so zoom only triggers while `Shift` is pressed and normal scrolling remains unchanged otherwise.
-- [ ] 4. Validate the responsive and interaction changes with viewport and browser checks, then update the linked Logics docs.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Rework the workspace layout for desktop, tablet, and mobile so core panels and actions remain usable without clipping or overlap.
+- [x] 3. Update preview wheel interaction so zoom only triggers while `Shift` is pressed and normal scrolling remains unchanged otherwise.
+- [x] 4. Validate the responsive and interaction changes with viewport and browser checks, then update the linked Logics docs.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -84,10 +84,15 @@ flowchart LR
 - Browser-driven interaction check for wheel zoom with and without `Shift`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Responsive delivery completed in one wave.
+- The workspace now keeps preview-first hierarchy on desktop and moves preview ahead of the editing rail on smaller widths so core actions stay reachable without overlap.
+- Wheel-based preview zoom now activates only while `Shift` is pressed; ordinary wheel input no longer triggers preview zoom.
+- Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run test:e2e`.
+- Browser-driven validation covered desktop, tablet, and mobile viewport behavior plus the `Shift`-gated wheel zoom interaction.

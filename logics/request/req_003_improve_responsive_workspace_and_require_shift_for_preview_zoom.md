@@ -1,7 +1,7 @@
 ## req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom - Improve responsive workspace and require shift for preview zoom
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
 > Complexity: Medium

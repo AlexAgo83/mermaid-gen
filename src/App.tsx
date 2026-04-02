@@ -259,7 +259,11 @@ function App() {
   };
 
   const handleWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
-    if (renderState.status !== "ready" || !previewRef.current) {
+    if (
+      renderState.status !== "ready" ||
+      !previewRef.current ||
+      !event.shiftKey
+    ) {
       return;
     }
 
@@ -433,6 +437,7 @@ function App() {
                 Preview stays primary. Drag to pan and use the toolbar to zoom.
               </p>
             </div>
+            <p className="preview-hint">Wheel zoom: hold Shift while scrolling.</p>
           </div>
 
           <div className="preview-toolbar">
