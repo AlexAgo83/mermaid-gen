@@ -1,10 +1,10 @@
 ## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
-> From version: 0.1.0+wave5
+> From version: 0.1.0+wave6
 > Schema version: 1.0
 > Status: In progress
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 71%
+> Progress: 85%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -45,7 +45,7 @@ flowchart LR
 - [x] 4. Wave 3: add keyboard dismissal semantics to the settings modal from `item_019`, then update linked docs and checkpoint the wave.
 - [x] 5. Wave 4: align preview panel header spacing with the workspace panel system from `item_020`, then update linked docs and checkpoint the wave.
 - [x] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
-- [ ] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
+- [x] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
 - [ ] 8. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
 - [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
 - [ ] FINAL: update related Logics docs and README before closure
@@ -107,3 +107,4 @@ flowchart LR
 - Wave 3 completed: the Settings modal now closes on `Escape` through the same state path as the explicit `Close` action, with validation covering both unit-level and browser-level keyboard interaction.
 - Wave 4 completed: the Preview header now reuses the shared panel header structure so its title sizing and spacing align with the other workspace panels while focus mode still strips preview-local chrome.
 - Wave 5 completed: the app now understands shared Mermaid URL payloads, hydrates the editor source from supported links, keeps preview rendering in sync on load, and avoids surfacing onboarding on top of an opened shared diagram.
+- Wave 6 completed: the Export modal now exposes a share-link action that copies a generated Mermaid URL to the clipboard, confirms success through a toast, and reuses the hydration contract so opening the copied link restores the source plus live preview state.

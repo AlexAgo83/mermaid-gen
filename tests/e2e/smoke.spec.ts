@@ -207,6 +207,49 @@ test("hydrates shared Mermaid from the URL on load", async ({ page }) => {
   await expect(page.locator(".preview-diagram")).toBeVisible();
 });
 
+test("copies a shared Mermaid URL from export and restores it on open", async ({
+  page,
+}) => {
+  const source = "flowchart LR\nIdea[Shared link] --> Preview[Ready on load]";
+
+  await page.addInitScript(() => {
+    let clipboardText = "";
+
+    Object.defineProperty(window.navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: async (value: string) => {
+          clipboardText = value;
+        },
+        readText: async () => clipboardText,
+      },
+    });
+  });
+
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.locator(".editor-textarea").fill(source);
+  await expect(page.locator(".preview-diagram")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open export dialog" })).toBeEnabled();
+
+  await page.getByRole("button", { name: "Open export dialog" }).click();
+  await page.getByRole("button", { name: "Copy share link" }).click();
+
+  await expect(page.getByRole("status")).toContainText(
+    "Share link copied to clipboard.",
+  );
+
+  const shareUrl = await page.evaluate(async () => navigator.clipboard.readText());
+
+  expect(shareUrl).toContain("?m=");
+
+  await page.goto(shareUrl);
+
+  await expect(page.getByRole("dialog", { name: "Welcome" })).toBeHidden();
+  await expect(page.locator(".editor-textarea")).toHaveValue(source);
+  await expect(page.locator(".preview-diagram")).toBeVisible();
+});
+
 test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();

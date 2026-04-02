@@ -27,7 +27,10 @@ import {
   renderMermaidDiagram,
   type SvgMetrics,
 } from "./lib/mermaid";
-import { loadSharedMermaidSourceFromLocation } from "./lib/share";
+import {
+  buildSharedMermaidUrl,
+  loadSharedMermaidSourceFromLocation,
+} from "./lib/share";
 
 type Viewport = {
   scale: number;
@@ -435,6 +438,8 @@ function App() {
   const [exportScale, setExportScale] = useState(2);
   const [exportError, setExportError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [isShareLinkCopying, setIsShareLinkCopying] = useState(false);
+  const [shareToastMessage, setShareToastMessage] = useState<string | null>(null);
   const [onboardingState, setOnboardingState] =
     useState<OnboardingState>(loadOnboardingState);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(
@@ -524,6 +529,20 @@ function App() {
       setIsMobileMenuOpen(false);
     }
   }, [isMobileHeader]);
+
+  useEffect(() => {
+    if (!shareToastMessage) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShareToastMessage(null);
+    }, 2400);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [shareToastMessage]);
 
   useEffect(() => {
     let active = true;
@@ -794,6 +813,30 @@ function App() {
       );
     } finally {
       setIsExporting(false);
+    }
+  };
+
+  const handleCopyShareLink = async () => {
+    if (
+      typeof window === "undefined" ||
+      typeof navigator === "undefined" ||
+      typeof navigator.clipboard?.writeText !== "function"
+    ) {
+      setExportError("Clipboard access is unavailable for share links.");
+      return;
+    }
+
+    setIsShareLinkCopying(true);
+    setExportError(null);
+
+    try {
+      const shareUrl = buildSharedMermaidUrl(source, window.location);
+      await navigator.clipboard.writeText(shareUrl);
+      setShareToastMessage("Share link copied to clipboard.");
+    } catch {
+      setExportError("Unable to copy the share link right now.");
+    } finally {
+      setIsShareLinkCopying(false);
     }
   };
 
@@ -1465,10 +1508,26 @@ function App() {
                   </p>
                 ) : null}
 
+                <p className="settings-help export-share-copy">
+                  Copy a share link when you want this Mermaid source to reopen
+                  with the editor prefilled and the preview already in sync.
+                </p>
+
                 {exportError ? <p className="prompt-error">{exportError}</p> : null}
 
                 <div className="settings-actions">
-                  <div />
+                  <div className="settings-actions-left">
+                    <button
+                      type="button"
+                      className="button-secondary"
+                      onClick={() => {
+                        void handleCopyShareLink();
+                      }}
+                      disabled={isShareLinkCopying}
+                    >
+                      {isShareLinkCopying ? "Copying link…" : "Copy share link"}
+                    </button>
+                  </div>
                   <div className="settings-actions-right">
                     <button
                       type="button"
@@ -1559,6 +1618,12 @@ function App() {
               </div>
             </div>
           </div>
+        </div>
+      ) : null}
+
+      {shareToastMessage ? (
+        <div className="app-toast" role="status" aria-live="polite">
+          {shareToastMessage}
         </div>
       ) : null}
     </div>

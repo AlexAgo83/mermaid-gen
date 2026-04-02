@@ -1,10 +1,10 @@
 ## item_022_add_export_modal_share_link_action_with_clipboard_toast - Add export modal share link action with clipboard toast
-> From version: 0.1.0
+> From version: 0.1.0+wave6
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,3 +74,4 @@ flowchart LR
 # Notes
 - Derived from request `req_012_share_mermaid_diagrams_through_generated_urls_from_export`.
 - This split keeps the export-surface UX and toast feedback separate from the lower-level URL hydration contract.
+- Delivered through the existing Export modal with a share-link button, clipboard copy flow, toast confirmation, and browser coverage proving that the copied URL restores the Mermaid source plus preview state on load.
