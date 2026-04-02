@@ -5,10 +5,6 @@
 </p>
 
 <p align="center">
-  <img src="assets/branding/readme-hero.svg" alt="Mermaid Generator hero banner" width="100%" />
-</p>
-
-<p align="center">
   A focused workspace for turning rough ideas into polished Mermaid diagrams.
 </p>
 
@@ -104,43 +100,3 @@ flowchart TD
     E --> D
     D --> F[Export asset]
 ```
-
-## Planned Release Flow
-
-The project will use a gated release path rather than deploying every development commit directly to production.
-
-```mermaid
-flowchart LR
-    Main[Develop on main] --> Prep[Prepare version and changelog]
-    Prep --> LocalCI[Run local CI]
-    LocalCI --> Release[Promote to release branch]
-    Release --> Tag[Create release tag]
-    Tag --> Push[Push branch and tag]
-    Push --> RemoteCI[Validate GitHub CI]
-    RemoteCI --> Publish[Publish GitHub release]
-    Publish --> Render[Render deploys release]
-```
-
-## Repository Direction
-
-This repository is currently in the early planning and bootstrap phase.
-
-- Core product framing: [request](logics/request/req_000_launch_mermaid_generator_web_app.md)
-- Brand, README, and release-doc slice: [request](logics/request/req_001_create_branding_assets_marketing_readme_and_release_workflow_docs.md)
-- Static app direction: [ADR](logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md)
-- Release branch deployment workflow: [ADR](logics/architecture/adr_001_define_static_deployment_and_release_branch_workflow.md)
-
-## Early Asset Inventory
-
-- App icon: [`assets/branding/app-icon.svg`](assets/branding/app-icon.svg)
-- Favicon base: [`assets/branding/favicon.svg`](assets/branding/favicon.svg)
-- README hero banner: [`assets/branding/readme-hero.svg`](assets/branding/readme-hero.svg)
-
-## Later, Once The MVP Exists
-
-The next README iteration can add:
-
-- a real CI badge once the GitHub repository is live;
-- a production badge once the Render static site is connected;
-- screenshots of the editor and generated preview flow;
-- developer setup steps once the stack bootstrap is committed.
