@@ -1,10 +1,10 @@
 ## item_016_make_preview_focus_feel_full_page_and_remove_panel_chrome - Make preview focus feel full page and remove panel chrome
-> From version: 0.1.0
+> From version: 0.1.0+focus-docs
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 99%
-> Confidence: 98%
-> Progress: 0%
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 5%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -19,11 +19,13 @@
 # Scope
 - In:
   - remove panel framing, rounded corners, and leftover decorative spacing in focus mode
+  - keep only the main application header as the remaining shell chrome in focus mode
+  - remove preview-local headers and toolbars so the preview surface is the only content below the header
   - make the preview surface feel like it takes over the page
-  - keep focus-mode controls compact and understandable
+  - keep focus-mode controls compact and understandable from the main header
   - validate desktop and mobile focus-mode behavior
 - Out:
-  - moving controls into the header itself
+  - redesigning the normal non-focus header information architecture beyond adding the focus-mode essentials it already needs to host
   - generated Mermaid validation or fallback handling
 
 ```mermaid
@@ -39,17 +41,17 @@ flowchart LR
 # Acceptance criteria
 - AC1: In focus mode, the preview no longer appears as a decorated panel inside the workspace.
 - AC2: Borders, rounded corners, and unnecessary outer spacing around the preview are removed or materially reduced in focus mode.
-- AC3: The focused preview surface uses the available page area much more directly and gives the impression of taking over the page.
+- AC3: In focus mode, the content below the main header is reduced to the preview rendering surface, which uses the available page area much more directly and gives the impression of taking over the page.
 - AC4: The transition into focus mode remains coherent with the application shell and does not feel like a broken layout state.
-- AC5: Controls required during focus mode remain understandable and accessible.
+- AC5: Controls required during focus mode remain understandable and accessible from the main header without leaving a secondary preview-local toolbar or panel header on screen.
 - AC6: The behavior is validated on desktop and mobile-sized layouts.
 
 # AC Traceability
 - AC1 -> Scope: In focus mode, the preview no longer appears as a decorated panel inside the workspace.. Proof: desktop browser validation and visual review.
 - AC2 -> Scope: Borders, rounded corners, and unnecessary outer spacing around the preview are removed or materially reduced in focus mode.. Proof: focused-layout comparison and browser validation.
-- AC3 -> Scope: The focused preview surface uses the available page area much more directly and gives the impression of taking over the page.. Proof: interactive focus-mode checks.
+- AC3 -> Scope: In focus mode, the content below the main header is reduced to the preview rendering surface, which uses the available page area much more directly and gives the impression of taking over the page.. Proof: interactive focus-mode checks.
 - AC4 -> Scope: The transition into focus mode remains coherent with the application shell and does not feel like a broken layout state.. Proof: transition and shell integration review.
-- AC5 -> Scope: Controls required during focus mode remain understandable and accessible.. Proof: keyboard and responsive interaction checks.
+- AC5 -> Scope: Controls required during focus mode remain understandable and accessible from the main header without leaving a secondary preview-local toolbar or panel header on screen.. Proof: keyboard and responsive interaction checks.
 - AC6 -> Scope: The behavior is validated on desktop and mobile-sized layouts.. Proof: desktop and mobile browser validation.
 
 # Decision framing
@@ -67,7 +69,7 @@ flowchart LR
 - Primary task(s): `task_003_orchestrate_mermaid_hardening_and_compact_header_focus_delivery`
 
 # AI Context
-- Summary: Refine preview focus mode so it feels like a true page takeover, with panel framing, rounded corners, and...
+- Summary: Refine preview focus mode so it feels like a true page takeover, with only the main header left in place while panel framing, preview-local chrome, rounded corners, and wasted spacing are stripped away.
 - Keywords: preview focus, full page, immersive mode, panel chrome, rounded corners, spacing, shell refinement, focus layout
 - Use when: Use when the preview focus state should become visually immersive and stop reading as a leftover panel layout.
 - Skip when: Skip when the work only concerns generation quality, providers, onboarding, or unrelated header navigation changes.

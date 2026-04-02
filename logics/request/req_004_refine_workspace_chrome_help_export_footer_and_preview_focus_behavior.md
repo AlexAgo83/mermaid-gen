@@ -1,9 +1,9 @@
 ## req_004_refine_workspace_chrome_help_export_footer_and_preview_focus_behavior - Refine workspace chrome help export footer and preview focus behavior
-> From version: 0.1.0
+> From version: 0.1.0+focus-docs
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -86,9 +86,9 @@ flowchart LR
 - The `Focus preview` bug and the final UI behavior are validated in a real browser flow, not only through static code inspection.
 
 # Clarifications
-- The sticky header should remain active in normal workspace mode, but it should be hidden in `Focus preview` mode so the preview can use the full available space.
+- The sticky header should remain active in normal workspace mode and remain the only shell element preserved in `Focus preview` mode so the preview can use the rest of the available space directly.
 - Help affordances should use lightweight tooltip/popover behavior: hover and keyboard focus on desktop, tap-to-open and tap-outside-to-close on mobile.
-- `Focus preview` should hide the left rail and use the full app width instead of leaving a dead column on the side; a minimal preview toolbar can remain available so users can exit focus mode.
+- `Focus preview` should hide the left rail and use the full app width instead of leaving a dead column on the side; preview-local headers and toolbars should disappear and any remaining focus actions should live in the main header.
 - The export flow should use one export button that opens a modal. MVP options should include at least `format` (`PNG` or `SVG`) and export size/scale controls appropriate for raster export.
 - `SVG` export should stay vector-first and not require arbitrary width/height resizing in the first export modal iteration.
 - The header marketing copy should move toward a professional authoring-tool tone rather than generic AI-product wording.
