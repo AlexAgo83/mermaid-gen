@@ -1,10 +1,10 @@
 ## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
 > From version: 0.1.0+wave6
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 85%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -46,9 +46,9 @@ flowchart LR
 - [x] 5. Wave 4: align preview panel header spacing with the workspace panel system from `item_020`, then update linked docs and checkpoint the wave.
 - [x] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
 - [x] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
-- [ ] 8. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: update related Logics docs and README before closure
+- [x] 8. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: update related Logics docs and README before closure
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -94,12 +94,12 @@ flowchart LR
 - Browser validation for modal scroll behavior, modal overlay coverage, settings keyboard dismissal, preview header alignment, and shared Mermaid URL loading plus export sharing
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] `README.md` is refreshed if the visible modal or sharing behavior changes materially.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] `README.md` is refreshed if the visible modal or sharing behavior changes materially.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Wave 1 completed: current modal surfaces now use a shared viewport-bounded container with internal scroll regions so onboarding, settings, and export remain reachable on short mobile viewports without relying on page scroll behind the modal.
@@ -108,3 +108,4 @@ flowchart LR
 - Wave 4 completed: the Preview header now reuses the shared panel header structure so its title sizing and spacing align with the other workspace panels while focus mode still strips preview-local chrome.
 - Wave 5 completed: the app now understands shared Mermaid URL payloads, hydrates the editor source from supported links, keeps preview rendering in sync on load, and avoids surfacing onboarding on top of an opened shared diagram.
 - Wave 6 completed: the Export modal now exposes a share-link action that copies a generated Mermaid URL to the clipboard, confirms success through a toast, and reuses the hydration contract so opening the copied link restores the source plus live preview state.
+- Final closure completed: README and the linked request/task docs now reflect the shipped modal standards plus Mermaid sharing flow, with full lint, typecheck, unit, build, and browser validation executed for the package.

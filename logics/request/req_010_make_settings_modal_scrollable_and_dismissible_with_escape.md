@@ -1,7 +1,7 @@
 ## req_010_make_settings_modal_scrollable_and_dismissible_with_escape - Make settings modal scrollable and dismissible with Escape
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

@@ -11,7 +11,7 @@
 <p align="center">
   <img alt="Status" src="https://img.shields.io/badge/status-planning-0E7380?style=for-the-badge" />
   <img alt="Live preview" src="https://img.shields.io/badge/live%20preview-mermaid%20first-12A6A3?style=for-the-badge" />
-  <img alt="Export" src="https://img.shields.io/badge/export-modal%20SVG%20%7C%20PNG-FFB65A?style=for-the-badge" />
+  <img alt="Export" src="https://img.shields.io/badge/export-modal%20SVG%20%7C%20PNG%20%7C%20share%20link-FFB65A?style=for-the-badge" />
   <img alt="AI" src="https://img.shields.io/badge/AI-multi--provider%20BYOK-0A3440?style=for-the-badge" />
   <img alt="Hosting" src="https://img.shields.io/badge/hosting-Render%20Static-0B3442?style=for-the-badge" />
   <img alt="Installable" src="https://img.shields.io/badge/PWA-targeted-FFF3C0?style=for-the-badge&labelColor=0B3442" />
@@ -63,7 +63,8 @@ Describe the system, process, or flow you want to visualize. Mermaid Generator t
 - Mobile collapses those header actions into a single burger menu rather than duplicating preview-local controls.
 - Focus mode keeps the main header and turns everything below it into the preview surface.
 - Contextual help popovers for Mermaid source, prompt draft, and preview when focus mode is not active.
-- Modal export flow with SVG output plus PNG scale selection.
+- Modal export flow with SVG output, PNG scale selection, and share-link copy from the same surface.
+- Shared modal scroll and overlay rules keep Settings, Export, and onboarding usable on short viewports while mobile modals fully dominate the page and desktop preserves only the header as a shell exception.
 - First-run onboarding with five steps: welcome, editor, prompt, preview, and export.
 - Browser-first multi-provider settings for OpenAI, OpenRouter, and Anthropic keys.
 - Generated Mermaid is validated before it can replace the editor source, and failed preview renders fall back to app-owned error copy rather than raw Mermaid parser output.
@@ -85,6 +86,7 @@ The active provider controls whether the prompt surface is unlocked and which ad
 - Use `Export` from the main header.
 - Choose `SVG` for vector output.
 - Choose `PNG` when you need a raster image, then pick the output scale.
+- Use `Copy share link` when you want a URL that restores the current Mermaid source directly in the app.
 - Downloads always use the full rendered diagram rather than the current pan or zoom position.
 
 ## What Makes It Different
