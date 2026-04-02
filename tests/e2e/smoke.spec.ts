@@ -71,6 +71,23 @@ test("requires Shift for wheel-based preview zoom", async ({ page }) => {
   await expect.poll(getTransform).not.toBe(before);
 });
 
+test("focus mode keeps the header and removes local preview chrome", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 980 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await page.getByRole("button", { name: "Focus preview" }).click();
+
+  await expect(page.getByRole("heading", { name: "Mermaid Generator" })).toBeVisible();
+  await expect(page.locator(".preview-stage")).toBeVisible();
+  await expect(page.getByText("Mermaid Generator © 2026")).toBeHidden();
+  await expect(page.getByRole("heading", { name: "Preview" })).toBeHidden();
+  await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeHidden();
+  await expect(page.getByRole("heading", { name: "Prompt draft" })).toBeHidden();
+});
+
 test("opens the export modal from a single entry point", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();

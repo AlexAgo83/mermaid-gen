@@ -1,10 +1,10 @@
 ## item_016_make_preview_focus_feel_full_page_and_remove_panel_chrome - Make preview focus feel full page and remove panel chrome
-> From version: 0.1.0+focus-docs
+> From version: 0.1.0+wave5
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -91,3 +91,4 @@ flowchart LR
 - Derived from request `req_009_make_preview_focus_feel_full_page_instead_of_panel_based`.
 - Source file: `logics/request/req_009_make_preview_focus_feel_full_page_instead_of_panel_based.md`.
 - Request context seeded into this backlog item from `logics/request/req_009_make_preview_focus_feel_full_page_instead_of_panel_based.md`.
+- Delivered in `task_003_orchestrate_mermaid_hardening_and_compact_header_focus_delivery` wave 5 by removing preview-local chrome in focus mode, letting the preview stage consume the full content area below the sticky header, and keeping mobile header interactions usable while the burger menu is open.

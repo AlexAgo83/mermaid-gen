@@ -455,15 +455,31 @@
 .app-shell.is-preview-focused .workspace-layout {
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "preview";
-  padding-top: 0;
+  gap: 0;
+  padding: 0;
+  min-height: calc(100dvh - 64px);
 }
 
 .app-shell.is-preview-focused .panel-preview {
-  min-height: calc(100vh - 132px);
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  gap: 0;
+}
+
+.app-shell.is-preview-focused .preview-header {
+  display: none;
 }
 
 .app-shell.is-preview-focused .preview-stage {
-  min-height: calc(100vh - 260px);
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at top, rgba(15, 58, 68, 0.08), transparent 28%),
+    var(--workspace-color);
 }
 
 .app-shell.is-preview-focused .app-footer {
@@ -645,6 +661,7 @@
     flex-direction: row;
     align-items: center;
     padding: 16px;
+    z-index: 30;
   }
 
   .topbar-actions {
@@ -662,7 +679,10 @@
 
   .mobile-menu-backdrop {
     position: fixed;
-    inset: 71px 0 0;
+    top: 72px;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 24;
     display: block;
     width: 100%;

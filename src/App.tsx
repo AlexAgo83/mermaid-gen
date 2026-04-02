@@ -1121,31 +1121,33 @@ function App() {
         </section>
 
         <section className="panel panel-preview">
-          <div className="preview-header">
-            <div className="panel-heading-group">
-              <div className="title-row">
-                <h2>Preview</h2>
-                <button
-                  type="button"
-                  className="help-trigger"
-                  aria-label="Show preview help"
-                  aria-expanded={helpTopic === "preview"}
-                  onClick={() => {
-                    setHelpTopic((current) =>
-                      current === "preview" ? null : "preview",
-                    );
-                  }}
-                >
-                  i
-                </button>
-              </div>
-              {helpTopic === "preview" ? (
-                <div className="help-popover" role="note">
-                  {HELP_COPY.preview}
+          {!isPreviewFocused ? (
+            <div className="preview-header">
+              <div className="panel-heading-group">
+                <div className="title-row">
+                  <h2>Preview</h2>
+                  <button
+                    type="button"
+                    className="help-trigger"
+                    aria-label="Show preview help"
+                    aria-expanded={helpTopic === "preview"}
+                    onClick={() => {
+                      setHelpTopic((current) =>
+                        current === "preview" ? null : "preview",
+                      );
+                    }}
+                  >
+                    i
+                  </button>
                 </div>
-              ) : null}
+                {helpTopic === "preview" ? (
+                  <div className="help-popover" role="note">
+                    {HELP_COPY.preview}
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <div
             ref={previewRef}
