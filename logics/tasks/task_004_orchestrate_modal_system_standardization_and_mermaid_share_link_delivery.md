@@ -1,0 +1,103 @@
+## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
+> From version: 0.1.0
+> Schema version: 1.0
+> Status: Ready
+> Understanding: 99%
+> Confidence: 97%
+> Progress: 0%
+> Complexity: High
+> Theme: UI
+> Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
+
+# Context
+This task orchestrates the next workspace polish and sharing package after task 003.
+It groups together three related streams that should be delivered in a controlled order:
+
+- shared modal-system standardization for scroll behavior on short viewports
+- shared modal overlay and backdrop layering across mobile and desktop shell rules
+- shareable Mermaid URLs with runtime hydration, export-modal creation, clipboard copy, and toast feedback
+- one small preview-panel consistency fix that can ride inside the same shell package without coupling to the share flow
+
+Execution constraints:
+
+- deliver the shared modal foundations before the modal-specific polish so `Settings` and `Export` can reuse the same behavior
+- keep the desktop shell exception explicit: the header may stay visible while the modal backdrop still covers the rest of the page
+- implement the shared Mermaid URL hydration contract before the export modal grows the share-link creation action
+- keep the repository commit-ready at the end of each wave and update the linked Logics docs during that wave
+- finish with browser validation on desktop and mobile flows, especially modal scroll, modal overlay coverage, settings keyboard dismissal, preview header alignment, and shared Mermaid URL loading
+
+```mermaid
+%% logics-kind: task
+%% logics-signature: task|orchestrate-modal-system-standardization|item-017-standardize-modal-internal-scro|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
+flowchart LR
+    Modals[item 017 and item 018 and item 019] --> Shell[item 020]
+    Shell --> Share[item 021 and item 022]
+    Share --> Docs[README and linked Logics docs]
+    Docs --> Validation[Automated and browser validation]
+    Validation --> Report[Done report]
+```
+
+# Plan
+- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [ ] 2. Wave 1: standardize modal internal scrolling across current modal surfaces from `item_017`, then update linked docs and checkpoint the wave.
+- [ ] 3. Wave 2: standardize modal overlay coverage and layer ordering across viewports from `item_018`, then update linked docs and checkpoint the wave.
+- [ ] 4. Wave 3: add keyboard dismissal semantics to the settings modal from `item_019`, then update linked docs and checkpoint the wave.
+- [ ] 5. Wave 4: align preview panel header spacing with the workspace panel system from `item_020`, then update linked docs and checkpoint the wave.
+- [ ] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
+- [ ] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
+- [ ] 8. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
+- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [ ] FINAL: update related Logics docs and README before closure
+
+# Delivery checkpoints
+- Each completed wave should leave the repository in a coherent, commit-ready state.
+- Update the linked Logics docs during the wave that changes the behavior, not only at final closure.
+- Prefer a reviewed commit checkpoint at the end of each meaningful wave instead of accumulating several undocumented partial states.
+
+# AC Traceability
+- AC1 -> `item_017_standardize_modal_internal_scrolling_across_current_modal_surfaces`: current app modals remain scrollable and usable on short viewports. Proof: desktop and mobile modal validation.
+- AC2 -> `item_018_standardize_modal_overlay_coverage_and_layer_ordering_across_viewports`: mobile modals fully dominate the page and desktop preserves the header only as an explicit shell exception while the backdrop still covers the rest. Proof: responsive overlay validation.
+- AC3 -> `item_019_add_keyboard_dismissal_semantics_to_the_settings_modal`: the Settings modal closes on `Escape` with the same effect as `Close`. Proof: keyboard interaction validation.
+- AC4 -> `item_020_align_preview_panel_header_spacing_with_the_workspace_panel_system`: preview header spacing aligns with the rest of the workspace panel system. Proof: UI shell comparison and browser validation.
+- AC5 -> `item_021_add_url_hydration_support_for_shared_mermaid_diagrams`: opening a supported shared Mermaid URL hydrates the editor and preview while preserving editability. Proof: shared URL browser validation.
+- AC6 -> `item_022_add_export_modal_share_link_action_with_clipboard_toast`: the Export modal can generate, copy, and confirm a share link through a toast. Proof: export share-flow validation.
+- AC7 -> Documentation closure: linked Logics docs and README reflect the delivered modal and sharing behavior. Proof: updated docs and final report.
+
+# Decision framing
+- Product framing: Required
+- Product signals: conversion journey, navigation and discoverability, experience scope
+- Product follow-up: Keep this orchestration synchronized with `prod_000_mermaid_generator_product_direction` while modal behavior and sharing evolve.
+- Architecture framing: Required
+- Architecture signals: contracts and integration, runtime and boundaries, data model and persistence
+- Architecture follow-up: Keep this orchestration synchronized with `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator` while modal layering and URL-state sharing evolve.
+
+# Links
+- Product brief(s): `prod_000_mermaid_generator_product_direction`
+- Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+- Backlog item: `item_017_standardize_modal_internal_scrolling_across_current_modal_surfaces`, `item_018_standardize_modal_overlay_coverage_and_layer_ordering_across_viewports`, `item_019_add_keyboard_dismissal_semantics_to_the_settings_modal`, `item_020_align_preview_panel_header_spacing_with_the_workspace_panel_system`, `item_021_add_url_hydration_support_for_shared_mermaid_diagrams`, `item_022_add_export_modal_share_link_action_with_clipboard_toast`
+- Request(s): `req_010_make_settings_modal_scrollable_and_dismissible_with_escape`, `req_011_align_preview_panel_header_spacing_with_other_panels`, `req_012_share_mermaid_diagrams_through_generated_urls_from_export`, `req_013_standardize_modal_scrolling_and_overlay_layering_across_viewports`
+
+# AI Context
+- Summary: Orchestrate the next Mermaid Generator package across shared modal-system standardization, settings keyboard dismissal, preview header consistency, and shareable Mermaid URL delivery from the export flow.
+- Keywords: modal system, scrolling, overlay, backdrop, escape, preview header, share URL, clipboard, toast
+- Use when: Use when executing the coordinated wave set that combines modal shell standardization with the new Mermaid share-link flow.
+- Skip when: Skip when the work is an isolated fix inside only one backlog item with no orchestration need.
+
+# Validation
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run build`
+- `npm run test:e2e`
+- Browser validation for modal scroll behavior, modal overlay coverage, settings keyboard dismissal, preview header alignment, and shared Mermaid URL loading plus export sharing
+
+# Definition of Done (DoD)
+- [ ] Scope implemented and acceptance criteria covered.
+- [ ] Validation commands executed and results captured.
+- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
+- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [ ] `README.md` is refreshed if the visible modal or sharing behavior changes materially.
+- [ ] Status is `Done` and progress is `100%`.
+
+# Report
