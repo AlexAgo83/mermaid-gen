@@ -1,10 +1,10 @@
 ## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
-> From version: 0.1.0+wave4
+> From version: 0.1.0+wave5
 > Schema version: 1.0
 > Status: In progress
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 57%
+> Progress: 71%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -44,7 +44,7 @@ flowchart LR
 - [x] 3. Wave 2: standardize modal overlay coverage and layer ordering across viewports from `item_018`, then update linked docs and checkpoint the wave.
 - [x] 4. Wave 3: add keyboard dismissal semantics to the settings modal from `item_019`, then update linked docs and checkpoint the wave.
 - [x] 5. Wave 4: align preview panel header spacing with the workspace panel system from `item_020`, then update linked docs and checkpoint the wave.
-- [ ] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
+- [x] 6. Wave 5: add URL hydration support for shared Mermaid diagrams from `item_021`, then update linked docs and checkpoint the wave.
 - [ ] 7. Wave 6: add the export modal share link action with clipboard toast from `item_022`, then update linked docs and checkpoint the wave.
 - [ ] 8. Finalize README and affected Logics docs, then run automated plus browser validation for the full package.
 - [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
@@ -106,3 +106,4 @@ flowchart LR
 - Wave 2 completed: modal backdrops now preserve the sticky header area on desktop while still covering the rest of the page, and mobile keeps the modal overlay full-screen above the page chrome.
 - Wave 3 completed: the Settings modal now closes on `Escape` through the same state path as the explicit `Close` action, with validation covering both unit-level and browser-level keyboard interaction.
 - Wave 4 completed: the Preview header now reuses the shared panel header structure so its title sizing and spacing align with the other workspace panels while focus mode still strips preview-local chrome.
+- Wave 5 completed: the app now understands shared Mermaid URL payloads, hydrates the editor source from supported links, keeps preview rendering in sync on load, and avoids surfacing onboarding on top of an opened shared diagram.

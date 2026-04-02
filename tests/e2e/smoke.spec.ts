@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { encodeSharedMermaidSource } from "../../src/lib/share";
 
 test("loads the foundation shell", async ({ page }) => {
   await page.goto("/");
@@ -193,6 +194,17 @@ test("closes settings with Escape", async ({ page }) => {
   await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   await page.locator("#provider-key").press("Escape");
   await expect(page.getByRole("dialog", { name: "Settings" })).toBeHidden();
+});
+
+test("hydrates shared Mermaid from the URL on load", async ({ page }) => {
+  const source = "flowchart LR\nA[Shared] --> B[Preview]";
+  const encoded = encodeSharedMermaidSource(source);
+
+  await page.goto(`/?m=${encoded}`);
+
+  await expect(page.getByRole("dialog", { name: "Welcome" })).toBeHidden();
+  await expect(page.locator(".editor-textarea")).toHaveValue(source);
+  await expect(page.locator(".preview-diagram")).toBeVisible();
 });
 
 test("lets the user reopen onboarding from settings", async ({ page }) => {

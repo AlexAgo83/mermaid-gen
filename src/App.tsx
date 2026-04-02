@@ -27,6 +27,7 @@ import {
   renderMermaidDiagram,
   type SvgMetrics,
 } from "./lib/mermaid";
+import { loadSharedMermaidSourceFromLocation } from "./lib/share";
 
 type Viewport = {
   scale: number;
@@ -118,6 +119,10 @@ const ONBOARDING_STEPS = [
       "Exports always use the full rendered diagram rather than the current zoom position.",
   },
 ] as const;
+
+function loadInitialSource() {
+  return loadSharedMermaidSourceFromLocation() ?? DEFAULT_MERMAID_SOURCE;
+}
 
 function clampScale(nextScale: number) {
   return Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
@@ -230,6 +235,10 @@ function loadIsMobileHeader() {
   }
 
   return window.matchMedia("(max-width: 920px)").matches;
+}
+
+function hasSharedMermaidSourceInLocation() {
+  return loadSharedMermaidSourceFromLocation() !== null;
 }
 
 function describeDiagramBalance(metrics: SvgMetrics) {
@@ -411,7 +420,7 @@ function BurgerIcon() {
 }
 
 function App() {
-  const [source, setSource] = useState(DEFAULT_MERMAID_SOURCE);
+  const [source, setSource] = useState(loadInitialSource);
   const [prompt, setPrompt] = useState("");
   const [isPreviewFocused, setIsPreviewFocused] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -429,7 +438,7 @@ function App() {
   const [onboardingState, setOnboardingState] =
     useState<OnboardingState>(loadOnboardingState);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(
-    () => loadOnboardingState() === "pending",
+    () => loadOnboardingState() === "pending" && !hasSharedMermaidSourceInLocation(),
   );
   const [onboardingStep, setOnboardingStep] = useState(0);
   const [helpTopic, setHelpTopic] = useState<HelpTopic>(null);

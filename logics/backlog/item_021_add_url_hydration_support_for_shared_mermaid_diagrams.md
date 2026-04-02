@@ -1,10 +1,10 @@
 ## item_021_add_url_hydration_support_for_shared_mermaid_diagrams - Add URL hydration support for shared Mermaid diagrams
-> From version: 0.1.0
+> From version: 0.1.0+wave5
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,3 +74,4 @@ flowchart LR
 # Notes
 - Derived from request `req_012_share_mermaid_diagrams_through_generated_urls_from_export`.
 - This split establishes the shared URL runtime contract before the export modal grows a share-link creation action.
+- Delivered in `task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery` wave 5 by adding a shared Mermaid URL encoding and hydration helper, loading shared Mermaid into the editor at startup, syncing preview rendering from that hydrated source, and suppressing onboarding when a shared Mermaid link is opened directly.
