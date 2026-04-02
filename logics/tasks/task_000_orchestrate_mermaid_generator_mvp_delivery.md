@@ -1,10 +1,10 @@
 ## task_000_orchestrate_mermaid_generator_mvp_delivery - Orchestrate Mermaid Generator MVP delivery
 > From version: 0.1.0
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 95%
-> Confidence: 94%
-> Progress: 90%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -36,7 +36,7 @@ flowchart LR
 - [x] 2. Implement `item_001` by bootstrapping the static React, TypeScript, Vite, and PWA baseline plus the delivery scripts and hosting configuration.
 - [x] 3. Implement `item_002` by building the dominant-preview workspace, Mermaid editing flow, preview navigation, focus mode, and full-diagram export.
 - [x] 4. Implement `item_003` by adding the `Settings` modal, local OpenAI key persistence, and prompt gating plus explanatory locked states.
-- [ ] 5. Validate the integrated MVP, update linked Logics docs, and leave the repository in a commit-ready state.
+- [x] 5. Validate the integrated MVP, update linked Logics docs, and leave the repository in a commit-ready state.
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -85,14 +85,14 @@ flowchart LR
 - Capture any stack-specific validation adjustments introduced by the bootstrap if command names differ.
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending.
 - Wave 1: foundation bootstrap completed with React, Vite, TypeScript, PWA config, Render blueprint, CI workflow, and baseline test/build/quality commands. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.
 - Wave 2: authoring workspace completed with dominant preview layout, CodeMirror editing, Mermaid rendering, focus mode, zoom/pan, and SVG/PNG export. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.
 - Wave 3: local OpenAI settings completed with a top-level `Settings` entry point, modal key management, local browser persistence, locked prompt messaging, and client-side Mermaid generation via the configured key. Validation passed for `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, and `npm run quality:pwa`.
+- Final validation: `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, `npm run quality:pwa`, and `npm run test:e2e` all passed. Playwright Chromium was installed locally with `npx playwright install chromium` to enable the browser check.
