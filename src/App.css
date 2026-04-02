@@ -1,7 +1,7 @@
 .app-shell {
   min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
@@ -45,6 +45,8 @@
 .topbar-actions {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 10px;
 }
 
@@ -54,18 +56,19 @@
 }
 
 .workspace-layout {
-  min-height: 0;
+  flex: 1 1 auto;
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 18px;
-  padding: 18px;
+  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+  padding: 20px;
 }
 
 .left-rail {
-  min-height: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 220px;
-  gap: 18px;
+  grid-template-rows: minmax(360px, 1fr) minmax(240px, auto);
+  align-content: start;
+  gap: 20px;
 }
 
 .panel {
@@ -74,15 +77,16 @@
   flex-direction: column;
   gap: 16px;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--surface-color);
-  padding: 16px;
+  padding: 18px;
 }
 
 .panel-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -107,35 +111,41 @@
   min-height: 0;
   flex: 1 1 auto;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
+  background: #fbfdfc;
 }
 
-.editor-surface .cm-editor {
+.editor-textarea {
+  width: 100%;
   height: 100%;
-}
-
-.editor-surface .cm-focused {
-  outline: none;
-}
-
-.editor-surface .cm-scroller {
+  min-height: 320px;
+  border: 0;
+  resize: none;
+  padding: 14px 16px;
+  background: transparent;
+  color: var(--text-color);
   font-family: var(--mono-font);
+  line-height: 1.45;
+  overflow: auto;
+  white-space: pre;
 }
 
 .panel-prompt {
   gap: 12px;
+  min-height: 260px;
 }
 
 .prompt-textarea {
-  flex: 1 1 auto;
+  flex: 0 0 144px;
   width: 100%;
+  min-height: 144px;
   resize: none;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--surface-subtle);
   padding: 14px;
-  color: var(--muted-text);
+  color: var(--text-color);
 }
 
 .prompt-locked {
@@ -161,32 +171,41 @@
 
 .prompt-actions {
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .prompt-error {
   margin: 0;
   color: #9c4f2b;
   font-size: 0.92rem;
+  max-width: 28ch;
 }
 
 .panel-preview {
-  min-height: 0;
+  min-height: min(860px, calc(100vh - 150px));
+}
+
+.preview-header {
+  display: grid;
+  gap: 8px;
 }
 
 .preview-toolbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .preview-stage {
   position: relative;
-  min-height: 0;
+  min-height: 620px;
   flex: 1 1 auto;
   overflow: hidden;
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 12px;
   background:
     linear-gradient(180deg, rgba(15, 58, 68, 0.03), transparent 26%),
     var(--workspace-color);
@@ -240,8 +259,27 @@
   display: none;
 }
 
+.app-shell.is-preview-focused .topbar {
+  display: none;
+}
+
 .app-shell.is-preview-focused .workspace-layout {
   grid-template-columns: minmax(0, 1fr);
+  padding: 0;
+}
+
+.app-shell.is-preview-focused .panel-preview {
+  min-height: 100vh;
+  border: 0;
+  border-radius: 0;
+}
+
+.app-shell.is-preview-focused .preview-stage {
+  min-height: calc(100vh - 112px);
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 0;
 }
 
 .modal-backdrop {
@@ -256,10 +294,10 @@
 .settings-modal {
   width: min(520px, 100%);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 12px;
   background: var(--surface-color);
   padding: 18px;
-  box-shadow: 0 16px 40px rgba(15, 42, 48, 0.12);
+  box-shadow: 0 10px 28px rgba(15, 42, 48, 0.12);
 }
 
 .settings-form {
@@ -291,7 +329,11 @@
 
 @media (max-width: 1100px) {
   .workspace-layout {
-    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-columns: minmax(300px, 332px) minmax(0, 1fr);
+  }
+
+  .preview-stage {
+    min-height: 560px;
   }
 }
 
@@ -308,11 +350,19 @@
   }
 
   .left-rail {
-    grid-template-rows: 320px 220px;
+    grid-template-rows: minmax(320px, auto) minmax(240px, auto);
   }
 
   .preview-toolbar {
     justify-content: flex-start;
+  }
+
+  .panel-preview {
+    min-height: auto;
+  }
+
+  .preview-stage {
+    min-height: 440px;
   }
 
   .settings-actions,

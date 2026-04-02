@@ -1,4 +1,3 @@
-import CodeMirror from "@uiw/react-codemirror";
 import {
   startTransition,
   useDeferredValue,
@@ -357,18 +356,14 @@ function App() {
               <span>{source.split("\n").length} lines</span>
             </div>
             <div className="editor-surface">
-              <CodeMirror
-                basicSetup={{
-                  foldGutter: false,
-                  dropCursor: false,
-                }}
+              <textarea
+                className="editor-textarea"
                 value={source}
-                height="100%"
-                theme="light"
-                onChange={(value) => {
+                spellCheck="false"
+                onChange={(event) => {
                   startTransition(() => {
                     setIsRendering(true);
-                    setSource(value);
+                    setSource(event.target.value);
                   });
                 }}
               />
@@ -431,61 +426,62 @@ function App() {
         </section>
 
         <section className="panel panel-preview">
-          <div className="panel-header">
+          <div className="preview-header">
             <div>
               <h2>Preview</h2>
               <p className="panel-subtitle">
                 Preview stays primary. Drag to pan and use the toolbar to zoom.
               </p>
             </div>
-            <div className="preview-toolbar">
-              <button type="button" onClick={() => handleZoom(-0.1)}>
-                -
-              </button>
-              <button type="button" onClick={() => handleZoom(0.1)}>
-                +
-              </button>
-              <button type="button" onClick={handleReset}>
-                Reset
-              </button>
-              <button type="button" onClick={handleFit}>
-                Fit
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsPreviewFocused((current) => !current);
-                }}
-              >
-                {isPreviewFocused ? "Exit focus" : "Focus preview"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  if (renderState.status === "ready") {
-                    void downloadDiagramAsSvg(renderState.svg, "mermaid-diagram");
-                  }
-                }}
-                disabled={!canExport}
-              >
-                Export SVG
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  if (renderState.status === "ready") {
-                    void downloadDiagramAsPng(
-                      renderState.svg,
-                      renderState.metrics,
-                      "mermaid-diagram",
-                    );
-                  }
-                }}
-                disabled={!canExport}
-              >
-                Export PNG
-              </button>
-            </div>
+          </div>
+
+          <div className="preview-toolbar">
+            <button type="button" onClick={() => handleZoom(-0.1)}>
+              -
+            </button>
+            <button type="button" onClick={() => handleZoom(0.1)}>
+              +
+            </button>
+            <button type="button" onClick={handleReset}>
+              Reset
+            </button>
+            <button type="button" onClick={handleFit}>
+              Fit
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsPreviewFocused((current) => !current);
+              }}
+            >
+              {isPreviewFocused ? "Exit focus" : "Focus preview"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (renderState.status === "ready") {
+                  void downloadDiagramAsSvg(renderState.svg, "mermaid-diagram");
+                }
+              }}
+              disabled={!canExport}
+            >
+              Export SVG
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (renderState.status === "ready") {
+                  void downloadDiagramAsPng(
+                    renderState.svg,
+                    renderState.metrics,
+                    "mermaid-diagram",
+                  );
+                }
+              }}
+              disabled={!canExport}
+            >
+              Export PNG
+            </button>
           </div>
 
           <div
