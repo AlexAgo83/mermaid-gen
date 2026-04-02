@@ -1,0 +1,70 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="112" y1="82" x2="1444" y2="842" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#061F2E"/>
+      <stop offset="0.56" stop-color="#0D4F5A"/>
+      <stop offset="1" stop-color="#129A97"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="954" y1="164" x2="1376" y2="730" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B3442"/>
+      <stop offset="1" stop-color="#062532"/>
+    </linearGradient>
+    <linearGradient id="card" x1="992" y1="244" x2="1334" y2="674" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123D4D"/>
+      <stop offset="1" stop-color="#0A2C38"/>
+    </linearGradient>
+    <linearGradient id="warm" x1="244" y1="266" x2="742" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF5CC"/>
+      <stop offset="0.5" stop-color="#FFE39C"/>
+      <stop offset="1" stop-color="#FFB65A"/>
+    </linearGradient>
+    <filter id="blur" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="40" result="effect1_foregroundBlur_0_1"/>
+    </filter>
+  </defs>
+  <rect x="28" y="28" width="1544" height="844" rx="56" fill="url(#bg)"/>
+  <g filter="url(#blur)" opacity="0.25">
+    <circle cx="320" cy="756" r="180" fill="#061A24"/>
+    <circle cx="1330" cy="210" r="140" fill="#89FFF4"/>
+  </g>
+  <rect x="934" y="134" width="510" height="632" rx="34" fill="url(#panel)" stroke="#3FD6CB" stroke-opacity="0.24" stroke-width="2"/>
+  <rect x="974" y="212" width="430" height="190" rx="26" fill="url(#card)" stroke="#59EFE4" stroke-opacity="0.18" stroke-width="2"/>
+  <rect x="974" y="430" width="430" height="284" rx="26" fill="url(#card)" stroke="#59EFE4" stroke-opacity="0.18" stroke-width="2"/>
+  <circle cx="1012" cy="172" r="8" fill="#FF8B70"/>
+  <circle cx="1040" cy="172" r="8" fill="#FFD06D"/>
+  <circle cx="1068" cy="172" r="8" fill="#69F0D1"/>
+  <text x="168" y="240" fill="#A9FFF7" font-family="Verdana, Geneva, sans-serif" font-size="28" letter-spacing="6">MERMAID GENERATOR</text>
+  <text x="164" y="344" fill="url(#warm)" font-family="Verdana, Geneva, sans-serif" font-size="98" font-weight="700">Write diagrams</text>
+  <text x="164" y="440" fill="url(#warm)" font-family="Verdana, Geneva, sans-serif" font-size="98" font-weight="700">at the speed of thought.</text>
+  <text x="168" y="532" fill="#D5FBF5" font-family="Verdana, Geneva, sans-serif" font-size="34">
+    Edit Mermaid code, prompt a first draft, preview instantly,
+  </text>
+  <text x="168" y="580" fill="#D5FBF5" font-family="Verdana, Geneva, sans-serif" font-size="34">
+    then export clean SVG and PNG assets from one focused workspace.
+  </text>
+  <g opacity="0.92">
+    <rect x="168" y="646" width="210" height="62" rx="31" fill="#FFF3C0"/>
+    <text x="216" y="686" fill="#0A3440" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">Live preview</text>
+    <rect x="398" y="646" width="198" height="62" rx="31" fill="#0E7380" stroke="#8DFFF3" stroke-width="2"/>
+    <text x="438" y="686" fill="#E8FFFB" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">AI draft</text>
+    <rect x="616" y="646" width="198" height="62" rx="31" fill="#0E7380" stroke="#8DFFF3" stroke-width="2"/>
+    <text x="668" y="686" fill="#E8FFFB" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">SVG PNG</text>
+  </g>
+  <text x="1012" y="268" fill="#87F8F3" font-family="Courier New, monospace" font-size="24">flowchart LR</text>
+  <text x="1012" y="312" fill="#DDFCF8" font-family="Courier New, monospace" font-size="24">Idea[Text context] --&gt; Draft[Mermaid code]</text>
+  <text x="1012" y="350" fill="#DDFCF8" font-family="Courier New, monospace" font-size="24">Draft --&gt; Preview[Diagram preview]</text>
+  <g opacity="0.92">
+    <circle cx="1064" cy="526" r="22" fill="#7AF4E7"/>
+    <circle cx="1192" cy="526" r="22" fill="#7AF4E7"/>
+    <circle cx="1324" cy="526" r="22" fill="#7AF4E7"/>
+    <path d="M1086 526H1170" stroke="#CFFFF9" stroke-width="10" stroke-linecap="round"/>
+    <path d="M1214 526H1302" stroke="#CFFFF9" stroke-width="10" stroke-linecap="round"/>
+    <text x="1030" y="592" fill="#E7FFFB" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">Prompt</text>
+    <text x="1150" y="592" fill="#E7FFFB" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">Code</text>
+    <text x="1264" y="592" fill="#E7FFFB" font-family="Verdana, Geneva, sans-serif" font-size="28" font-weight="700">Export</text>
+  </g>
+  <path d="M147 124C222 150 264 206 316 298" stroke="#8CFFF6" stroke-opacity="0.6" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1410 760C1342 710 1290 668 1230 610" stroke="#8CFFF6" stroke-opacity="0.4" stroke-width="8" stroke-linecap="round"/>
+</svg>
