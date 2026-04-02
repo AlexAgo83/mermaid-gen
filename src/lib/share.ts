@@ -1,4 +1,5 @@
 const SHARED_MERMAID_QUERY_KEY = "m";
+const SHARED_MERMAID_DECODER = new TextDecoder("utf-8", { fatal: true });
 
 function toBase64Url(bytes: Uint8Array) {
   let binary = "";
@@ -39,7 +40,7 @@ export function decodeSharedMermaidSource(value: string) {
       return null;
     }
 
-    return new TextDecoder().decode(bytes);
+    return SHARED_MERMAID_DECODER.decode(bytes);
   } catch {
     return null;
   }

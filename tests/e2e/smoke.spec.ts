@@ -23,18 +23,30 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
     page.getByRole("button", { name: "Open navigation menu" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Open navigation menu" }).click();
-  await expect(page.getByRole("dialog", { name: "Navigation menu" })).toBeVisible();
+  const navigationMenu = page.getByRole("dialog", { name: "Navigation menu" });
+  await expect(navigationMenu).toBeVisible();
+  await expect(
+    navigationMenu.evaluate(
+      (element) =>
+        element.getBoundingClientRect().top === 0 &&
+        element.getBoundingClientRect().bottom === window.innerHeight,
+    ),
+  ).resolves.toBe(true);
   await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open export dialog" })).toBeVisible();
-  await page
-    .getByRole("banner")
-    .getByRole("button", { name: "Close navigation menu" })
-    .click();
+  await navigationMenu.getByRole("button", { name: "Close navigation menu" }).click();
   await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeVisible();
 
   const previewHeading = page.getByRole("heading", { name: "Preview" });
+  const previewStage = page.locator(".preview-stage");
   await previewHeading.scrollIntoViewIfNeeded();
   await expect(previewHeading).toBeVisible();
+  await expect(
+    previewStage.getByRole("button", { name: "Zoom out" }),
+  ).toBeVisible();
+  await expect(
+    previewStage.getByRole("button", { name: "Zoom in" }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Show preview help" }).click();
   await expect(page.getByRole("note")).toContainText(
     /Hold Shift while scrolling to zoom/i,
@@ -42,6 +54,14 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
 });
 
 test("requires Shift for wheel-based preview zoom", async ({ page }) => {
+  const consoleErrors: string[] = [];
+
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      consoleErrors.push(message.text());
+    }
+  });
+
   await page.setViewportSize({ width: 1440, height: 980 });
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();
@@ -70,6 +90,37 @@ test("requires Shift for wheel-based preview zoom", async ({ page }) => {
   await page.keyboard.up("Shift");
 
   await expect.poll(getTransform).not.toBe(before);
+  expect(
+    consoleErrors.filter((message) =>
+      message.includes(
+        "Unable to preventDefault inside passive event listener invocation.",
+      ),
+    ),
+  ).toHaveLength(0);
+});
+
+test("lets preview zoom buttons update the viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 980 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  const previewStage = page.locator(".preview-stage");
+  const previewDiagram = page.locator(".preview-diagram");
+  await expect(previewStage).toBeVisible();
+  await expect(previewDiagram).toBeVisible();
+
+  const getTransform = async () =>
+    previewDiagram.evaluate((element) => (element as HTMLElement).style.transform);
+
+  const before = await getTransform();
+
+  await previewStage.getByRole("button", { name: "Zoom in" }).click();
+  await expect.poll(getTransform).not.toBe(before);
+
+  const afterZoomIn = await getTransform();
+
+  await previewStage.getByRole("button", { name: "Zoom out" }).click();
+  await expect.poll(getTransform).not.toBe(afterZoomIn);
 });
 
 test("focus mode keeps the header and removes local preview chrome", async ({
@@ -205,6 +256,23 @@ test("hydrates shared Mermaid from the URL on load", async ({ page }) => {
   await expect(page.getByRole("dialog", { name: "Welcome" })).toBeHidden();
   await expect(page.locator(".editor-textarea")).toHaveValue(source);
   await expect(page.locator(".preview-diagram")).toBeVisible();
+});
+
+test("shows app-owned preview copy for invalid Mermaid source", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await page.locator(".editor-textarea").fill("flowchart LR\nA -->");
+
+  await expect(
+    page.getByRole("heading", { name: "Preview unavailable" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/This Mermaid source could not be rendered/i),
+  ).toBeVisible();
+  await expect(page.getByText(/Syntax error in text/i)).toBeHidden();
 });
 
 test("copies a shared Mermaid URL from export and restores it on open", async ({

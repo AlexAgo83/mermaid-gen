@@ -1,6 +1,7 @@
 import {
   useDeferredValue,
   useEffect,
+  useEffectEvent,
   useMemo,
   useRef,
   useState,
@@ -10,7 +11,6 @@ import type {
   KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
   ReactNode,
-  WheelEvent as ReactWheelEvent,
 } from "react";
 import "./App.css";
 import { downloadDiagramAsPng, downloadDiagramAsSvg } from "./lib/exporters";
@@ -280,6 +280,13 @@ function getRenderErrorCopy(sourceOrigin: SourceOrigin): RenderErrorCopy {
 
 function isEscapeDismissalKey(key: string, code: string) {
   return key === "Escape" || key === "Esc" || code === "Escape";
+}
+
+function isInteractivePreviewTarget(target: EventTarget | null) {
+  return (
+    target instanceof Element &&
+    target.closest("button, input, textarea, select, a") !== null
+  );
 }
 
 type HeaderActionButtonProps = {
@@ -711,7 +718,10 @@ function App() {
   };
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (renderState.status !== "ready") {
+    if (
+      renderState.status !== "ready" ||
+      isInteractivePreviewTarget(event.target)
+    ) {
       return;
     }
 
@@ -748,7 +758,7 @@ function App() {
     }
   };
 
-  const handleWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
+  const handlePreviewWheel = useEffectEvent((event: WheelEvent) => {
     if (
       renderState.status !== "ready" ||
       !previewRef.current ||
@@ -774,7 +784,25 @@ function App() {
       x: nextX,
       y: nextY,
     });
-  };
+  });
+
+  useEffect(() => {
+    const previewElement = previewRef.current;
+
+    if (!previewElement) {
+      return;
+    }
+
+    const onWheel = (event: WheelEvent) => {
+      handlePreviewWheel(event);
+    };
+
+    previewElement.addEventListener("wheel", onWheel, { passive: false });
+
+    return () => {
+      previewElement.removeEventListener("wheel", onWheel);
+    };
+  }, []);
 
   const handleSaveSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -900,26 +928,6 @@ function App() {
           {!isMobileHeader ? (
             <div className="topbar-action-row">
               <HeaderActionButton
-                label="Zoom out"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleZoom(-0.1);
-                }}
-                disabled={!canExport}
-              >
-                <MinusIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
-                label="Zoom in"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleZoom(0.1);
-                }}
-                disabled={!canExport}
-              >
-                <PlusIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
                 label="Reset preview position"
                 onClick={() => {
                   closeMobileMenu();
@@ -994,7 +1002,28 @@ function App() {
             aria-label="Close navigation menu"
             onClick={closeMobileMenu}
           />
-          <div className="mobile-menu-sheet" role="dialog" aria-label="Navigation menu">
+          <div
+            className="mobile-menu-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+          >
+            <div className="mobile-menu-header">
+              <div>
+                <h2 id="mobile-menu-title">Navigation menu</h2>
+                <p className="panel-subtitle">
+                  Open workspace actions without leaving the mobile layout.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="mobile-menu-close"
+                aria-label="Close navigation menu"
+                onClick={closeMobileMenu}
+              >
+                Close
+              </button>
+            </div>
             <div className="mobile-menu-group">
               <MobileMenuActionButton label="Open settings" onClick={openSettings}>
                 <SettingsIcon />
@@ -1016,26 +1045,6 @@ function App() {
               </MobileMenuActionButton>
             </div>
             <div className="mobile-menu-group">
-              <MobileMenuActionButton
-                label="Zoom out"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleZoom(-0.1);
-                }}
-                disabled={!canExport}
-              >
-                <MinusIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
-                label="Zoom in"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleZoom(0.1);
-                }}
-                disabled={!canExport}
-              >
-                <PlusIcon />
-              </MobileMenuActionButton>
               <MobileMenuActionButton
                 label="Reset preview position"
                 onClick={() => {
@@ -1248,7 +1257,6 @@ function App() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            onWheel={handleWheel}
           >
             {isRendering ? (
               <div className="preview-message">Rendering Mermaid preview…</div>
@@ -1272,6 +1280,31 @@ function App() {
                 dangerouslySetInnerHTML={{ __html: renderState.svg }}
               />
             ) : null}
+
+            <div className="preview-stage-controls" aria-label="Preview zoom controls">
+              <button
+                type="button"
+                className="preview-stage-control"
+                aria-label="Zoom out"
+                onClick={() => {
+                  handleZoom(-0.1);
+                }}
+                disabled={!canExport}
+              >
+                <MinusIcon />
+              </button>
+              <button
+                type="button"
+                className="preview-stage-control"
+                aria-label="Zoom in"
+                onClick={() => {
+                  handleZoom(0.1);
+                }}
+                disabled={!canExport}
+              >
+                <PlusIcon />
+              </button>
+            </div>
           </div>
         </section>
       </main>

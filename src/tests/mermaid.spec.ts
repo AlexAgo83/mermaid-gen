@@ -3,6 +3,7 @@ import {
   GENERATED_MERMAID_VALIDATION_ERROR,
   normalizeGeneratedMermaid,
   prepareGeneratedMermaidSource,
+  renderMermaidDiagram,
 } from "../lib/mermaid";
 
 describe("normalizeGeneratedMermaid", () => {
@@ -61,5 +62,9 @@ describe("prepareGeneratedMermaidSource", () => {
       source: "flowchart LR\nA -->",
       error: GENERATED_MERMAID_VALIDATION_ERROR,
     });
+  });
+
+  it("rejects invalid Mermaid instead of returning Mermaid error svg markup", async () => {
+    await expect(renderMermaidDiagram("flowchart LR\nA -->")).rejects.toThrow();
   });
 });

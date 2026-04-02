@@ -201,6 +201,8 @@ async function getMermaid() {
 export async function renderMermaidDiagram(source: string) {
   const mermaid = await getMermaid();
 
+  await mermaid.parse(source);
+
   const id = `mermaid-${crypto.randomUUID()}`;
   const { svg } = await mermaid.render(id, source);
   return svg;

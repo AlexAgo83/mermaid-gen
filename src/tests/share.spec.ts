@@ -25,6 +25,10 @@ describe("shared Mermaid URL helpers", () => {
     expect(loadSharedMermaidSourceFromSearch("?m=not.valid")).toBeNull();
   });
 
+  it("returns null when the shared payload decodes to invalid utf-8", () => {
+    expect(loadSharedMermaidSourceFromSearch("?m=_____")).toBeNull();
+  });
+
   it("builds a share URL that preserves the current path", () => {
     const source = "flowchart TD\nShare --> Link";
     const url = buildSharedMermaidUrl(
