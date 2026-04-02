@@ -837,9 +837,14 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <span>Mermaid Generator</span>
-        <span>© 2026</span>
-        <span className="footer-slot">Repository link coming soon</span>
+        <a
+          className="footer-link"
+          href="https://github.com/AlexAgo83/mermaid-gen"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Mermaid Generator © 2026
+        </a>
       </footer>
 
       {isSettingsOpen ? (

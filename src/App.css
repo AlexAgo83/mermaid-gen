@@ -505,15 +505,28 @@
 .app-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
-  padding: 14px 20px 18px;
+  padding: 10px 20px 14px;
   color: var(--muted-text);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
-.footer-slot {
-  color: var(--accent-strong);
+.footer-link {
+  color: var(--muted-text);
+  opacity: 0.72;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    opacity 160ms ease,
+    color 160ms ease;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  opacity: 1;
+  color: var(--muted-text);
+  text-decoration: none;
 }
 
 @media (max-width: 1100px) {
@@ -576,7 +589,7 @@
 
   .app-footer {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 }
 

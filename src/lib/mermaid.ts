@@ -63,7 +63,7 @@ export function normalizeGeneratedMermaid(source: string) {
       return line;
     }
 
-    const explicitIdMatch = definition.match(/^([^\[\s]+)\s*(\[.*\])$/);
+    const explicitIdMatch = definition.match(/^([^\s[]+)\s*(\[.*\])$/);
 
     if (explicitIdMatch) {
       const originalId = explicitIdMatch[1];
