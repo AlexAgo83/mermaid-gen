@@ -98,6 +98,55 @@ test("opens the export modal from a single entry point", async ({ page }) => {
   await expect(page.getByText(/Choose the output format/i)).toBeVisible();
 });
 
+test("keeps modal content reachable on a short mobile viewport", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 480 });
+  await page.goto("/");
+
+  const onboardingDialog = page.getByRole("dialog", { name: "Welcome" });
+  const onboardingScroll = page.locator(".onboarding-modal .modal-scroll-content");
+  await expect(onboardingDialog).toBeVisible();
+  await expect(onboardingScroll).toBeVisible();
+  await expect(
+    onboardingDialog.evaluate(
+      (element) => element.getBoundingClientRect().bottom <= window.innerHeight,
+    ),
+  ).resolves.toBe(true);
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+  const settingsDialog = page.getByRole("dialog", { name: "Settings" });
+  const settingsScroll = settingsDialog.locator(".modal-scroll-content");
+  await expect(settingsDialog).toBeVisible();
+  await expect(settingsScroll).toBeVisible();
+  await expect(
+    settingsDialog.evaluate(
+      (element) => element.getBoundingClientRect().bottom <= window.innerHeight,
+    ),
+  ).resolves.toBe(true);
+  await expect(
+    settingsScroll.evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+      return element.scrollTop > 0;
+    }),
+  ).resolves.toBe(true);
+  await settingsDialog.getByRole("button", { name: "Close" }).click();
+
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await page.getByRole("button", { name: "Open export dialog" }).click();
+  const exportDialog = page.getByRole("dialog", { name: "Export diagram" });
+  const exportScroll = exportDialog.locator(".modal-scroll-content");
+  await expect(exportDialog).toBeVisible();
+  await expect(exportScroll).toBeVisible();
+  await expect(
+    exportDialog.evaluate(
+      (element) => element.getBoundingClientRect().bottom <= window.innerHeight,
+    ),
+  ).resolves.toBe(true);
+});
+
 test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Skip" }).click();

@@ -1,10 +1,10 @@
 ## item_017_standardize_modal_internal_scrolling_across_current_modal_surfaces - Standardize modal internal scrolling across current modal surfaces
-> From version: 0.1.0
+> From version: 0.1.0+wave1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,3 +74,4 @@ flowchart LR
 # Notes
 - Derived from requests `req_010_make_settings_modal_scrollable_and_dismissible_with_escape` and `req_013_standardize_modal_scrolling_and_overlay_layering_across_viewports`.
 - This split isolates shared scroll usability from backdrop/layering rules so mobile reachability can be delivered and validated independently.
+- Delivered in `task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery` wave 1 by bounding current modal surfaces to the viewport, moving overflow into shared internal scroll containers, and validating short mobile viewport reachability across onboarding, settings, and export.

@@ -1205,130 +1205,132 @@ function App() {
             aria-modal="true"
             aria-labelledby="settings-title"
           >
-            <div className="panel-header">
-              <div>
-                <h2 id="settings-title">Settings</h2>
-                <p className="panel-subtitle">
-                  Choose the active provider and keep keys local to this browser.
-                </p>
-              </div>
-            </div>
-
-            <form className="settings-form" onSubmit={handleSaveSettings}>
-              <div className="provider-picker" role="radiogroup" aria-label="Provider">
-                {PROVIDERS.map((provider) => {
-                  const hasKey =
-                    settingsDraft.providerKeys[provider.id].trim().length > 0;
-
-                  return (
-                    <button
-                      key={provider.id}
-                      type="button"
-                      className={`provider-card${
-                        settingsDraft.activeProviderId === provider.id
-                          ? " is-active"
-                          : ""
-                      }`}
-                      role="radio"
-                      aria-checked={settingsDraft.activeProviderId === provider.id}
-                      onClick={() => {
-                        setSettingsDraft((current) => ({
-                          ...current,
-                          activeProviderId: provider.id,
-                        }));
-                        setIsDraftKeyVisible(false);
-                      }}
-                    >
-                      <span className="provider-card-label">{provider.label}</span>
-                      <span className="provider-card-copy">
-                        {provider.description}
-                      </span>
-                      <span className="provider-card-status">
-                        {hasKey ? "Key saved locally" : "No key saved"}
-                      </span>
-                    </button>
-                  );
-                })}
+            <div className="modal-scroll-content">
+              <div className="panel-header">
+                <div>
+                  <h2 id="settings-title">Settings</h2>
+                  <p className="panel-subtitle">
+                    Choose the active provider and keep keys local to this browser.
+                  </p>
+                </div>
               </div>
 
-              <label className="settings-field" htmlFor="provider-key">
-                {activeDraftProvider.keyLabel}
-              </label>
-              <div className="settings-key-row">
-                <input
-                  id="provider-key"
-                  className="settings-input"
-                  type={isDraftKeyVisible ? "text" : "password"}
-                  value={settingsDraft.providerKeys[settingsDraft.activeProviderId]}
-                  onChange={(event) => {
-                    const nextValue = event.target.value;
-                    setSettingsDraft((current) => ({
-                      ...current,
-                      providerKeys: {
-                        ...current.providerKeys,
-                        [current.activeProviderId]: nextValue,
-                      },
-                    }));
-                  }}
-                  placeholder={activeDraftProvider.keyPlaceholder}
-                  autoComplete="off"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsDraftKeyVisible((current) => !current);
-                  }}
-                >
-                  {isDraftKeyVisible ? "Hide" : "Reveal"}
-                </button>
-              </div>
-              <p className="settings-help">
-                Keys stay on this device in local browser storage. You can keep
-                multiple provider keys and switch the active provider without
-                losing the others.
-              </p>
-              <div className="settings-actions">
-                <div className="settings-actions-left">
-                  <button
-                    type="button"
-                    onClick={() => {
+              <form className="settings-form" onSubmit={handleSaveSettings}>
+                <div className="provider-picker" role="radiogroup" aria-label="Provider">
+                  {PROVIDERS.map((provider) => {
+                    const hasKey =
+                      settingsDraft.providerKeys[provider.id].trim().length > 0;
+
+                    return (
+                      <button
+                        key={provider.id}
+                        type="button"
+                        className={`provider-card${
+                          settingsDraft.activeProviderId === provider.id
+                            ? " is-active"
+                            : ""
+                        }`}
+                        role="radio"
+                        aria-checked={settingsDraft.activeProviderId === provider.id}
+                        onClick={() => {
+                          setSettingsDraft((current) => ({
+                            ...current,
+                            activeProviderId: provider.id,
+                          }));
+                          setIsDraftKeyVisible(false);
+                        }}
+                      >
+                        <span className="provider-card-label">{provider.label}</span>
+                        <span className="provider-card-copy">
+                          {provider.description}
+                        </span>
+                        <span className="provider-card-status">
+                          {hasKey ? "Key saved locally" : "No key saved"}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <label className="settings-field" htmlFor="provider-key">
+                  {activeDraftProvider.keyLabel}
+                </label>
+                <div className="settings-key-row">
+                  <input
+                    id="provider-key"
+                    className="settings-input"
+                    type={isDraftKeyVisible ? "text" : "password"}
+                    value={settingsDraft.providerKeys[settingsDraft.activeProviderId]}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
                       setSettingsDraft((current) => ({
                         ...current,
                         providerKeys: {
                           ...current.providerKeys,
-                          [current.activeProviderId]: "",
+                          [current.activeProviderId]: nextValue,
                         },
                       }));
                     }}
-                  >
-                    Remove key
-                  </button>
+                    placeholder={activeDraftProvider.keyPlaceholder}
+                    autoComplete="off"
+                  />
                   <button
                     type="button"
                     onClick={() => {
-                      setIsSettingsOpen(false);
-                      setOnboardingStep(0);
-                      setIsOnboardingOpen(true);
+                      setIsDraftKeyVisible((current) => !current);
                     }}
                   >
-                    Reopen onboarding
+                    {isDraftKeyVisible ? "Hide" : "Reveal"}
                   </button>
                 </div>
-                <div className="settings-actions-right">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsSettingsOpen(false);
-                    }}
-                  >
-                    Close
-                  </button>
-                  <button className="button-primary" type="submit">
-                    Save settings
-                  </button>
+                <p className="settings-help">
+                  Keys stay on this device in local browser storage. You can keep
+                  multiple provider keys and switch the active provider without
+                  losing the others.
+                </p>
+                <div className="settings-actions">
+                  <div className="settings-actions-left">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSettingsDraft((current) => ({
+                          ...current,
+                          providerKeys: {
+                            ...current.providerKeys,
+                            [current.activeProviderId]: "",
+                          },
+                        }));
+                      }}
+                    >
+                      Remove key
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSettingsOpen(false);
+                        setOnboardingStep(0);
+                        setIsOnboardingOpen(true);
+                      }}
+                    >
+                      Reopen onboarding
+                    </button>
+                  </div>
+                  <div className="settings-actions-right">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSettingsOpen(false);
+                      }}
+                    >
+                      Close
+                    </button>
+                    <button className="button-primary" type="submit">
+                      Save settings
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       ) : null}
@@ -1341,95 +1343,97 @@ function App() {
             aria-modal="true"
             aria-labelledby="export-title"
           >
-            <div className="panel-header">
-              <div>
-                <h2 id="export-title">Export diagram</h2>
-                <p className="panel-subtitle">
-                  Choose the output format and raster scale before downloading.
-                </p>
-              </div>
-            </div>
-
-            <form className="settings-form" onSubmit={handleExport}>
-              <div className="export-options" role="radiogroup" aria-label="Export format">
-                <button
-                  type="button"
-                  className={`provider-card${exportFormat === "svg" ? " is-active" : ""}`}
-                  role="radio"
-                  aria-checked={exportFormat === "svg"}
-                  onClick={() => {
-                    setExportFormat("svg");
-                  }}
-                >
-                  <span className="provider-card-label">SVG</span>
-                  <span className="provider-card-copy">
-                    Vector export for docs and further editing.
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className={`provider-card${exportFormat === "png" ? " is-active" : ""}`}
-                  role="radio"
-                  aria-checked={exportFormat === "png"}
-                  onClick={() => {
-                    setExportFormat("png");
-                  }}
-                >
-                  <span className="provider-card-label">PNG</span>
-                  <span className="provider-card-copy">
-                    Raster export with selectable output scale.
-                  </span>
-                </button>
-              </div>
-
-              {exportFormat === "png" ? (
-                <div className="scale-picker" role="radiogroup" aria-label="PNG scale">
-                  {[1, 2, 3].map((scale) => (
-                    <button
-                      key={scale}
-                      type="button"
-                      className={`scale-chip${exportScale === scale ? " is-active" : ""}`}
-                      role="radio"
-                      aria-checked={exportScale === scale}
-                      onClick={() => {
-                        setExportScale(scale);
-                      }}
-                    >
-                      {scale}x
-                    </button>
-                  ))}
+            <div className="modal-scroll-content">
+              <div className="panel-header">
+                <div>
+                  <h2 id="export-title">Export diagram</h2>
+                  <p className="panel-subtitle">
+                    Choose the output format and raster scale before downloading.
+                  </p>
                 </div>
-              ) : null}
+              </div>
 
-              {renderState.status === "ready" ? (
-                <p className="settings-help">
-                  Source diagram: {Math.round(renderState.metrics.width)} x{" "}
-                  {Math.round(renderState.metrics.height)} px
-                  {exportSize && exportFormat === "png"
-                    ? ` · PNG output: ${exportSize.width} x ${exportSize.height} px`
-                    : ""}
-                </p>
-              ) : null}
-
-              {exportError ? <p className="prompt-error">{exportError}</p> : null}
-
-              <div className="settings-actions">
-                <div />
-                <div className="settings-actions-right">
+              <form className="settings-form" onSubmit={handleExport}>
+                <div className="export-options" role="radiogroup" aria-label="Export format">
                   <button
                     type="button"
+                    className={`provider-card${exportFormat === "svg" ? " is-active" : ""}`}
+                    role="radio"
+                    aria-checked={exportFormat === "svg"}
                     onClick={() => {
-                      setIsExportOpen(false);
+                      setExportFormat("svg");
                     }}
                   >
-                    Close
+                    <span className="provider-card-label">SVG</span>
+                    <span className="provider-card-copy">
+                      Vector export for docs and further editing.
+                    </span>
                   </button>
-                  <button className="button-primary" type="submit" disabled={isExporting}>
-                    {isExporting ? "Downloading…" : "Download"}
+                  <button
+                    type="button"
+                    className={`provider-card${exportFormat === "png" ? " is-active" : ""}`}
+                    role="radio"
+                    aria-checked={exportFormat === "png"}
+                    onClick={() => {
+                      setExportFormat("png");
+                    }}
+                  >
+                    <span className="provider-card-label">PNG</span>
+                    <span className="provider-card-copy">
+                      Raster export with selectable output scale.
+                    </span>
                   </button>
                 </div>
-              </div>
-            </form>
+
+                {exportFormat === "png" ? (
+                  <div className="scale-picker" role="radiogroup" aria-label="PNG scale">
+                    {[1, 2, 3].map((scale) => (
+                      <button
+                        key={scale}
+                        type="button"
+                        className={`scale-chip${exportScale === scale ? " is-active" : ""}`}
+                        role="radio"
+                        aria-checked={exportScale === scale}
+                        onClick={() => {
+                          setExportScale(scale);
+                        }}
+                      >
+                        {scale}x
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+
+                {renderState.status === "ready" ? (
+                  <p className="settings-help">
+                    Source diagram: {Math.round(renderState.metrics.width)} x{" "}
+                    {Math.round(renderState.metrics.height)} px
+                    {exportSize && exportFormat === "png"
+                      ? ` · PNG output: ${exportSize.width} x ${exportSize.height} px`
+                      : ""}
+                  </p>
+                ) : null}
+
+                {exportError ? <p className="prompt-error">{exportError}</p> : null}
+
+                <div className="settings-actions">
+                  <div />
+                  <div className="settings-actions-right">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsExportOpen(false);
+                      }}
+                    >
+                      Close
+                    </button>
+                    <button className="button-primary" type="submit" disabled={isExporting}>
+                      {isExporting ? "Downloading…" : "Download"}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       ) : null}
@@ -1442,63 +1446,65 @@ function App() {
             aria-modal="true"
             aria-labelledby="onboarding-title"
           >
-            <div className="onboarding-kicker">
-              Step {onboardingStep + 1} of {ONBOARDING_STEPS.length}
-            </div>
-            <div className="panel-header">
-              <div>
-                <h2 id="onboarding-title">{ONBOARDING_STEPS[onboardingStep].title}</h2>
-                <p className="panel-subtitle">
-                  {ONBOARDING_STEPS[onboardingStep].body}
-                </p>
+            <div className="modal-scroll-content modal-scroll-content-onboarding">
+              <div className="onboarding-kicker">
+                Step {onboardingStep + 1} of {ONBOARDING_STEPS.length}
               </div>
-            </div>
-            <p className="onboarding-detail">
-              {ONBOARDING_STEPS[onboardingStep].detail}
-            </p>
-            <div className="settings-actions">
-              <button
-                type="button"
-                onClick={() => {
-                  setOnboardingState("dismissed");
-                  setIsOnboardingOpen(false);
-                }}
-              >
-                Skip
-              </button>
-              <div className="settings-actions-right">
-                {onboardingStep > 0 ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOnboardingStep((current) => current - 1);
-                    }}
-                  >
-                    Back
-                  </button>
-                ) : null}
-                {onboardingStep < ONBOARDING_STEPS.length - 1 ? (
-                  <button
-                    className="button-primary"
-                    type="button"
-                    onClick={() => {
-                      setOnboardingStep((current) => current + 1);
-                    }}
-                  >
-                    Next
-                  </button>
-                ) : (
-                  <button
-                    className="button-primary"
-                    type="button"
-                    onClick={() => {
-                      setOnboardingState("completed");
-                      setIsOnboardingOpen(false);
-                    }}
-                  >
-                    Finish
-                  </button>
-                )}
+              <div className="panel-header">
+                <div>
+                  <h2 id="onboarding-title">{ONBOARDING_STEPS[onboardingStep].title}</h2>
+                  <p className="panel-subtitle">
+                    {ONBOARDING_STEPS[onboardingStep].body}
+                  </p>
+                </div>
+              </div>
+              <p className="onboarding-detail">
+                {ONBOARDING_STEPS[onboardingStep].detail}
+              </p>
+              <div className="settings-actions">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOnboardingState("dismissed");
+                    setIsOnboardingOpen(false);
+                  }}
+                >
+                  Skip
+                </button>
+                <div className="settings-actions-right">
+                  {onboardingStep > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOnboardingStep((current) => current - 1);
+                      }}
+                    >
+                      Back
+                    </button>
+                  ) : null}
+                  {onboardingStep < ONBOARDING_STEPS.length - 1 ? (
+                    <button
+                      className="button-primary"
+                      type="button"
+                      onClick={() => {
+                        setOnboardingStep((current) => current + 1);
+                      }}
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <button
+                      className="button-primary"
+                      type="button"
+                      onClick={() => {
+                        setOnboardingState("completed");
+                        setIsOnboardingOpen(false);
+                      }}
+                    >
+                      Finish
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
