@@ -1160,7 +1160,7 @@ function App() {
 
         <section className="panel panel-preview">
           {!isPreviewFocused ? (
-            <div className="preview-header">
+            <div className="panel-header preview-header">
               <div className="panel-heading-group">
                 <div className="title-row">
                   <h2>Preview</h2>

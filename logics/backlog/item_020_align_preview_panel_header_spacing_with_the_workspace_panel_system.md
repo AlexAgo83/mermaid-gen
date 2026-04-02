@@ -1,10 +1,10 @@
 ## item_020_align_preview_panel_header_spacing_with_the_workspace_panel_system - Align preview panel header spacing with the workspace panel system
-> From version: 0.1.0
+> From version: 0.1.0+wave4
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -73,3 +73,4 @@ flowchart LR
 # Notes
 - Derived from request `req_011_align_preview_panel_header_spacing_with_other_panels`.
 - This item isolates a small but visible shell consistency defect so it can be delivered without coupling it to the modal or share-link work.
+- Delivered in `task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery` wave 4 by moving the preview header back onto the shared panel-header structure so title reset and spacing behavior match the rest of the workspace panel system.

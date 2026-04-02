@@ -383,8 +383,7 @@
 }
 
 .preview-header {
-  display: grid;
-  gap: 8px;
+  align-items: flex-start;
 }
 
 .preview-hint {
