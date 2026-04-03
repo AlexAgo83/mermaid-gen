@@ -1,10 +1,10 @@
 ## task_007_orchestrate_post_020_audit_hardening_and_quality_wave - Orchestrate post-0.2.0 audit hardening and quality wave
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In Progress
 > Understanding: 98%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 8%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -33,11 +33,11 @@ flowchart TD
 
 # Plan
 
-- [ ] **Wave 0 — Changelog tests** (`item_035`)
-  - [ ] 0.1. Read `src/tests/changelog.spec.ts` and `src/lib/changelog.ts` to understand the current assertion structure.
-  - [ ] 0.2. Refactor version-specific assertions to relative structural assertions (ordering, shape, normalization) that do not name a specific latest version string.
-  - [ ] 0.3. Run `npm run test -- src/tests/changelog.spec.ts` and verify all AC1–AC5 pass.
-  - [ ] 0.4. Update `item_035` status to Done, commit.
+- [x] **Wave 0 — Changelog tests** (`item_035`)
+  - [x] 0.1. Read `src/tests/changelog.spec.ts` and `src/lib/changelog.ts` to understand the current assertion structure.
+  - [x] 0.2. Refactor version-specific assertions to relative structural assertions (ordering, shape, normalization) that do not name a specific latest version string.
+  - [x] 0.3. Run `npm run test -- src/tests/changelog.spec.ts` and verify all AC1–AC5 pass.
+  - [x] 0.4. Update `item_035` status to Done, commit.
 
 - [ ] **Wave 1 — Bug fixes** (`item_036`, `item_037`, `item_038`)
   - [ ] 1.1. **Anthropic CORS warning** (`item_036`): read `src/components/modals/SettingsModal.tsx` and `src/lib/llm.ts`. Add an inline warning banner when the Anthropic provider is selected. Improve the prompt-panel error message for network-level failures on the Anthropic path.

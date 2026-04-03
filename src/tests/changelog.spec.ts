@@ -4,20 +4,44 @@ import {
   normalizeChangelogEntry,
 } from "../lib/changelog";
 
+function compareVersionsDesc(left: string, right: string) {
+  const leftParts = left.split(".").map((value) => Number.parseInt(value, 10));
+  const rightParts = right.split(".").map((value) => Number.parseInt(value, 10));
+  const maxLength = Math.max(leftParts.length, rightParts.length);
+
+  for (let index = 0; index < maxLength; index += 1) {
+    const leftValue = leftParts[index] ?? 0;
+    const rightValue = rightParts[index] ?? 0;
+
+    if (leftValue !== rightValue) {
+      return rightValue - leftValue;
+    }
+  }
+
+  return 0;
+}
+
 describe("changelog loader", () => {
   it("loads the available changelog history from the curated changelog files", async () => {
     const entries = await loadChangelogEntries();
+    const versions = entries.map((entry) => entry.version);
+    const sortedVersions = [...versions].sort(compareVersionsDesc);
 
     expect(entries.length).toBeGreaterThan(0);
-    expect(entries[0]?.version).toBe("0.2.0");
-    expect(entries.map((entry) => entry.version)).toEqual(["0.2.0", "0.1.0"]);
-    expect(entries[0]?.body).toContain("Major Highlights");
-    expect(entries[0]?.sections.map((section) => section.title)).toContain(
-      "Major Highlights",
-    );
-    expect(entries[0]?.sections[0]?.blocks[0]).toMatchObject({
-      type: "list",
-    });
+    expect(versions).toEqual(sortedVersions);
+
+    for (const entry of entries) {
+      expect(entry.slug).toBe(`v${entry.version}`);
+      expect(entry.title).toBe(`Version ${entry.version}`);
+      expect(entry.body.trim().length).toBeGreaterThan(0);
+      expect(entry.sections.length).toBeGreaterThan(0);
+      expect(entry.sections.some((section) => section.title.length > 0)).toBe(true);
+      expect(
+        entry.sections.some((section) =>
+          section.blocks.some((block) => block.type === "list"),
+        ),
+      ).toBe(true);
+    }
   });
 
   it("backfills parsed changelog sections for legacy entry shapes", () => {
