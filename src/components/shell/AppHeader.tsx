@@ -7,31 +7,51 @@ import {
   FocusIcon,
   ResetIcon,
   SettingsIcon,
-} from "../icons";
+} from "@/components/icons";
 
-type HeaderActionButtonProps = {
+type ActionButtonProps = {
   label: string;
   onClick: () => void;
   disabled?: boolean;
   active?: boolean;
-  variant?: "default" | "primary";
+  emphasis?: "default" | "primary";
+  variant?: "topbar" | "mobile-menu";
   children: ReactNode;
 };
 
-function HeaderActionButton({
+function ActionButton({
   label,
   onClick,
   disabled = false,
   active = false,
-  variant = "default",
+  emphasis = "default",
+  variant = "topbar",
   children,
-}: HeaderActionButtonProps) {
+}: ActionButtonProps) {
+  if (variant === "mobile-menu") {
+    return (
+      <button
+        type="button"
+        className={`mobile-menu-action${
+          emphasis === "primary" ? " is-primary" : ""
+        }${active ? " is-active" : ""}`}
+        onClick={onClick}
+        disabled={disabled}
+      >
+        <span className="mobile-menu-action-icon" aria-hidden="true">
+          {children}
+        </span>
+        <span>{label}</span>
+      </button>
+    );
+  }
+
   return (
     <div className="topbar-action-item">
       <button
         type="button"
         className={`topbar-icon-button${
-          variant === "primary" ? " is-primary" : ""
+          emphasis === "primary" ? " is-primary" : ""
         }${active ? " is-active" : ""}`}
         aria-label={label}
         onClick={onClick}
@@ -43,40 +63,6 @@ function HeaderActionButton({
         {label}
       </span>
     </div>
-  );
-}
-
-type MobileMenuActionButtonProps = {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  active?: boolean;
-  variant?: "default" | "primary";
-  children: ReactNode;
-};
-
-function MobileMenuActionButton({
-  label,
-  onClick,
-  disabled = false,
-  active = false,
-  variant = "default",
-  children,
-}: MobileMenuActionButtonProps) {
-  return (
-    <button
-      type="button"
-      className={`mobile-menu-action${
-        variant === "primary" ? " is-primary" : ""
-      }${active ? " is-active" : ""}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <span className="mobile-menu-action-icon" aria-hidden="true">
-        {children}
-      </span>
-      <span>{label}</span>
-    </button>
   );
 }
 
@@ -122,42 +108,42 @@ export function AppHeader({
           {isPreviewFocused ? <div className="focus-pill">Preview focus</div> : null}
           {!isMobileHeader ? (
             <div className="topbar-action-row">
-              <HeaderActionButton
+              <ActionButton
                 label="Reset preview position"
                 onClick={onResetPreview}
                 disabled={!canExport}
               >
                 <ResetIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
+              </ActionButton>
+              <ActionButton
                 label="Fit preview"
                 onClick={onFitPreview}
                 disabled={!canExport}
               >
                 <FitIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
+              </ActionButton>
+              <ActionButton
                 label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
                 active={isPreviewFocused}
               >
                 <FocusIcon />
-              </HeaderActionButton>
-              <HeaderActionButton label="Open changelog history" onClick={onOpenChangelog}>
+              </ActionButton>
+              <ActionButton label="Open changelog history" onClick={onOpenChangelog}>
                 <ChangelogIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
+              </ActionButton>
+              <ActionButton
                 label="Open export dialog"
                 onClick={onOpenExport}
                 disabled={!canExport}
-                variant="primary"
+                emphasis="primary"
               >
                 <ExportIcon />
-              </HeaderActionButton>
-              <HeaderActionButton label="Open settings" onClick={onOpenSettings}>
+              </ActionButton>
+              <ActionButton label="Open settings" onClick={onOpenSettings}>
                 <SettingsIcon />
-              </HeaderActionButton>
+              </ActionButton>
             </div>
           ) : (
             <button
@@ -208,47 +194,56 @@ export function AppHeader({
               </button>
             </div>
             <div className="mobile-menu-group">
-              <MobileMenuActionButton label="Open settings" onClick={onOpenSettings}>
+              <ActionButton
+                label="Open settings"
+                onClick={onOpenSettings}
+                variant="mobile-menu"
+              >
                 <SettingsIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
+              </ActionButton>
+              <ActionButton
                 label="Open changelog history"
                 onClick={onOpenChangelog}
+                variant="mobile-menu"
               >
                 <ChangelogIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
+              </ActionButton>
+              <ActionButton
                 label="Open export dialog"
                 onClick={onOpenExport}
                 disabled={!canExport}
-                variant="primary"
+                variant="mobile-menu"
+                emphasis="primary"
               >
                 <ExportIcon />
-              </MobileMenuActionButton>
+              </ActionButton>
             </div>
             <div className="mobile-menu-group">
-              <MobileMenuActionButton
+              <ActionButton
                 label="Reset preview position"
                 onClick={onResetPreview}
                 disabled={!canExport}
+                variant="mobile-menu"
               >
                 <ResetIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
+              </ActionButton>
+              <ActionButton
                 label="Fit preview"
                 onClick={onFitPreview}
                 disabled={!canExport}
+                variant="mobile-menu"
               >
                 <FitIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
+              </ActionButton>
+              <ActionButton
                 label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
                 active={isPreviewFocused}
+                variant="mobile-menu"
               >
                 <FocusIcon />
-              </MobileMenuActionButton>
+              </ActionButton>
             </div>
           </div>
         </>

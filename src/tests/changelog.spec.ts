@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   loadChangelogEntries,
   normalizeChangelogEntry,
-} from "../lib/changelog";
+} from "@/lib/changelog";
 
 function compareVersionsDesc(left: string, right: string) {
   const leftParts = left.split(".").map((value) => Number.parseInt(value, 10));

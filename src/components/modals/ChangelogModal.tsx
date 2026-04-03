@@ -1,8 +1,8 @@
 import type {
   ChangelogContentBlock,
   ChangelogEntry,
-} from "../../lib/changelog";
-import { normalizeChangelogEntry } from "../../lib/changelog";
+} from "@/lib/changelog";
+import { normalizeChangelogEntry } from "@/lib/changelog";
 
 function renderInlineMarkdown(text: string) {
   const fragments = text.split(/(`[^`]+`)/g).filter(Boolean);

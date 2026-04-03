@@ -4,7 +4,7 @@ import {
   generateMermaidFromPrompt,
   PROVIDER_IDS,
   PROVIDERS,
-} from "../lib/llm";
+} from "@/lib/llm";
 
 afterEach(() => {
   vi.restoreAllMocks();

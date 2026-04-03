@@ -4,8 +4,8 @@ import {
   ANTHROPIC_BROWSER_WARNING,
   PROVIDERS,
   type ProviderId,
-} from "../../lib/llm";
-import type { ProviderSettings } from "../../lib/app-types";
+} from "@/lib/llm";
+import type { ProviderSettings } from "@/lib/app-types";
 
 type SettingsModalProps = {
   isOpen: boolean;

@@ -1,4 +1,4 @@
-import { ONBOARDING_STEPS } from "../../lib/onboarding";
+import { ONBOARDING_STEPS } from "@/lib/onboarding";
 
 type OnboardingModalProps = {
   isOpen: boolean;

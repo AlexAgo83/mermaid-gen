@@ -4,7 +4,7 @@ import {
   decodeSharedMermaidSource,
   encodeSharedMermaidSource,
   loadSharedMermaidSourceFromSearch,
-} from "../lib/share";
+} from "@/lib/share";
 
 describe("shared Mermaid URL helpers", () => {
   it("round-trips Mermaid source through the shared encoding", () => {

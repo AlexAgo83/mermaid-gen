@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../lib/mermaid", async () => {
-  const actual = await vi.importActual<typeof import("../lib/mermaid")>(
-    "../lib/mermaid",
+vi.mock("@/lib/mermaid", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/mermaid")>(
+    "@/lib/mermaid",
   );
 
   return {
@@ -14,7 +14,7 @@ vi.mock("../lib/mermaid", async () => {
   };
 });
 
-import App from "../App";
+import App from "@/App";
 
 describe("App render error handling", () => {
   beforeEach(() => {

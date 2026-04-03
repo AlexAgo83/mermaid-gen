@@ -1,4 +1,4 @@
-import type { SvgMetrics } from "./mermaid";
+import type { SvgMetrics } from "@/lib/mermaid";
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);

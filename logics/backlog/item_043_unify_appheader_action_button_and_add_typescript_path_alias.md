@@ -1,10 +1,10 @@
 ## item_043_unify_appheader_action_button_and_add_typescript_path_alias - Unify AppHeader action button duplication and add TypeScript path alias
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Structure
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

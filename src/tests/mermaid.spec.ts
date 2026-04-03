@@ -5,7 +5,7 @@ import {
   prepareGeneratedMermaidSource,
   renderMermaidDiagram,
   sanitizeRenderedSvg,
-} from "../lib/mermaid";
+} from "@/lib/mermaid";
 
 type SvgElementWithMeasurementShims = SVGElement & {
   getBBox?: () => { x: number; y: number; width: number; height: number };

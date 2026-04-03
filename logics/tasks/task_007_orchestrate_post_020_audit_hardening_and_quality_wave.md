@@ -4,7 +4,7 @@
 > Status: In Progress
 > Understanding: 98%
 > Confidence: 97%
-> Progress: 50%
+> Progress: 75%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -52,12 +52,12 @@ flowchart TD
   - [x] 2.3. Run `npm run ci:local` plus `npm run test:e2e`. Fix any regressions.
   - [x] 2.4. Update `item_039`, `item_040` status to Done, commit.
 
-- [ ] **Wave 3 — Structural refactors** (`item_041`, `item_042`, `item_043`)
-  - [ ] 3.1. **usePreviewInteraction hook** (`item_041`): create `src/hooks/usePreviewInteraction.ts`. Move viewport state, zoom/pan/fit handlers, `handlePreviewWheel`, and the ResizeObserver fit effect from `App.tsx` into the hook. Consume the hook in `App.tsx`. Add a unit test for `handlePreviewWheel` coordinate translation in `src/tests/usePreviewInteraction.spec.ts`.
-  - [ ] 3.2. **useExport + useChangelog hooks** (`item_042`): create `src/hooks/useExport.ts` and `src/hooks/useChangelog.ts`. Move export state/handlers and changelog loading state/effect into their respective hooks. Consume both in `App.tsx`.
-  - [ ] 3.3. **AppHeader unification + path alias** (`item_043`): collapse `HeaderActionButton` and `MobileMenuActionButton` into a single `ActionButton` with a `variant` prop in `AppHeader.tsx`. Add `"@/*": ["src/*"]` to `tsconfig.app.json` `paths` and the matching `resolve.alias` to `vite.config.ts`. Migrate existing imports across the codebase to use `@/`.
-  - [ ] 3.4. Run `npm run ci:local` and `npm run test:e2e`. Fix any regressions. Verify `App.tsx` line count has decreased meaningfully.
-  - [ ] 3.5. Update `item_041`, `item_042`, `item_043` status to Done, commit.
+- [x] **Wave 3 — Structural refactors** (`item_041`, `item_042`, `item_043`)
+  - [x] 3.1. **usePreviewInteraction hook** (`item_041`): create `src/hooks/usePreviewInteraction.ts`. Move viewport state, zoom/pan/fit handlers, `handlePreviewWheel`, and the ResizeObserver fit effect from `App.tsx` into the hook. Consume the hook in `App.tsx`. Add a unit test for `handlePreviewWheel` coordinate translation in `src/tests/usePreviewInteraction.spec.ts`.
+  - [x] 3.2. **useExport + useChangelog hooks** (`item_042`): create `src/hooks/useExport.ts` and `src/hooks/useChangelog.ts`. Move export state/handlers and changelog loading state/effect into their respective hooks. Consume both in `App.tsx`.
+  - [x] 3.3. **AppHeader unification + path alias** (`item_043`): collapse `HeaderActionButton` and `MobileMenuActionButton` into a single `ActionButton` with a `variant` prop in `AppHeader.tsx`. Add `"@/*": ["src/*"]` to `tsconfig.app.json` `paths` and the matching `resolve.alias` to `vite.config.ts`. Migrate existing imports across the codebase to use `@/`.
+  - [x] 3.4. Run `npm run ci:local` and `npm run test:e2e`. Fix any regressions. Verify `App.tsx` line count has decreased meaningfully.
+  - [x] 3.5. Update `item_041`, `item_042`, `item_043` status to Done, commit.
 
 - [ ] **Wave 4 — Delivery and accessibility** (`item_044`, `item_045`, `item_046`)
   - [ ] 4.1. **CSP header** (`item_044`): read `render.yaml`. Define a `Content-Security-Policy` header covering `default-src 'self'`, `script-src`, `style-src`, `img-src` (data URIs), `connect-src` (all six LLM provider base URLs), and `worker-src` (Service Worker). Block `unsafe-eval`. Add `unsafe-inline` for styles only if Mermaid's inline style attributes require it, with an explanatory comment. Validate on a deployed Render preview.

@@ -1,5 +1,5 @@
-import { PROVIDER_IDS, type ProviderId } from "./llm";
-import type { ProviderKeyStore, ProviderSettings } from "./app-types";
+import { PROVIDER_IDS, type ProviderId } from "@/lib/llm";
+import type { ProviderKeyStore, ProviderSettings } from "@/lib/app-types";
 
 export const PROVIDER_SETTINGS_STORAGE_KEY = "mermaid-gen.provider-settings";
 export const LEGACY_OPENAI_STORAGE_KEY = "mermaid-gen.openai-key";

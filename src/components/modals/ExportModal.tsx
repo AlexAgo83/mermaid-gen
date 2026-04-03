@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import type { ExportFormat, RenderState } from "../../lib/app-types";
+import type { ExportFormat, RenderState } from "@/lib/app-types";
 
 type ExportModalProps = {
   isOpen: boolean;

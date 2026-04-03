@@ -2,8 +2,8 @@ import type {
   PointerEvent as ReactPointerEvent,
   RefObject,
 } from "react";
-import type { RenderState } from "../../lib/app-types";
-import { MinusIcon, PlusIcon } from "../icons";
+import type { RenderState } from "@/lib/app-types";
+import { MinusIcon, PlusIcon } from "@/components/icons";
 
 type PreviewPanelProps = {
   isPreviewFocused: boolean;

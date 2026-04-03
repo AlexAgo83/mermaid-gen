@@ -1,10 +1,10 @@
 ## item_042_extract_export_orchestration_and_changelog_loading_from_app_into_dedicated_hooks - Extract export orchestration and changelog loading from App into dedicated hooks
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Structure
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

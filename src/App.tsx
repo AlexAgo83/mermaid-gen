@@ -1,79 +1,56 @@
-import {
-  lazy,
-  Suspense,
-  useDeferredValue,
-  useEffect,
-  useEffectEvent,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import type {
-  FormEvent,
-  KeyboardEvent as ReactKeyboardEvent,
-  PointerEvent as ReactPointerEvent,
-} from "react";
-import "./styles/header.css";
-import "./styles/modals.css";
-import "./App.css";
-import { OnboardingModal } from "./components/modals/OnboardingModal";
-import { AppHeader } from "./components/shell/AppHeader";
-import { PreviewPanel } from "./components/workspace/PreviewPanel";
+import { lazy, Suspense, useDeferredValue, useEffect, useRef, useState } from "react";
+import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
+import "@/styles/header.css";
+import "@/styles/modals.css";
+import "@/App.css";
+import { OnboardingModal } from "@/components/modals/OnboardingModal";
+import { AppHeader } from "@/components/shell/AppHeader";
+import { PreviewPanel } from "@/components/workspace/PreviewPanel";
+import { useChangelog } from "@/hooks/useChangelog";
+import { useExport } from "@/hooks/useExport";
+import { usePreviewInteraction } from "@/hooks/usePreviewInteraction";
 import type {
   OnboardingState,
   ProviderSettings,
   RenderErrorCopy,
   RenderState,
   SourceOrigin,
-  Viewport,
-} from "./lib/app-types";
-import { loadChangelogEntries, type ChangelogEntry } from "./lib/changelog";
-import { downloadDiagramAsPng, downloadDiagramAsSvg } from "./lib/exporters";
-import {
-  generateMermaidFromPrompt,
-  PROVIDERS,
-  type ProviderId,
-} from "./lib/llm";
+} from "@/lib/app-types";
+import { PROVIDERS, generateMermaidFromPrompt, type ProviderId } from "@/lib/llm";
 import {
   DEFAULT_MERMAID_SOURCE,
   extractSvgMetrics,
   prepareGeneratedMermaidSource,
   renderMermaidDiagram,
   type SvgMetrics,
-} from "./lib/mermaid";
+} from "@/lib/mermaid";
 import {
+  ONBOARDING_STATE_STORAGE_KEY,
   loadIsMobileHeader,
   loadOnboardingState,
-  ONBOARDING_STATE_STORAGE_KEY,
-} from "./lib/onboarding";
+} from "@/lib/onboarding";
 import {
   LEGACY_OPENAI_STORAGE_KEY,
+  PROVIDER_SETTINGS_STORAGE_KEY,
   loadProviderSettings,
   normalizeProviderSettings,
-  PROVIDER_SETTINGS_STORAGE_KEY,
-} from "./lib/provider-settings";
-import {
-  buildSharedMermaidUrl,
-  loadSharedMermaidSourceFromLocation,
-} from "./lib/share";
+} from "@/lib/provider-settings";
+import { loadSharedMermaidSourceFromLocation } from "@/lib/share";
 
 const SettingsModal = lazy(async () => {
-  const module = await import("./components/modals/SettingsModal");
+  const module = await import("@/components/modals/SettingsModal");
   return { default: module.SettingsModal };
 });
 
 const ExportModal = lazy(async () => {
-  const module = await import("./components/modals/ExportModal");
+  const module = await import("@/components/modals/ExportModal");
   return { default: module.ExportModal };
 });
 
 const ChangelogModal = lazy(async () => {
-  const module = await import("./components/modals/ChangelogModal");
+  const module = await import("@/components/modals/ChangelogModal");
   return { default: module.ChangelogModal };
 });
-
-const MIN_SCALE = 0.35;
-const MAX_SCALE = 2.4;
 
 const HELP_COPY = {
   source:
@@ -86,29 +63,6 @@ const HELP_COPY = {
 
 function loadInitialSource() {
   return loadSharedMermaidSourceFromLocation() ?? DEFAULT_MERMAID_SOURCE;
-}
-
-function clampScale(nextScale: number) {
-  return Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
-}
-
-function centerViewport(
-  container: HTMLElement,
-  metrics: SvgMetrics,
-  scale: number,
-): Viewport {
-  const x = (container.clientWidth - metrics.width * scale) / 2;
-  const y = (container.clientHeight - metrics.height * scale) / 2;
-
-  return { scale, x, y };
-}
-
-function fitViewport(container: HTMLElement, metrics: SvgMetrics): Viewport {
-  const widthScale = container.clientWidth / metrics.width;
-  const heightScale = container.clientHeight / metrics.height;
-  const scale = clampScale(Math.min(widthScale, heightScale) * 0.92);
-
-  return centerViewport(container, metrics, scale);
 }
 
 function hasSharedMermaidSourceInLocation() {
@@ -153,13 +107,6 @@ function isEscapeDismissalKey(key: string, code: string) {
   return key === "Escape" || key === "Esc" || code === "Escape";
 }
 
-function isInteractivePreviewTarget(target: EventTarget | null) {
-  return (
-    target instanceof Element &&
-    target.closest("button, input, textarea, select, a") !== null
-  );
-}
-
 function App() {
   const [source, setSource] = useState(loadInitialSource);
   const [prompt, setPrompt] = useState("");
@@ -171,13 +118,6 @@ function App() {
   const [providerSettings, setProviderSettings] =
     useState<ProviderSettings>(loadProviderSettings);
   const [isDraftKeyVisible, setIsDraftKeyVisible] = useState(false);
-  const [isExportOpen, setIsExportOpen] = useState(false);
-  const [exportFormat, setExportFormat] = useState<"svg" | "png">("png");
-  const [exportScale, setExportScale] = useState(2);
-  const [exportError, setExportError] = useState<string | null>(null);
-  const [isExporting, setIsExporting] = useState(false);
-  const [isShareLinkCopying, setIsShareLinkCopying] = useState(false);
-  const [shareToastMessage, setShareToastMessage] = useState<string | null>(null);
   const [onboardingState, setOnboardingState] =
     useState<OnboardingState>(loadOnboardingState);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(
@@ -195,16 +135,7 @@ function App() {
   const [generationNotice, setGenerationNotice] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileHeader, setIsMobileHeader] = useState(loadIsMobileHeader);
-  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
-  const [isChangelogLoading, setIsChangelogLoading] = useState(false);
-  const [changelogEntries, setChangelogEntries] = useState<ChangelogEntry[]>([]);
-  const [changelogError, setChangelogError] = useState<string | null>(null);
   const [sourceOrigin, setSourceOrigin] = useState<SourceOrigin>("manual");
-  const [viewport, setViewport] = useState<Viewport>({
-    scale: 1,
-    x: 0,
-    y: 0,
-  });
   const [renderState, setRenderState] = useState<RenderState>({
     status: "loading",
     error: null,
@@ -213,16 +144,10 @@ function App() {
   });
 
   const deferredSource = useDeferredValue(source);
-  const previewRef = useRef<HTMLDivElement | null>(null);
   const settingsDialogRef = useRef<HTMLDivElement | null>(null);
-  const isChangelogRequestInFlightRef = useRef(false);
-  const dragRef = useRef<{
-    pointerId: number;
-    startX: number;
-    startY: number;
-    originX: number;
-    originY: number;
-  } | null>(null);
+  const previewInteraction = usePreviewInteraction(renderState);
+  const exportState = useExport(renderState, source);
+  const changelogState = useChangelog();
 
   useEffect(() => {
     if (
@@ -276,20 +201,6 @@ function App() {
       setIsMobileMenuOpen(false);
     }
   }, [isMobileHeader]);
-
-  useEffect(() => {
-    if (!shareToastMessage) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setShareToastMessage(null);
-    }, 2400);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [shareToastMessage]);
 
   useEffect(() => {
     let active = true;
@@ -351,40 +262,12 @@ function App() {
       settingsDialogRef.current?.querySelector<HTMLElement>("button, input");
 
     focusTarget?.focus();
-
     document.addEventListener("keydown", handleSettingsEscape, true);
 
     return () => {
       document.removeEventListener("keydown", handleSettingsEscape, true);
     };
   }, [isSettingsOpen]);
-
-  useEffect(() => {
-    if (renderState.status !== "ready" || !previewRef.current) {
-      return;
-    }
-
-    const container = previewRef.current;
-    const applyFit = () => {
-      setViewport(fitViewport(container, renderState.metrics));
-    };
-
-    applyFit();
-
-    if (typeof ResizeObserver === "undefined") {
-      return;
-    }
-
-    const observer = new ResizeObserver(() => {
-      applyFit();
-    });
-
-    observer.observe(container);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [renderState]);
 
   useEffect(() => {
     if (renderState.status !== "ready") {
@@ -408,54 +291,11 @@ function App() {
     setIsPromptErrorOpen(false);
   }, [promptError]);
 
-  const requestChangelogEntries = useEffectEvent(() => {
-    if (
-      changelogEntries.length > 0 ||
-      isChangelogRequestInFlightRef.current
-    ) {
-      return;
-    }
-
-    isChangelogRequestInFlightRef.current = true;
-    setIsChangelogLoading(true);
-    setChangelogError(null);
-
-    void loadChangelogEntries()
-      .then((entries) => {
-        setChangelogEntries(entries);
-      })
-      .catch(() => {
-        setChangelogError("Unable to load changelog history right now.");
-      })
-      .finally(() => {
-        isChangelogRequestInFlightRef.current = false;
-        setIsChangelogLoading(false);
-      });
-  });
-
-  useEffect(() => {
-    requestChangelogEntries();
-  }, []);
-
-  useEffect(() => {
-    if (!isChangelogOpen) {
-      return;
-    }
-
-    requestChangelogEntries();
-  }, [isChangelogOpen]);
-
   const canExport = renderState.status === "ready";
   const activeProvider = getProvider(providerSettings.activeProviderId);
   const activeProviderKey =
     providerSettings.providerKeys[providerSettings.activeProviderId].trim();
   const hasActiveProviderKey = activeProviderKey.length > 0;
-
-  const previewTransform = useMemo(
-    () =>
-      `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.scale})`,
-    [viewport],
-  );
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
@@ -471,46 +311,14 @@ function App() {
 
   const openExport = () => {
     closeMobileMenu();
-
-    if (canExport) {
-      setExportError(null);
-      setHelpTopic(null);
-      setIsExportOpen(true);
-    }
+    setHelpTopic(null);
+    exportState.openExport();
   };
 
   const openChangelog = () => {
     closeMobileMenu();
     setIsSettingsOpen(false);
-    setIsChangelogOpen(true);
-  };
-
-  const handleZoom = (delta: number) => {
-    if (renderState.status !== "ready" || !previewRef.current) {
-      return;
-    }
-
-    const container = previewRef.current;
-    const nextScale = clampScale(viewport.scale + delta);
-    setViewport(centerViewport(container, renderState.metrics, nextScale));
-  };
-
-  const handleReset = () => {
-    if (renderState.status !== "ready" || !previewRef.current) {
-      return;
-    }
-
-    closeMobileMenu();
-    setViewport(centerViewport(previewRef.current, renderState.metrics, 1));
-  };
-
-  const handleFit = () => {
-    if (renderState.status !== "ready" || !previewRef.current) {
-      return;
-    }
-
-    closeMobileMenu();
-    setViewport(fitViewport(previewRef.current, renderState.metrics));
+    changelogState.openChangelog();
   };
 
   const handleTogglePreviewFocus = () => {
@@ -519,155 +327,10 @@ function App() {
     setIsPreviewFocused((current) => !current);
   };
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (
-      renderState.status !== "ready" ||
-      isInteractivePreviewTarget(event.target)
-    ) {
-      return;
-    }
-
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      originX: viewport.x,
-      originY: viewport.y,
-    };
-
-    event.currentTarget.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) {
-      return;
-    }
-
-    const deltaX = event.clientX - drag.startX;
-    const deltaY = event.clientY - drag.startY;
-    setViewport((current) => ({
-      ...current,
-      x: drag.originX + deltaX,
-      y: drag.originY + deltaY,
-    }));
-  };
-
-  const handlePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (dragRef.current?.pointerId === event.pointerId) {
-      dragRef.current = null;
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  };
-
-  const handlePreviewWheel = useEffectEvent((event: WheelEvent) => {
-    if (
-      renderState.status !== "ready" ||
-      !previewRef.current ||
-      !event.shiftKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const rect = previewRef.current.getBoundingClientRect();
-    const cursorX = event.clientX - rect.left;
-    const cursorY = event.clientY - rect.top;
-    const nextScale = clampScale(
-      viewport.scale + (event.deltaY < 0 ? 0.12 : -0.12),
-    );
-    const ratio = nextScale / viewport.scale;
-    const nextX = cursorX - (cursorX - viewport.x) * ratio;
-    const nextY = cursorY - (cursorY - viewport.y) * ratio;
-
-    setViewport({
-      scale: nextScale,
-      x: nextX,
-      y: nextY,
-    });
-  });
-
-  useEffect(() => {
-    const previewElement = previewRef.current;
-
-    if (!previewElement) {
-      return;
-    }
-
-    const onWheel = (event: WheelEvent) => {
-      handlePreviewWheel(event);
-    };
-
-    previewElement.addEventListener("wheel", onWheel, { passive: false });
-
-    return () => {
-      previewElement.removeEventListener("wheel", onWheel);
-    };
-  }, []);
-
   const handleSaveSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setProviderSettings(normalizeProviderSettings(settingsDraft));
     setIsSettingsOpen(false);
-  };
-
-  const handleExport = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (renderState.status !== "ready") {
-      return;
-    }
-
-    setIsExporting(true);
-    setExportError(null);
-
-    try {
-      if (exportFormat === "svg") {
-        await downloadDiagramAsSvg(renderState.svg, "mermaid-diagram");
-      } else {
-        await downloadDiagramAsPng(
-          renderState.svg,
-          renderState.metrics,
-          "mermaid-diagram",
-          {
-            scale: exportScale,
-          },
-        );
-      }
-
-      setIsExportOpen(false);
-    } catch (error) {
-      setExportError(
-        error instanceof Error ? error.message : "Unable to export the diagram.",
-      );
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
-  const handleCopyShareLink = async () => {
-    if (
-      typeof window === "undefined" ||
-      typeof navigator === "undefined" ||
-      typeof navigator.clipboard?.writeText !== "function"
-    ) {
-      setExportError("Clipboard access is unavailable for share links.");
-      return;
-    }
-
-    setIsShareLinkCopying(true);
-    setExportError(null);
-
-    try {
-      const shareUrl = buildSharedMermaidUrl(source, window.location);
-      await navigator.clipboard.writeText(shareUrl);
-      setShareToastMessage("Share link copied to clipboard.");
-    } catch {
-      setExportError("Unable to copy the share link right now.");
-    } finally {
-      setIsShareLinkCopying(false);
-    }
   };
 
   const handleGenerate = async () => {
@@ -731,8 +394,14 @@ function App() {
           setIsMobileMenuOpen((current) => !current);
         }}
         onCloseMobileMenu={closeMobileMenu}
-        onResetPreview={handleReset}
-        onFitPreview={handleFit}
+        onResetPreview={() => {
+          closeMobileMenu();
+          previewInteraction.resetPreview();
+        }}
+        onFitPreview={() => {
+          closeMobileMenu();
+          previewInteraction.fitPreview();
+        }}
       />
 
       <main className="workspace-layout">
@@ -900,20 +569,20 @@ function App() {
           previewHelp={HELP_COPY.preview}
           renderState={renderState}
           isRendering={isRendering}
-          previewRef={previewRef}
-          previewTransform={previewTransform}
+          previewRef={previewInteraction.previewRef}
+          previewTransform={previewInteraction.previewTransform}
           canExport={canExport}
           onTogglePreviewHelp={() => {
             setHelpTopic((current) => (current === "preview" ? null : "preview"));
           }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
+          onPointerDown={previewInteraction.handlePointerDown}
+          onPointerMove={previewInteraction.handlePointerMove}
+          onPointerUp={previewInteraction.handlePointerUp}
           onZoomIn={() => {
-            handleZoom(0.1);
+            previewInteraction.zoomPreview(0.1);
           }}
           onZoomOut={() => {
-            handleZoom(-0.1);
+            previewInteraction.zoomPreview(-0.1);
           }}
         />
       </main>
@@ -978,22 +647,20 @@ function App() {
 
       <Suspense fallback={null}>
         <ExportModal
-          isOpen={isExportOpen}
-          exportFormat={exportFormat}
-          exportScale={exportScale}
-          exportError={exportError}
-          isExporting={isExporting}
-          isShareLinkCopying={isShareLinkCopying}
+          isOpen={exportState.isExportOpen}
+          exportFormat={exportState.exportFormat}
+          exportScale={exportState.exportScale}
+          exportError={exportState.exportError}
+          isExporting={exportState.isExporting}
+          isShareLinkCopying={exportState.isShareLinkCopying}
           renderState={renderState}
-          onClose={() => {
-            setIsExportOpen(false);
-          }}
-          onSubmit={handleExport}
+          onClose={exportState.closeExport}
+          onSubmit={exportState.handleExport}
           onCopyShareLink={() => {
-            void handleCopyShareLink();
+            void exportState.handleCopyShareLink();
           }}
-          onSelectFormat={setExportFormat}
-          onSelectScale={setExportScale}
+          onSelectFormat={exportState.setExportFormat}
+          onSelectScale={exportState.setExportScale}
         />
       </Suspense>
 
@@ -1018,19 +685,17 @@ function App() {
 
       <Suspense fallback={null}>
         <ChangelogModal
-          isOpen={isChangelogOpen}
-          entries={changelogEntries}
-          isLoading={isChangelogLoading}
-          error={changelogError}
-          onClose={() => {
-            setIsChangelogOpen(false);
-          }}
+          isOpen={changelogState.isChangelogOpen}
+          entries={changelogState.changelogEntries}
+          isLoading={changelogState.isChangelogLoading}
+          error={changelogState.changelogError}
+          onClose={changelogState.closeChangelog}
         />
       </Suspense>
 
-      {shareToastMessage ? (
+      {exportState.shareToastMessage ? (
         <div className="app-toast" role="status" aria-live="polite">
-          {shareToastMessage}
+          {exportState.shareToastMessage}
         </div>
       ) : null}
     </div>

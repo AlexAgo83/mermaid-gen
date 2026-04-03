@@ -1,5 +1,5 @@
-import type { ProviderId } from "./llm";
-import type { SvgMetrics } from "./mermaid";
+import type { ProviderId } from "@/lib/llm";
+import type { SvgMetrics } from "@/lib/mermaid";
 
 export type Viewport = {
   scale: number;

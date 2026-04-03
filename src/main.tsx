@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import App from "@/App";
 import "./index.css";
-import { registerPwa } from "./pwa/runtime";
+import { registerPwa } from "@/pwa/runtime";
 
 registerPwa();
 

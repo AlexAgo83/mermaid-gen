@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   downloadDiagramAsPng,
   downloadDiagramAsSvg,
-} from "../lib/exporters";
+} from "@/lib/exporters";
 
 function createMockImageClass(mode: "load" | "error") {
   return class MockImage {

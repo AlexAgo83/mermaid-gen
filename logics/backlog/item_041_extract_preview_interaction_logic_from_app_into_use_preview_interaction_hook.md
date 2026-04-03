@@ -1,10 +1,10 @@
 ## item_041_extract_preview_interaction_logic_from_app_into_use_preview_interaction_hook - Extract preview interaction logic from App into usePreviewInteraction hook
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Structure
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
