@@ -18,5 +18,18 @@ export default defineConfig({
     setupFiles: ["./src/tests/setup.ts"],
     include: ["src/tests/**/*.spec.ts", "src/tests/**/*.spec.tsx"],
     exclude: ["tests/e2e/**"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      all: true,
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: ["src/main.tsx", "src/vite-env.d.ts", "src/tests/**"],
+      thresholds: {
+        statements: 61,
+        branches: 50,
+        functions: 58,
+        lines: 61,
+      },
+    },
   },
 });

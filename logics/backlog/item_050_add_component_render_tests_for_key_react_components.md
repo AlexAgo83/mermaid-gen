@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -84,3 +84,4 @@ flowchart LR
 - Derived from `req_022`, test visibility theme, AC4.
 - These tests complement E2E — they do not replace it. Focus on render correctness and prop-driven behavior.
 - Mermaid rendering should be mocked to avoid pulling in the full Mermaid library in unit tests.
+- Completed in `task_008` Wave 1 with dedicated render specs for `AppHeader`, `SettingsModal`, `ExportModal`, and `PreviewPanel`.

@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -79,3 +79,4 @@ flowchart LR
 
 - Derived from `req_022`, test visibility theme, AC1.
 - The initial threshold should be set to the actual current coverage level, then ratcheted upward as new tests are added.
+- Completed in `task_008` Wave 1 with `@vitest/coverage-v8`, coverage output wired into `npm run test`, and enforced global thresholds in `vitest.config.ts`.

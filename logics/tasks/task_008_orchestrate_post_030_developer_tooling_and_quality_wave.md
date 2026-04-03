@@ -5,7 +5,7 @@
 > Status: In Progress
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 20%
+> Progress: 40%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -41,11 +41,11 @@ flowchart TD
   - [x] 0.3. Run `npm run ci:local`. Fix any regressions.
   - [x] 0.4. Update `item_048`, `item_049` status to Done, commit.
 
-- [ ] **Wave 1 — Test visibility** (`item_047`, `item_050`)
-  - [ ] 1.1. **Coverage reporting** (`item_047`): install `@vitest/coverage-v8` as a devDependency. Update `vitest.config.ts` to enable the `v8` coverage provider with a `reporter` (text + lcov) and a `thresholds` block. Run `npm run test` to determine baseline coverage, then set thresholds at or slightly below actual values. Add `coverage/` to `.gitignore`.
-  - [ ] 1.2. **Component render tests** (`item_050`): create `src/tests/AppHeader.spec.tsx`, `src/tests/SettingsModal.spec.tsx`, `src/tests/ExportModal.spec.tsx`, `src/tests/PreviewPanel.spec.tsx`. Mock Mermaid rendering and LLM calls. Cover: render correctness, conditional UI (mobile menu, focus mode), callback invocation, error fallback states.
-  - [ ] 1.3. Run `npm run ci:local`. Fix any regressions. Verify coverage threshold does not fail.
-  - [ ] 1.4. Update `item_047`, `item_050` status to Done, commit.
+- [x] **Wave 1 — Test visibility** (`item_047`, `item_050`)
+  - [x] 1.1. **Coverage reporting** (`item_047`): install `@vitest/coverage-v8` as a devDependency. Update `vitest.config.ts` to enable the `v8` coverage provider with a `reporter` (text + lcov) and a `thresholds` block. Run `npm run test` to determine baseline coverage, then set thresholds at or slightly below actual values. Add `coverage/` to `.gitignore`.
+  - [x] 1.2. **Component render tests** (`item_050`): create `src/tests/AppHeader.spec.tsx`, `src/tests/SettingsModal.spec.tsx`, `src/tests/ExportModal.spec.tsx`, `src/tests/PreviewPanel.spec.tsx`. Mock Mermaid rendering and LLM calls. Cover: render correctness, conditional UI (mobile menu, focus mode), callback invocation, error fallback states.
+  - [x] 1.3. Run `npm run ci:local`. Fix any regressions. Verify coverage threshold does not fail.
+  - [x] 1.4. Update `item_047`, `item_050` status to Done, commit.
 
 - [ ] **Wave 2 — CSS maintainability** (`item_052`, `item_053`)
   - [ ] 2.1. **header.css split** (`item_052`): read `src/styles/header.css` and map internal sections to components. Split into component-scoped CSS files (e.g. `AppHeader.module.css`, `MobileMenu.module.css`, or per-component `.css` files). Update imports in all consuming components. Visually verify no regression.
@@ -155,3 +155,9 @@ flowchart TD
 - Added Husky + lint-staged with a tracked `pre-commit` hook and a `prepare` install path.
 - Added Prettier plus `eslint-config-prettier`, `format`, and `format:check`, then recorded a standalone baseline formatting commit.
 - Validation: `npx prettier --check .` and `npm run ci:local`.
+
+## Wave 1
+
+- Enabled V8 coverage in Vitest so `npm run test` now emits terminal and `lcov` reports with enforced global thresholds.
+- Added dedicated render specs for `AppHeader`, `SettingsModal`, `ExportModal`, and `PreviewPanel`.
+- Validation: `npm run test` and `npm run ci:local`.
