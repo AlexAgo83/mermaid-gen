@@ -4,7 +4,7 @@
 > Status: In Progress
 > Understanding: 98%
 > Confidence: 97%
-> Progress: 33%
+> Progress: 50%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -46,11 +46,11 @@ flowchart TD
   - [x] 1.4. Run `npm run ci:local`. Fix any regressions before proceeding.
   - [x] 1.5. Update `item_036`, `item_037`, `item_038` status to Done, commit.
 
-- [ ] **Wave 2 — Test coverage** (`item_039`, `item_040`)
-  - [ ] 2.1. **exporters unit tests** (`item_039`): create `src/tests/exporters.spec.ts`. Mock `URL.createObjectURL`, `URL.revokeObjectURL`, `HTMLCanvasElement.prototype.toBlob`, and anchor `click`. Cover SVG path (Blob creation, anchor trigger, URL revocation) and PNG path (canvas pipeline, correct scale, anchor trigger, revocation on success and on `image.onerror`).
-  - [ ] 2.2. **Playwright Firefox** (`item_040`): read `playwright.config.ts`. Add `{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }` to the projects array. Run `npm run test:e2e` and confirm all scenarios pass on both Chromium and Firefox. Skip-annotate any known Firefox limitation with a comment.
-  - [ ] 2.3. Run `npm run ci:local` plus `npm run test:e2e`. Fix any regressions.
-  - [ ] 2.4. Update `item_039`, `item_040` status to Done, commit.
+- [x] **Wave 2 — Test coverage** (`item_039`, `item_040`)
+  - [x] 2.1. **exporters unit tests** (`item_039`): create `src/tests/exporters.spec.ts`. Mock `URL.createObjectURL`, `URL.revokeObjectURL`, `HTMLCanvasElement.prototype.toBlob`, and anchor `click`. Cover SVG path (Blob creation, anchor trigger, URL revocation) and PNG path (canvas pipeline, correct scale, anchor trigger, revocation on success and on `image.onerror`).
+  - [x] 2.2. **Playwright Firefox** (`item_040`): read `playwright.config.ts`. Add `{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }` to the projects array. Run `npm run test:e2e` and confirm all scenarios pass on both Chromium and Firefox. Skip-annotate any known Firefox limitation with a comment.
+  - [x] 2.3. Run `npm run ci:local` plus `npm run test:e2e`. Fix any regressions.
+  - [x] 2.4. Update `item_039`, `item_040` status to Done, commit.
 
 - [ ] **Wave 3 — Structural refactors** (`item_041`, `item_042`, `item_043`)
   - [ ] 3.1. **usePreviewInteraction hook** (`item_041`): create `src/hooks/usePreviewInteraction.ts`. Move viewport state, zoom/pan/fit handlers, `handlePreviewWheel`, and the ResizeObserver fit effect from `App.tsx` into the hook. Consume the hook in `App.tsx`. Add a unit test for `handlePreviewWheel` coordinate translation in `src/tests/usePreviewInteraction.spec.ts`.

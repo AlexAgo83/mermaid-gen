@@ -1,10 +1,10 @@
 ## item_040_expand_playwright_configuration_to_include_firefox - Expand Playwright configuration to include Firefox
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

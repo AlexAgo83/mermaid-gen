@@ -1,10 +1,10 @@
 ## item_039_add_unit_test_coverage_for_exporters_svg_and_png_download_paths - Add unit test coverage for exporters SVG and PNG download paths
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
