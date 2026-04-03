@@ -9,7 +9,8 @@ describe("changelog loader", () => {
     const entries = await loadChangelogEntries();
 
     expect(entries.length).toBeGreaterThan(0);
-    expect(entries[0]?.version).toBe("0.1.0");
+    expect(entries[0]?.version).toBe("0.2.0");
+    expect(entries.map((entry) => entry.version)).toEqual(["0.2.0", "0.1.0"]);
     expect(entries[0]?.body).toContain("Major Highlights");
     expect(entries[0]?.sections.map((section) => section.title)).toContain(
       "Major Highlights",
