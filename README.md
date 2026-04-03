@@ -17,13 +17,6 @@
   <img alt="PWA" src="https://img.shields.io/badge/PWA-ready-FFB65A" />
 </p>
 
-## Live Demo & Status
-
-- Production: [https://mermaid-gen.onrender.com/](https://mermaid-gen.onrender.com/)
-- Hosting: Render Static Site
-- Current version: `0.1.0`
-- CI status: see the GitHub Actions badge above
-
 ## Why Mermaid Generator
 
 Mermaid Generator exists for a simple reason: diagram work is usually fragmented.
@@ -157,3 +150,11 @@ flowchart TD
     E --> D
     D --> F[Export asset]
 ```
+
+## Contributing
+
+Contribution guidelines are available in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
