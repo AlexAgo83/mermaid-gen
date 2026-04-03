@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 93%
 > Confidence: 88%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Maintainability
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -83,3 +83,4 @@ flowchart LR
 - Derived from `req_022`, CSS maintainability theme, AC7.
 - Should follow the same CSS module convention established by `item_052`.
 - Shared overlay/backdrop patterns (used by all modals) should be extracted into a common module rather than duplicated per-modal.
+- Completed in `task_008` Wave 2 by replacing `src/styles/modals.css` with co-located modal CSS files plus a shared `modal-shared.css`.

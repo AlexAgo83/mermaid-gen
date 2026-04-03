@@ -1,0 +1,18 @@
+.export-modal {
+  width: min(960px, 100%);
+}
+
+.export-options {
+  display: grid;
+  gap: 10px;
+}
+
+.export-share-copy {
+  max-width: 52ch;
+}
+
+@media (max-width: 920px) {
+  .export-options {
+    grid-template-columns: 1fr;
+  }
+}

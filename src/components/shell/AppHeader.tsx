@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "./AppHeader.css";
 import {
   BurgerIcon,
   ChangelogIcon,

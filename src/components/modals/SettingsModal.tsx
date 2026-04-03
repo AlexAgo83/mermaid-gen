@@ -1,5 +1,7 @@
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import type { RefObject } from "react";
+import "./modal-shared.css";
+import "./SettingsModal.css";
 import {
   ANTHROPIC_BROWSER_WARNING,
   PROVIDERS,

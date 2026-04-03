@@ -1,3 +1,5 @@
+import "./modal-shared.css";
+import "./ChangelogModal.css";
 import type { ChangelogContentBlock, ChangelogEntry } from "@/lib/changelog";
 import { normalizeChangelogEntry } from "@/lib/changelog";
 

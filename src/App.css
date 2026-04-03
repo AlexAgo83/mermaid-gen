@@ -180,6 +180,30 @@
   font-size: 0.92rem;
 }
 
+.button-primary {
+  border-color: var(--accent-color);
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+.button-primary:hover,
+.button-primary:focus-visible {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+}
+
+.button-secondary {
+  border-color: #9fc4bd;
+  background: #eef7f4;
+  color: var(--accent-strong);
+}
+
+.button-secondary:hover,
+.button-secondary:focus-visible {
+  border-color: var(--accent-color);
+  background: #e4f1ed;
+}
+
 .warning-trigger {
   width: 24px;
   height: 24px;

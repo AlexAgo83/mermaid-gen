@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 93%
 > Confidence: 88%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Maintainability
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -82,3 +82,4 @@ flowchart LR
 - Derived from `req_022`, CSS maintainability theme, AC6.
 - The split should follow existing component boundaries: `AppHeader`, mobile menu, action buttons, preview controls.
 - CSS Modules (`*.module.css`) are the recommended approach for scoping, but plain per-component CSS files are also acceptable.
+- Completed in `task_008` Wave 2 by replacing `src/styles/header.css` with co-located files imported by `App.tsx` and `AppHeader.tsx`.

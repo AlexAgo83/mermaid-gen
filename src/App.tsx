@@ -7,9 +7,8 @@ import {
   useState,
 } from "react";
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
-import "@/styles/header.css";
-import "@/styles/modals.css";
 import "@/App.css";
+import "@/AppShell.css";
 import { OnboardingModal } from "@/components/modals/OnboardingModal";
 import { AppHeader } from "@/components/shell/AppHeader";
 import { PreviewPanel } from "@/components/workspace/PreviewPanel";

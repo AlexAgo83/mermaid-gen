@@ -1,3 +1,5 @@
+import "./modal-shared.css";
+import "./OnboardingModal.css";
 import { ONBOARDING_STEPS } from "@/lib/onboarding";
 
 type OnboardingModalProps = {

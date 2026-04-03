@@ -5,7 +5,7 @@
 > Status: In Progress
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 40%
+> Progress: 60%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -47,11 +47,11 @@ flowchart TD
   - [x] 1.3. Run `npm run ci:local`. Fix any regressions. Verify coverage threshold does not fail.
   - [x] 1.4. Update `item_047`, `item_050` status to Done, commit.
 
-- [ ] **Wave 2 — CSS maintainability** (`item_052`, `item_053`)
-  - [ ] 2.1. **header.css split** (`item_052`): read `src/styles/header.css` and map internal sections to components. Split into component-scoped CSS files (e.g. `AppHeader.module.css`, `MobileMenu.module.css`, or per-component `.css` files). Update imports in all consuming components. Visually verify no regression.
-  - [ ] 2.2. **modals.css split** (`item_053`): read `src/styles/modals.css` and map internal sections to modal components. Split into per-modal CSS files (e.g. `SettingsModal.css`, `ExportModal.css`, `OnboardingModal.css`, `ChangelogModal.css`) plus a shared `modal-overlay.css`. Update imports. Visually verify no regression.
-  - [ ] 2.3. Run `npm run ci:local` and `npm run test:e2e`. Fix any regressions.
-  - [ ] 2.4. Update `item_052`, `item_053` status to Done, commit.
+- [x] **Wave 2 — CSS maintainability** (`item_052`, `item_053`)
+  - [x] 2.1. **header.css split** (`item_052`): read `src/styles/header.css` and map internal sections to components. Split into component-scoped CSS files (e.g. `AppHeader.module.css`, `MobileMenu.module.css`, or per-component `.css` files). Update imports in all consuming components. Visually verify no regression.
+  - [x] 2.2. **modals.css split** (`item_053`): read `src/styles/modals.css` and map internal sections to modal components. Split into per-modal CSS files (e.g. `SettingsModal.css`, `ExportModal.css`, `OnboardingModal.css`, `ChangelogModal.css`) plus a shared `modal-overlay.css`. Update imports. Visually verify no regression.
+  - [x] 2.3. Run `npm run ci:local` and `npm run test:e2e`. Fix any regressions.
+  - [x] 2.4. Update `item_052`, `item_053` status to Done, commit.
 
 - [ ] **Wave 3 — Cross-browser & accessibility** (`item_051`, `item_054`)
   - [ ] 3.1. **WebKit in Playwright** (`item_051`): read `playwright.config.ts`. Add `{ name: 'webkit', use: { ...devices['Desktop Safari'] } }` to the projects array. Update `.github/workflows/ci.yml` to install WebKit (`npx playwright install --with-deps chromium firefox webkit`). Run `npm run test:e2e` and skip-annotate any WebKit-specific failures with a comment.
@@ -161,3 +161,9 @@ flowchart TD
 - Enabled V8 coverage in Vitest so `npm run test` now emits terminal and `lcov` reports with enforced global thresholds.
 - Added dedicated render specs for `AppHeader`, `SettingsModal`, `ExportModal`, and `PreviewPanel`.
 - Validation: `npm run test` and `npm run ci:local`.
+
+## Wave 2
+
+- Replaced `src/styles/header.css` with co-located header/app-shell CSS files and removed the monolithic import from `App.tsx`.
+- Replaced `src/styles/modals.css` with per-modal CSS files plus a shared modal stylesheet.
+- Validation: `npm run ci:local`, `npm run test:e2e`, and manual desktop/mobile verification on the preview build.
