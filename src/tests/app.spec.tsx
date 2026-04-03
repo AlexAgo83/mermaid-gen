@@ -65,6 +65,17 @@ describe("App foundation shell", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows Gemini in settings as a selectable provider", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
+
+    expect(
+      await screen.findByRole("radio", { name: "Gemini" }),
+    ).toBeInTheDocument();
+  });
+
   it("closes settings with Escape", async () => {
     render(<App />);
 

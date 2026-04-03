@@ -4,6 +4,7 @@ export const PROVIDER_IDS = [
   "anthropic",
   "grok",
   "mistral",
+  "gemini",
 ] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];
@@ -57,6 +58,15 @@ export const PROVIDERS: ProviderDefinition[] = [
     keyLabel: "Mistral API key",
     keyPlaceholder: "Paste your Mistral API key",
     model: "mistral-medium-latest",
+  },
+  {
+    id: "gemini",
+    label: "Gemini",
+    description:
+      "Direct Gemini generation through Google's OpenAI-compatible API.",
+    keyLabel: "Gemini API key",
+    keyPlaceholder: "Paste your Gemini API key",
+    model: "gemini-2.5-flash",
   },
 ];
 
@@ -283,6 +293,15 @@ export async function generateMermaidFromPrompt({
         apiKey,
         prompt,
         endpoint: "https://api.mistral.ai/v1/chat/completions",
+        model: provider.model,
+        providerLabel: provider.label,
+      });
+    case "gemini":
+      return generateWithOpenAiCompatibleApi({
+        apiKey,
+        prompt,
+        endpoint:
+          "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
         model: provider.model,
         providerLabel: provider.label,
       });

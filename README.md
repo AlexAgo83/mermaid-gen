@@ -9,13 +9,20 @@
 </p>
 
 <p align="center">
-  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v0.1.0-0E7380?style=for-the-badge" />
-  <img alt="Live preview" src="https://img.shields.io/badge/live%20preview-mermaid%20first-12A6A3?style=for-the-badge" />
-  <img alt="Export" src="https://img.shields.io/badge/export-modal%20SVG%20%7C%20PNG%20%7C%20share%20link-FFB65A?style=for-the-badge" />
-  <img alt="AI" src="https://img.shields.io/badge/AI-multi--provider%20BYOK-0A3440?style=for-the-badge" />
-  <img alt="Hosting" src="https://img.shields.io/badge/hosting-Render%20Static-0B3442?style=for-the-badge" />
-  <img alt="Installable" src="https://img.shields.io/badge/PWA-targeted-FFF3C0?style=for-the-badge&labelColor=0B3442" />
+  <a href="https://github.com/AlexAgo83/mermaid-gen/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/AlexAgo83/mermaid-gen/actions/workflows/ci.yml/badge.svg" /></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/AlexAgo83/mermaid-gen" /></a>
+  <a href="https://mermaid-gen.onrender.com/"><img alt="Live Demo" src="https://img.shields.io/badge/live%20demo-Render-46E3B7?logo=render&logoColor=white" /></a>
+  <img alt="Version" src="https://img.shields.io/badge/version-v0.1.0-4C8BF5" />
+  <img alt="Stack" src="https://img.shields.io/badge/stack-React%2019%20%7C%20TypeScript%20%7C%20Vite-7B61FF" />
+  <img alt="PWA" src="https://img.shields.io/badge/PWA-ready-FFB65A" />
 </p>
+
+## Live Demo & Status
+
+- Production: [https://mermaid-gen.onrender.com/](https://mermaid-gen.onrender.com/)
+- Hosting: Render Static Site
+- Current version: `0.1.0`
+- CI status: see the GitHub Actions badge above
 
 ## Why Mermaid Generator
 
@@ -66,7 +73,7 @@ Describe the system, process, or flow you want to visualize. Mermaid Generator t
 - Modal export flow with SVG output, PNG scale selection, and share-link copy from the same surface.
 - Shared modal scroll and overlay rules keep Settings, Export, and onboarding usable on short viewports while mobile modals fully dominate the page and desktop preserves only the header as a shell exception.
 - First-run onboarding with five steps: welcome, editor, prompt, preview, and export.
-- Browser-first multi-provider settings for OpenAI, OpenRouter, Anthropic, Grok, and Mistral keys.
+- Browser-first multi-provider settings for OpenAI, OpenRouter, Anthropic, Grok, Mistral, and Gemini keys.
 - In-app changelog history accessible from `Settings` and the mobile navigation menu.
 - Generated Mermaid is validated before it can replace the editor source, and failed preview renders fall back to app-owned error copy rather than raw Mermaid parser output.
 - Preview rendering uses Mermaid strict mode plus SVG sanitization before the preview injects markup into the page.
@@ -88,6 +95,7 @@ Supported direct providers:
 - `Anthropic`
 - `Grok`
 - `Mistral`
+- `Gemini`
 
 The active provider controls whether the prompt surface is unlocked and which adapter handles generation.
 

@@ -358,4 +358,5 @@ test("shows the expanded provider catalog in settings", async ({ page }) => {
   await expect(page.getByRole("radio", { name: /Anthropic/i })).toBeVisible();
   await expect(page.getByRole("radio", { name: /Grok/i })).toBeVisible();
   await expect(page.getByRole("radio", { name: /Mistral/i })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Gemini/i })).toBeVisible();
 });
