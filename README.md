@@ -12,7 +12,7 @@
   <a href="https://github.com/AlexAgo83/mermaid-gen/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/AlexAgo83/mermaid-gen/actions/workflows/ci.yml/badge.svg" /></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/AlexAgo83/mermaid-gen" /></a>
   <a href="https://mermaid-gen.onrender.com/"><img alt="Live Demo" src="https://img.shields.io/badge/live%20demo-Render-46E3B7?logo=render&logoColor=white" /></a>
-  <img alt="Version" src="https://img.shields.io/badge/version-v0.3.0-4C8BF5" />
+  <img alt="Version" src="https://img.shields.io/badge/version-v0.4.0-4C8BF5" />
   <img alt="Stack" src="https://img.shields.io/badge/stack-React%2019%20%7C%20TypeScript%20%7C%20Vite-7B61FF" />
   <img alt="PWA" src="https://img.shields.io/badge/PWA-ready-FFB65A" />
 </p>
@@ -116,8 +116,8 @@ Provider note:
 ## Accessibility And Cross-Browser Coverage
 
 - Provider, format, and PNG scale radiogroups follow the expected arrow-key navigation pattern.
-- The smoke suite runs on both Chromium and Firefox.
-- Preview zoom, share-link restore, modal flows, and onboarding are covered in E2E.
+- The smoke suite runs on Chromium, Firefox, and WebKit.
+- Preview zoom, share-link restore, modal flows, onboarding, and serious accessibility checks are covered in E2E.
 
 ## Deployment On Render
 
