@@ -67,10 +67,13 @@ Describe the system, process, or flow you want to visualize. Mermaid Generator t
 - Shared modal scroll and overlay rules keep Settings, Export, and onboarding usable on short viewports while mobile modals fully dominate the page and desktop preserves only the header as a shell exception.
 - First-run onboarding with five steps: welcome, editor, prompt, preview, and export.
 - Browser-first multi-provider settings for OpenAI, OpenRouter, Anthropic, Grok, Mistral, and Gemini keys.
+- Explicit Anthropic browser warning copy so the CORS limitation is visible before generation fails.
 - In-app changelog history accessible from `Settings` and the mobile navigation menu.
 - Generated Mermaid is validated before it can replace the editor source, and failed preview renders fall back to app-owned error copy rather than raw Mermaid parser output.
 - Preview rendering uses Mermaid strict mode plus SVG sanitization before the preview injects markup into the page.
 - Light generation guardrails that bias prompts toward balanced diagrams and warn when the result is still unusually wide or tall.
+- Settings and export radiogroups now support arrow-key navigation with roving focus.
+- Production delivery now includes a Render CSP, Firefox smoke coverage, and PNG PWA icons for installability.
 
 ## Provider Setup
 
@@ -92,6 +95,10 @@ Supported direct providers:
 
 The active provider controls whether the prompt surface is unlocked and which adapter handles generation.
 
+Provider note:
+
+- `Anthropic` remains available, but direct browser calls are blocked by CORS on standard origins. Use it only if you route requests through a local proxy that adds the required permissions.
+
 ## Export Flow
 
 - Use `Export` from the main header.
@@ -105,6 +112,12 @@ The active provider controls whether the prompt surface is unlocked and which ad
 - Open `Settings`, then use `View changelog history`.
 - On mobile, the same action is available from the burger menu.
 - The changelog modal loads the curated release-note files from `changelogs/` and lets users browse the available history inside the app.
+
+## Accessibility And Cross-Browser Coverage
+
+- Provider, format, and PNG scale radiogroups follow the expected arrow-key navigation pattern.
+- The smoke suite runs on both Chromium and Firefox.
+- Preview zoom, share-link restore, modal flows, and onboarding are covered in E2E.
 
 ## Deployment On Render
 
@@ -133,6 +146,11 @@ Delivery note:
 
 - Render now treats hashed `/assets/*` files as long-lived immutable assets.
 - The PWA precache deliberately excludes the heaviest Mermaid runtime chunks so install/update cost stays bounded while runtime asset caching still warms them during normal online use.
+- `render.yaml` now adds a route-wide `Content-Security-Policy` that keeps `script-src 'self'`, blocks `unsafe-eval`, and restricts outbound provider fetches to the six supported APIs.
+
+PWA note:
+
+- The manifest now ships the existing SVG icon plus `192x192` and `512x512` PNG icons so install prompts have browser-friendly assets.
 
 ## What Makes It Different
 

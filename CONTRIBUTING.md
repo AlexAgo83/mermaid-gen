@@ -33,6 +33,7 @@ Prerequisites:
 - Node.js 20+
 - npm
 - Python 3 for Logics tooling
+- Playwright browsers for E2E (`npx playwright install chromium firefox`)
 
 Install dependencies:
 
