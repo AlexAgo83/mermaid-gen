@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
-> Confidence: 85%
-> Progress: 0%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,13 +41,13 @@ flowchart LR
 
 - AC1: `playwright.config.ts` includes a WebKit project entry alongside Chromium and Firefox.
 - AC2: The CI workflow installs WebKit and runs E2E tests on all three browsers.
-- AC3: E2E tests pass on WebKit, with any platform-specific failures skip-annotated and documented in a comment.
+- AC3: E2E tests pass on WebKit, with any platform-specific failures either fixed or skip-annotated with a comment.
 
 # AC Traceability
 
 - AC1 -> Scope: WebKit config entry. Proof: `playwright.config.ts` contains `webkit` project.
 - AC2 -> Scope: CI update. Proof: CI workflow installs `webkit` and test job runs on three browsers.
-- AC3 -> Scope: test pass or skip-annotate. Proof: `npm run test:e2e` green on all three browsers.
+- AC3 -> Scope: test pass or skip-annotate. Proof: `npm run test:e2e` green on Chromium, Firefox, and WebKit.
 
 # Decision framing
 
@@ -79,5 +79,5 @@ flowchart LR
 # Notes
 
 - Derived from `req_022`, cross-browser theme, AC5.
-- WebKit may initially be allowed to fail without blocking CI if platform-specific issues surface, then stabilized incrementally.
-- Confidence is lower (85%) because WebKit has known differences that may require test adjustments.
+- Delivered in Wave 3 by adding a `webkit` project based on `Desktop Safari` to `playwright.config.ts`.
+- CI now installs `chromium firefox webkit`, and the full Playwright smoke suite passes on all three browsers.

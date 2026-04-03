@@ -108,7 +108,7 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   background: #fbfdfc;
-  color: var(--muted-text);
+  color: var(--text-color);
   font-size: 0.78rem;
   line-height: 1.2;
   box-shadow: 0 8px 20px rgba(15, 42, 48, 0.08);

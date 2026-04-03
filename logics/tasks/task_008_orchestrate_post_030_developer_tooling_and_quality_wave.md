@@ -4,8 +4,8 @@
 > Schema version: 1.0
 > Status: In Progress
 > Understanding: 95%
-> Confidence: 90%
-> Progress: 60%
+> Confidence: 95%
+> Progress: 80%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -53,11 +53,11 @@ flowchart TD
   - [x] 2.3. Run `npm run ci:local` and `npm run test:e2e`. Fix any regressions.
   - [x] 2.4. Update `item_052`, `item_053` status to Done, commit.
 
-- [ ] **Wave 3 — Cross-browser & accessibility** (`item_051`, `item_054`)
-  - [ ] 3.1. **WebKit in Playwright** (`item_051`): read `playwright.config.ts`. Add `{ name: 'webkit', use: { ...devices['Desktop Safari'] } }` to the projects array. Update `.github/workflows/ci.yml` to install WebKit (`npx playwright install --with-deps chromium firefox webkit`). Run `npm run test:e2e` and skip-annotate any WebKit-specific failures with a comment.
-  - [ ] 3.2. **axe-core integration** (`item_054`): install `@axe-core/playwright` as a devDependency. Add accessibility checks to at least three E2E scenarios: main workspace loaded, settings modal open, export modal open. Establish a baseline configuration that excludes pre-existing minor violations. Verify that introducing a deliberate violation (e.g. removing an `aria-label`) causes test failure.
-  - [ ] 3.3. Run `npm run ci:local` and `npm run test:e2e` on all three browsers. Fix or skip-annotate regressions.
-  - [ ] 3.4. Update `item_051`, `item_054` status to Done, commit.
+- [x] **Wave 3 — Cross-browser & accessibility** (`item_051`, `item_054`)
+  - [x] 3.1. **WebKit in Playwright** (`item_051`): read `playwright.config.ts`. Add `{ name: 'webkit', use: { ...devices['Desktop Safari'] } }` to the projects array. Update `.github/workflows/ci.yml` to install WebKit (`npx playwright install --with-deps chromium firefox webkit`). Run `npm run test:e2e` and skip-annotate any WebKit-specific failures with a comment.
+  - [x] 3.2. **axe-core integration** (`item_054`): install `@axe-core/playwright` as a devDependency. Add accessibility checks to at least three E2E scenarios: main workspace loaded, settings modal open, export modal open. Establish a baseline configuration that excludes pre-existing minor violations. Verify that introducing a deliberate violation (e.g. removing an `aria-label`) causes test failure.
+  - [x] 3.3. Run `npm run ci:local` and `npm run test:e2e` on all three browsers. Fix or skip-annotate regressions.
+  - [x] 3.4. Update `item_051`, `item_054` status to Done, commit.
 
 - [ ] **Wave 4 — Code hygiene** (`item_055`)
   - [ ] 4.1. **Anthropic API version constant** (`item_055`): read `src/lib/llm.ts`. Extract `"2023-06-01"` into a `const ANTHROPIC_API_VERSION = "2023-06-01"` at the top of the file. Replace all inline usages with the constant.
@@ -167,3 +167,10 @@ flowchart TD
 - Replaced `src/styles/header.css` with co-located header/app-shell CSS files and removed the monolithic import from `App.tsx`.
 - Replaced `src/styles/modals.css` with per-modal CSS files plus a shared modal stylesheet.
 - Validation: `npm run ci:local`, `npm run test:e2e`, and manual desktop/mobile verification on the preview build.
+
+## Wave 3
+
+- Added WebKit to the Playwright project matrix and updated CI to install `chromium firefox webkit`.
+- Added `@axe-core/playwright` smoke coverage for the workspace shell, settings modal, and export modal, plus a deliberate failing proof test.
+- Fixed real accessibility regressions found during rollout by labeling the editor/prompt textareas and raising link/tooltip contrast instead of suppressing the findings.
+- Validation: `npm run build`, targeted Playwright accessibility runs, `npm run test:e2e`, and `npm run ci:local`.

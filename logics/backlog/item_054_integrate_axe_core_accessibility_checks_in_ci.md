@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 93%
-> Confidence: 88%
-> Progress: 0%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Accessibility
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -21,8 +21,8 @@
 - In:
   - install `@axe-core/playwright` as a devDependency
   - integrate axe accessibility checks into the existing Playwright E2E suite (e.g. run `checkA11y()` on key pages/states after navigation)
-  - establish a baseline of known violations so pre-existing minor issues do not block the pipeline on day one
-  - document the baseline and the process for resolving violations over time
+  - establish the initial accessibility gate in the existing Playwright smoke coverage and either baseline or remediate any blocking violations found during rollout
+  - document how deliberate accessibility regressions are expected to fail the suite
 - Out:
   - fixing all pre-existing accessibility issues in this item (those are tracked separately)
   - adding `vitest-axe` for unit-level accessibility checks (can be added later)
@@ -41,13 +41,13 @@ flowchart LR
 # Acceptance criteria
 
 - AC1: `@axe-core/playwright` is installed and integrated into at least three key E2E test scenarios (e.g. main workspace, settings modal open, export modal open).
-- AC2: A baseline of known violations is established and documented so the pipeline does not fail on pre-existing issues.
+- AC2: The rollout strategy for pre-existing issues is documented, and the shipped suite either baselines or remediates any blocking violations before enabling the gate.
 - AC3: New accessibility violations introduced after the baseline cause the E2E test to fail.
 
 # AC Traceability
 
 - AC1 -> Scope: axe integration in E2E. Proof: `npm run test:e2e` runs axe checks and reports results.
-- AC2 -> Scope: baseline. Proof: baseline file or inline configuration documents known issues.
+- AC2 -> Scope: rollout strategy. Proof: Wave 3 notes document that the initial serious violations were fixed in-app before enabling the gate.
 - AC3 -> Scope: regression detection. Proof: introducing a deliberate violation (e.g. removing an `aria-label`) causes test failure.
 
 # Decision framing
@@ -80,5 +80,7 @@ flowchart LR
 # Notes
 
 - Derived from `req_022`, accessibility automation theme, AC8.
-- The baseline approach ensures the pipeline is immediately useful without requiring a full accessibility remediation sprint.
-- `@axe-core/playwright` is preferred over a separate CI step because it runs axe in the context of real rendered pages.
+- Derived from `req_022`, accessibility automation theme, AC8.
+- Delivered in Wave 3 with `@axe-core/playwright`, a shared `assertNoSeriousA11yViolations()` helper, and smoke coverage for the workspace shell, settings modal, and export modal.
+- The initial rollout surfaced real label and color-contrast violations; they were fixed in-app instead of being silently baselined.
+- A deliberate failing scenario remains covered by a Playwright test so regressions continue to prove the gate is active.

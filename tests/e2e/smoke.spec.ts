@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { encodeSharedMermaidSource } from "../../src/lib/share";
+import { assertNoSeriousA11yViolations } from "./a11y";
 
 test("loads the foundation shell", async ({ page }) => {
   await page.goto("/");
@@ -14,6 +15,15 @@ test("loads the foundation shell", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Open settings" }),
   ).toBeVisible();
+});
+
+test("has no serious accessibility violations in the workspace shell", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await assertNoSeriousA11yViolations(page);
 });
 
 test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
@@ -175,6 +185,30 @@ test("opens the export modal from a single entry point", async ({ page }) => {
     page.getByRole("dialog", { name: "Export diagram" }),
   ).toBeVisible();
   await expect(page.getByText(/Choose the output format/i)).toBeVisible();
+});
+
+test("has no serious accessibility violations in the settings modal", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
+  await assertNoSeriousA11yViolations(page);
+});
+
+test("has no serious accessibility violations in the export modal", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open export dialog" }).click();
+
+  await expect(
+    page.getByRole("dialog", { name: "Export diagram" }),
+  ).toBeVisible();
+  await assertNoSeriousA11yViolations(page);
 });
 
 test("keeps modal content reachable on a short mobile viewport", async ({
@@ -442,4 +476,18 @@ test("supports arrow-key navigation across provider and export radiogroups", asy
   await page.keyboard.press("ArrowRight");
   await expect(scale1xRadio).toHaveAttribute("aria-checked", "true");
   await expect(scale1xRadio).toBeFocused();
+});
+
+test("detects a deliberate accessibility violation when axe is run", async ({
+  page,
+}) => {
+  await page.setContent(`
+    <main>
+      <button></button>
+    </main>
+  `);
+
+  await expect(assertNoSeriousA11yViolations(page)).rejects.toThrow(
+    /button-name/i,
+  );
 });

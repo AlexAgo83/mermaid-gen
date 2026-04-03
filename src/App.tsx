@@ -423,7 +423,7 @@ function App() {
             <div className="panel-header">
               <div className="panel-heading-group">
                 <div className="title-row">
-                  <h2>Mermaid source</h2>
+                  <h2 id="editor-title">Mermaid source</h2>
                   <button
                     type="button"
                     className="help-trigger"
@@ -449,6 +449,7 @@ function App() {
             <div className="editor-surface">
               <textarea
                 className="editor-textarea"
+                aria-labelledby="editor-title"
                 value={source}
                 spellCheck="false"
                 onChange={(event) => {
@@ -464,7 +465,7 @@ function App() {
             <div className="panel-header">
               <div className="panel-heading-group">
                 <div className="title-row">
-                  <h2>Prompt draft</h2>
+                  <h2 id="prompt-title">Prompt draft</h2>
                   <button
                     type="button"
                     className="help-trigger"
@@ -493,6 +494,7 @@ function App() {
             </div>
             <textarea
               className="prompt-textarea"
+              aria-labelledby="prompt-title"
               value={prompt}
               onChange={(event) => {
                 setPrompt(event.target.value);
