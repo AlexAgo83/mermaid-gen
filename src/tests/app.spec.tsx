@@ -20,9 +20,7 @@ describe("App foundation shell", () => {
   it("shows onboarding on the first run", () => {
     render(<App />);
 
-    expect(
-      screen.getByRole("dialog", { name: "Welcome" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Welcome" })).toBeInTheDocument();
   });
 
   it("shows the locked prompt state before a provider key is configured", () => {
@@ -70,7 +68,9 @@ describe("App foundation shell", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
-    fireEvent.click(screen.getByRole("button", { name: "Open changelog history" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open changelog history" }),
+    );
 
     expect(
       await screen.findByRole(
@@ -110,7 +110,9 @@ describe("App foundation shell", () => {
     );
 
     expect(
-      screen.getByText(/Anthropic blocks direct browser calls from arbitrary origins/i),
+      screen.getByText(
+        /Anthropic blocks direct browser calls from arbitrary origins/i,
+      ),
     ).toBeInTheDocument();
   });
 

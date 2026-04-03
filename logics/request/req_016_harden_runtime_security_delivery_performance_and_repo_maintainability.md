@@ -1,4 +1,5 @@
 ## req_016_harden_runtime_security_delivery_performance_and_repo_maintainability - Harden runtime security, delivery performance, and repository maintainability
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,6 +10,7 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Address the main audit findings that now represent the most important technical hardening work after the `0.1.0` release.
 - Reduce avoidable runtime risk in the Mermaid rendering path, especially where shared user-controlled input is rendered into the DOM.
 - Improve delivery quality by aligning static hosting cache behavior and frontend payload cost with the current Render deployment model.
@@ -16,6 +18,7 @@
 - Clean up stale documentation and dead code so the repository reflects the real shipped state of the project.
 
 # Context
+
 The repository is currently functional and the local quality gates are green, but the recent audit surfaced several important hardening themes that should no longer stay implicit:
 
 1. The Mermaid rendering pipeline accepts user-controlled shared source, renders it with Mermaid configured in a permissive security mode, and injects the resulting SVG into the DOM.
@@ -57,6 +60,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: The Mermaid rendering path no longer relies on a permissive trust model for shared or user-controlled source without an explicit hardening decision and mitigation.
 - AC2: The delivery setup on Render is reviewed and adjusted so cache behavior is coherent with hashed build assets and the intended PWA strategy.
 - AC3: The current oversized frontend bundle and precache cost are treated as an optimization target rather than left as an undocumented warning.
@@ -66,6 +70,7 @@ flowchart TD
 - AC7: All hardening work preserves the current validated user flows covered by the existing test suite.
 
 # Clarifications
+
 - Recommended default: start by hardening Mermaid rendering and DOM injection before doing broader structural refactors.
 - Recommended default: delivery work should improve real caching and loading behavior, not just silence warnings.
 - Recommended default: structural cleanup should focus first on the highest-volatility areas of `App.tsx` and `App.css`, rather than forcing a full rewrite in one pass.
@@ -73,22 +78,26 @@ flowchart TD
 - Recommended default: this request can be split into dedicated backlog items for security, delivery/performance, structure, and hygiene once the package is approved.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Convert the current audit findings into a coordinated hardening initiative covering Mermaid rendering security, Render delivery behavior, frontend payload cost, codebase modularity, and repository hygiene.
 - Keywords: hardening, security, Mermaid, Render, caching, PWA, bundle size, refactor, maintainability, cleanup
 - Use when: Use when planning the next post-release technical hardening wave for Mermaid Generator.
 - Skip when: Skip when the work concerns a single isolated UI tweak or a narrow provider-specific feature only.
 
 # References
+
 - `src/App.tsx`
 - `src/App.css`
 - `src/lib/mermaid.ts`
@@ -103,6 +112,7 @@ flowchart TD
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 
 # Backlog
+
 - `item_025_profile_and_split_heavy_frontend_chunks_without_regressing_core_flows`
 - `item_026_align_render_cache_and_pwa_precache_behavior_with_static_asset_delivery`
 - `item_027_harden_shared_mermaid_rendering_and_dom_injection_boundaries`

@@ -11,7 +11,9 @@ export function useExport(renderState: RenderState, source: string) {
   const [exportError, setExportError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isShareLinkCopying, setIsShareLinkCopying] = useState(false);
-  const [shareToastMessage, setShareToastMessage] = useState<string | null>(null);
+  const [shareToastMessage, setShareToastMessage] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!shareToastMessage) {
@@ -67,7 +69,9 @@ export function useExport(renderState: RenderState, source: string) {
       setIsExportOpen(false);
     } catch (error) {
       setExportError(
-        error instanceof Error ? error.message : "Unable to export the diagram.",
+        error instanceof Error
+          ? error.message
+          : "Unable to export the diagram.",
       );
     } finally {
       setIsExporting(false);

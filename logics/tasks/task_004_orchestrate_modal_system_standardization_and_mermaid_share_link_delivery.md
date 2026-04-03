@@ -1,4 +1,5 @@
 ## task_004_orchestrate_modal_system_standardization_and_mermaid_share_link_delivery - Orchestrate modal system standardization and Mermaid share link delivery
+
 > From version: 0.1.0+wave6
 > Schema version: 1.0
 > Status: Done
@@ -10,6 +11,7 @@
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
 
 # Context
+
 This task orchestrates the next workspace polish and sharing package after task 003.
 It groups together three related streams that should be delivered in a controlled order:
 
@@ -38,6 +40,7 @@ flowchart LR
 ```
 
 # Plan
+
 - [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
 - [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
 - [x] 2. Wave 1: standardize modal internal scrolling across current modal surfaces from `item_017`, then update linked docs and checkpoint the wave.
@@ -51,11 +54,13 @@ flowchart LR
 - [x] FINAL: update related Logics docs and README before closure
 
 # Delivery checkpoints
+
 - Each completed wave should leave the repository in a coherent, commit-ready state.
 - Update the linked Logics docs during the wave that changes the behavior, not only at final closure.
 - Prefer a reviewed commit checkpoint at the end of each meaningful wave instead of accumulating several undocumented partial states.
 
 # AC Traceability
+
 - AC1 -> `item_017_standardize_modal_internal_scrolling_across_current_modal_surfaces`: current app modals remain scrollable and usable on short viewports. Proof: desktop and mobile modal validation.
 - AC2 -> `item_018_standardize_modal_overlay_coverage_and_layer_ordering_across_viewports`: mobile modals fully dominate the page and desktop preserves the header only as an explicit shell exception while the backdrop still covers the rest. Proof: responsive overlay validation.
 - AC3 -> `item_019_add_keyboard_dismissal_semantics_to_the_settings_modal`: the Settings modal closes on `Escape` with the same effect as `Close`. Proof: keyboard interaction validation.
@@ -65,6 +70,7 @@ flowchart LR
 - AC7 -> Documentation closure: linked Logics docs and README reflect the delivered modal and sharing behavior. Proof: updated docs and final report.
 
 # Decision framing
+
 - Product framing: Required
 - Product signals: conversion journey, navigation and discoverability, experience scope
 - Product follow-up: Keep this orchestration synchronized with `prod_000_mermaid_generator_product_direction` while modal behavior and sharing evolve.
@@ -73,18 +79,21 @@ flowchart LR
 - Architecture follow-up: Keep this orchestration synchronized with `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator` while modal layering and URL-state sharing evolve.
 
 # Links
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 - Backlog item: `item_017_standardize_modal_internal_scrolling_across_current_modal_surfaces`, `item_018_standardize_modal_overlay_coverage_and_layer_ordering_across_viewports`, `item_019_add_keyboard_dismissal_semantics_to_the_settings_modal`, `item_020_align_preview_panel_header_spacing_with_the_workspace_panel_system`, `item_021_add_url_hydration_support_for_shared_mermaid_diagrams`, `item_022_add_export_modal_share_link_action_with_clipboard_toast`
 - Request(s): `req_010_make_settings_modal_scrollable_and_dismissible_with_escape`, `req_011_align_preview_panel_header_spacing_with_other_panels`, `req_012_share_mermaid_diagrams_through_generated_urls_from_export`, `req_013_standardize_modal_scrolling_and_overlay_layering_across_viewports`
 
 # AI Context
+
 - Summary: Orchestrate the next Mermaid Generator package across shared modal-system standardization, settings keyboard dismissal, preview header consistency, and shareable Mermaid URL delivery from the export flow.
 - Keywords: modal system, scrolling, overlay, backdrop, escape, preview header, share URL, clipboard, toast
 - Use when: Use when executing the coordinated wave set that combines modal shell standardization with the new Mermaid share-link flow.
 - Skip when: Skip when the work is an isolated fix inside only one backlog item with no orchestration need.
 
 # Validation
+
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 - `npm run lint`
 - `npm run typecheck`
@@ -94,6 +103,7 @@ flowchart LR
 - Browser validation for modal scroll behavior, modal overlay coverage, settings keyboard dismissal, preview header alignment, and shared Mermaid URL loading plus export sharing
 
 # Definition of Done (DoD)
+
 - [x] Scope implemented and acceptance criteria covered.
 - [x] Validation commands executed and results captured.
 - [x] Linked request/backlog/task docs updated during completed waves and at closure.
@@ -102,6 +112,7 @@ flowchart LR
 - [x] Status is `Done` and progress is `100%`.
 
 # Report
+
 - Wave 1 completed: current modal surfaces now use a shared viewport-bounded container with internal scroll regions so onboarding, settings, and export remain reachable on short mobile viewports without relying on page scroll behind the modal.
 - Wave 2 completed: modal backdrops now preserve the sticky header area on desktop while still covering the rest of the page, and mobile keeps the modal overlay full-screen above the page chrome.
 - Wave 3 completed: the Settings modal now closes on `Escape` through the same state path as the explicit `Close` action, with validation covering both unit-level and browser-level keyboard interaction.

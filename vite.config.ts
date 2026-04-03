@@ -33,7 +33,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "icon.svg", "icon-192.png", "icon-512.png"],
+      includeAssets: [
+        "favicon.svg",
+        "icon.svg",
+        "icon-192.png",
+        "icon-512.png",
+      ],
       workbox: {
         globIgnores: [
           "**/assets/mermaid.core-*.js",

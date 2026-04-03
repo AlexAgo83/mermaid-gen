@@ -5,7 +5,9 @@ import { loadChangelogEntries } from "@/lib/changelog";
 export function useChangelog() {
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
   const [isChangelogLoading, setIsChangelogLoading] = useState(false);
-  const [changelogEntries, setChangelogEntries] = useState<ChangelogEntry[]>([]);
+  const [changelogEntries, setChangelogEntries] = useState<ChangelogEntry[]>(
+    [],
+  );
   const [changelogError, setChangelogError] = useState<string | null>(null);
   const isRequestInFlightRef = useRef(false);
 

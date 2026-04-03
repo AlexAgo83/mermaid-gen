@@ -1,4 +1,5 @@
 ## req_018_add_an_in_app_changelog_modal_accessible_from_settings_and_mobile_navigation - Add an in-app changelog modal accessible from Settings and mobile navigation
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,12 +10,14 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Add an in-app way to read the app changelogs without leaving Mermaid Generator.
 - Expose this access from `Settings` through a dedicated button that opens a scrollable modal.
 - On mobile, expose the same changelog entry point in the burger menu so the user can reach it without first opening `Settings`.
 - Keep the changelog-reading surface coherent with the app’s current modal system and mobile navigation model.
 
 # Context
+
 The app now has versioned changelog files, but there is no in-product surface for users to consult them.
 That creates a gap between shipping releases and making release information discoverable inside the app itself.
 
@@ -59,6 +62,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: `Settings` exposes a dedicated action that opens an app changelog modal.
 - AC2: The changelog modal is internally scrollable so longer release notes remain fully readable on short viewports and mobile screens.
 - AC3: On mobile, the burger menu exposes a changelog action that opens the same modal without requiring the user to open `Settings` first.
@@ -68,28 +72,33 @@ flowchart TD
 - AC7: The new informational surface does not regress the current navigation behavior of `Settings`, the burger menu, or the existing modal system.
 
 # Clarifications
+
 - Recommended default: the changelog action in `Settings` should feel like an informational action alongside other app-level actions rather than another provider-setting control.
 - Recommended default: the changelog modal should prioritize readable typography and vertical scroll over dense card-like layout.
 - Recommended default: mobile should expose the changelog directly in the burger menu because that menu already acts as the compact top-level action surface.
 - Recommended default: the first version should expose all available app changelogs in one readable history surface, even if version navigation remains lightweight.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Add an in-app changelog reader modal reachable from Settings and, on mobile, directly from the burger menu, while keeping the modal scrollable and exposing the app's changelog history.
 - Keywords: changelog, release notes, settings, modal, mobile, burger menu, scrollable, app shell, changelog history
 - Use when: Use when defining how users should read app release notes inside Mermaid Generator.
 - Skip when: Skip when the work concerns deployment automation, release tagging, or provider settings unrelated to in-app changelog access.
 
 # References
+
 - `changelogs/CHANGELOGS_0_1_0.md`
 - `src/App.tsx`
 - `src/App.css`
@@ -100,5 +109,6 @@ flowchart TD
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 
 # Backlog
+
 - `item_032_add_a_scrollable_in_app_changelog_history_modal`
 - `item_033_add_changelog_entry_points_to_settings_and_mobile_burger_navigation`

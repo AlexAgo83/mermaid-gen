@@ -1,7 +1,4 @@
-import type {
-  ChangelogContentBlock,
-  ChangelogEntry,
-} from "@/lib/changelog";
+import type { ChangelogContentBlock, ChangelogEntry } from "@/lib/changelog";
 import { normalizeChangelogEntry } from "@/lib/changelog";
 
 function renderInlineMarkdown(text: string) {
@@ -55,7 +52,9 @@ export function ChangelogModal({
     return null;
   }
 
-  const normalizedEntries = entries.map((entry) => normalizeChangelogEntry(entry));
+  const normalizedEntries = entries.map((entry) =>
+    normalizeChangelogEntry(entry),
+  );
 
   return (
     <div className="modal-backdrop" role="presentation">
@@ -97,23 +96,23 @@ export function ChangelogModal({
                       <p className="changelog-entry-kicker">{entry.slug}</p>
                     </div>
                   </header>
-                      <div className="changelog-entry-body">
-                        {entry.intro.length > 0 ? (
-                          <div className="changelog-entry-intro">
-                            {renderBlocks(entry.intro)}
+                  <div className="changelog-entry-body">
+                    {entry.intro.length > 0 ? (
+                      <div className="changelog-entry-intro">
+                        {renderBlocks(entry.intro)}
+                      </div>
+                    ) : null}
+                    <div className="changelog-sections">
+                      {entry.sections.map((section) => (
+                        <details
+                          key={`${entry.version}-${section.title}`}
+                          className="changelog-section"
+                          open={section.title === "Major Highlights"}
+                        >
+                          <summary>{section.title}</summary>
+                          <div className="changelog-section-body">
+                            {renderBlocks(section.blocks)}
                           </div>
-                        ) : null}
-                        <div className="changelog-sections">
-                          {entry.sections.map((section) => (
-                            <details
-                              key={`${entry.version}-${section.title}`}
-                              className="changelog-section"
-                              open={section.title === "Major Highlights"}
-                            >
-                              <summary>{section.title}</summary>
-                              <div className="changelog-section-body">
-                                {renderBlocks(section.blocks)}
-                              </div>
                         </details>
                       ))}
                     </div>

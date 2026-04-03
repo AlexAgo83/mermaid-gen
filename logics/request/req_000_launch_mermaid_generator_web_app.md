@@ -1,4 +1,5 @@
 ## req_000_launch_mermaid_generator_web_app - Launch Mermaid Generator web app
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,6 +10,7 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Provide a browser-based Mermaid editor where users can paste Mermaid code, edit it, and see a live preview.
 - Provide a prompt-based generation flow where users can paste contextual text and receive Mermaid code plus an immediate preview.
 - Support export of the rendered diagram as both PNG and SVG.
@@ -16,6 +18,7 @@
 - Keep the AI generation layer provider-aware so OpenAI can be the first option without hard-coupling the product to one vendor.
 
 # Context
+
 Mermaid Generator is a new web app focused on two primary user paths.
 
 1. A user already has Mermaid code and wants a faster place to edit it, validate it visually, and export it.
@@ -44,6 +47,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
+
 - Users can paste valid Mermaid code into the app and see a live rendered preview without a page reload.
 - Users can edit Mermaid code in place and the preview updates fast enough for iterative authoring.
 - Users can provide textual context to an AI prompt flow and receive Mermaid code that is inserted into the editable source area.
@@ -52,26 +56,32 @@ flowchart LR
 - The request is framed with companion product and architecture docs that clarify scope and technical direction.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+
 # AI Context
+
 - Summary: Build a focused Mermaid authoring web app with live preview, AI-assisted code generation, and export, while preserving a static PWA-friendly delivery model.
 - Keywords: mermaid, editor, preview, export, llm, openai, provider adapter, pwa, static app
 - Use when: Use when defining backlog slices for editor UX, Mermaid rendering, export, persistence, or AI provider integration.
 - Skip when: Skip when the work is about unrelated diagram formats, multi-user collaboration, or non-web delivery targets.
 
 # References
+
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - Reference app: `https://e-plan-editor.onrender.com/`
 - Reference repository: `https://github.com/AlexAgo83/electrical-plan-editor`
 
 # Backlog
+
 - `item_001_bootstrap_static_pwa_foundation_and_delivery_baseline`
 - `item_002_build_mermaid_authoring_workspace_and_export_flow`

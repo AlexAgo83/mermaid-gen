@@ -105,7 +105,9 @@ export function AppHeader({
           </div>
         </div>
         <div className="topbar-actions">
-          {isPreviewFocused ? <div className="focus-pill">Preview focus</div> : null}
+          {isPreviewFocused ? (
+            <div className="focus-pill">Preview focus</div>
+          ) : null}
           {!isMobileHeader ? (
             <div className="topbar-action-row">
               <ActionButton
@@ -123,14 +125,19 @@ export function AppHeader({
                 <FitIcon />
               </ActionButton>
               <ActionButton
-                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
+                label={
+                  isPreviewFocused ? "Exit preview focus" : "Focus preview"
+                }
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
                 active={isPreviewFocused}
               >
                 <FocusIcon />
               </ActionButton>
-              <ActionButton label="Open changelog history" onClick={onOpenChangelog}>
+              <ActionButton
+                label="Open changelog history"
+                onClick={onOpenChangelog}
+              >
                 <ChangelogIcon />
               </ActionButton>
               <ActionButton
@@ -236,7 +243,9 @@ export function AppHeader({
                 <FitIcon />
               </ActionButton>
               <ActionButton
-                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
+                label={
+                  isPreviewFocused ? "Exit preview focus" : "Focus preview"
+                }
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
                 active={isPreviewFocused}

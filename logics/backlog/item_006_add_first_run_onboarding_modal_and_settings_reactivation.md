@@ -1,4 +1,5 @@
 ## item_006_add_first_run_onboarding_modal_and_settings_reactivation - Add first run onboarding modal and settings reactivation
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -10,12 +11,14 @@
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
+
 - Add a first-run onboarding flow so new users understand how to use Mermaid Generator without guessing the workspace.
 - Use a modal-based, step-by-step onboarding similar in spirit to the one already used in `e-plan editor`.
 - Let users dismiss onboarding and reactivate it later from `Settings`.
 - Keep the onboarding lightweight, product-focused, and usable on mobile as well as desktop.
 
 # Scope
+
 - In:
   - first-run modal onboarding flow
   - exactly five MVP steps: welcome, code editor, prompt, preview, export
@@ -39,6 +42,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
+
 - The app shows a step-by-step onboarding modal for first-time users.
 - The onboarding contains exactly five core steps for the MVP: welcome, code editor, prompt, preview, and export.
 - The final onboarding step ends with a `Finish` action that closes the onboarding.
@@ -49,6 +53,7 @@ flowchart LR
 - The onboarding direction stays aligned with the product inspiration from `e-plan editor` without requiring a visual clone.
 
 # AC Traceability
+
 - AC1 -> Scope: The app shows a step-by-step onboarding modal for first-time users.. Proof: UI checks and task report evidence.
 - AC2 -> Scope: The onboarding contains exactly five core steps for the MVP: welcome, code editor, prompt, preview, and export.. Proof: UI checks and task report evidence.
 - AC3 -> Scope: The final onboarding step ends with a `Finish` action that closes the onboarding.. Proof: UI checks and task report evidence.
@@ -59,6 +64,7 @@ flowchart LR
 - AC8 -> Scope: The onboarding direction stays aligned with the product inspiration from `e-plan editor` without requiring a visual clone.. Proof: UI review and task report evidence.
 
 # Decision framing
+
 - Product framing: Required
 - Product signals: conversion journey, pricing and packaging, navigation and discoverability, experience scope
 - Product follow-up: Create or link a product brief before implementation moves deeper into delivery.
@@ -67,18 +73,21 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 - Request: `req_005_add_first_run_onboarding_modal_with_reactivation_from_settings`
 - Primary task(s): `task_002_orchestrate_workspace_polish_onboarding_and_multi_provider_rollout`
 
 # AI Context
+
 - Summary: Add a first-run onboarding modal flow that explains the Mermaid Generator workspace step by step, persists dismissal locally...
 - Keywords: onboarding, first run, modal, wizard, settings, local persistence, welcome, editor, prompt, preview, export
 - Use when: Use when defining first-use guidance and reactivation behavior for the Mermaid Generator workspace.
 - Skip when: Skip when the work concerns export implementation details, sticky-header polish, or provider configuration alone.
 
 # References
+
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - `https://e-plan-editor.onrender.com/`
@@ -86,10 +95,12 @@ flowchart LR
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Priority
+
 - Impact: Medium
 - Urgency: Medium
 
 # Notes
+
 - Derived from request `req_005_add_first_run_onboarding_modal_with_reactivation_from_settings`.
 - Source file: `logics/request/req_005_add_first_run_onboarding_modal_with_reactivation_from_settings.md`.
 - Request context seeded into this backlog item from `logics/request/req_005_add_first_run_onboarding_modal_with_reactivation_from_settings.md`.

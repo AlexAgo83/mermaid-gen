@@ -1,4 +1,5 @@
 ## req_017_add_grok_and_mistral_providers_and_rework_settings_provider_ux - Add Grok and Mistral providers and rework Settings provider UX
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,12 +10,14 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Extend Mermaid Generator’s current multi-provider setup with support for `Grok` and `Mistral`.
 - Rework the `Settings` provider-management UX so the modal remains clear and usable as the provider list grows.
 - Preserve the browser-first BYOK model while making provider choice, provider-specific API key entry, and active-provider state easier to understand.
 - Avoid turning the settings surface into a cramped provider wall as more providers are added.
 
 # Context
+
 The app already supports a browser-side multi-provider flow centered on:
 
 - OpenAI
@@ -64,6 +67,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: The app supports `Grok` and `Mistral` as selectable providers for prompt-to-Mermaid generation.
 - AC2: The provider abstraction remains normalized so the rest of the app does not need provider-specific branching outside the provider layer.
 - AC3: `Settings` lets the user manage `Grok` and `Mistral` keys locally in the browser alongside the existing providers.
@@ -73,6 +77,7 @@ flowchart TD
 - AC7: Any UX/UI changes to the settings modal remain consistent with the app’s current shell, modal, and responsive behavior.
 
 # Clarifications
+
 - Recommended default: do not simply append two more provider cards if that makes the current settings modal harder to scan or use.
 - Recommended default: the selected provider should remain visually obvious, but non-selected providers should not create unnecessary density.
 - Recommended default: key entry should stay tied to the currently selected provider rather than showing many simultaneous credential fields.
@@ -80,22 +85,26 @@ flowchart TD
 - Recommended default: this request explicitly includes UX/UI refinement of `Settings`, and that refinement should use `logics-ui-steering` during implementation.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Add Grok and Mistral to the app’s provider lineup and treat the settings modal as a scalable provider-management surface rather than extending it naively.
 - Keywords: grok, mistral, provider, settings, multi-provider, byok, modal, ux, ui, local persistence
 - Use when: Use when defining the next provider expansion and the accompanying settings UX refresh.
 - Skip when: Skip when the work concerns deployment, Mermaid rendering, or export behavior unrelated to provider management.
 
 # References
+
 - `logics/request/req_006_add_multi_provider_llm_support_and_expand_settings_management.md`
 - `src/lib/llm.ts`
 - `src/App.tsx`
@@ -106,5 +115,6 @@ flowchart TD
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Backlog
+
 - `item_030_add_direct_grok_and_mistral_provider_support_to_the_llm_adapter_layer`
 - `item_031_rework_settings_provider_management_for_a_growing_provider_catalog`

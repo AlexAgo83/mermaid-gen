@@ -8,12 +8,16 @@ function toBase64Url(bytes: Uint8Array) {
     binary += String.fromCharCode(byte);
   }
 
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
 }
 
 function fromBase64Url(value: string) {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
-  const padding = normalized.length % 4 === 0 ? "" : "=".repeat(4 - (normalized.length % 4));
+  const padding =
+    normalized.length % 4 === 0 ? "" : "=".repeat(4 - (normalized.length % 4));
   const binary = atob(`${normalized}${padding}`);
   const bytes = new Uint8Array(binary.length);
 
@@ -65,7 +69,10 @@ export function loadSharedMermaidSourceFromLocation() {
   return loadSharedMermaidSourceFromSearch(window.location.search);
 }
 
-export function buildSharedMermaidUrl(source: string, location: { href: string }) {
+export function buildSharedMermaidUrl(
+  source: string,
+  location: { href: string },
+) {
   const url = new URL(location.href);
   url.searchParams.set(
     SHARED_MERMAID_QUERY_KEY,

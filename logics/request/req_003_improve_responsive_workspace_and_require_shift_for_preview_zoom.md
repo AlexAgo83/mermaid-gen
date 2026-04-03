@@ -1,4 +1,5 @@
 ## req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom - Improve responsive workspace and require shift for preview zoom
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,11 +10,13 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Make the Mermaid Generator workspace genuinely responsive across desktop, tablet, and mobile widths.
 - Keep the preview navigation predictable by allowing wheel-based zoom only while the `Shift` key is actively pressed.
 - Prevent accidental zoom interactions during ordinary page or panel scrolling inside the app.
 
 # Context
+
 The current workspace direction is correct at a product level, but two concrete interaction rules still need to be locked down.
 
 First, the app must remain usable on smaller viewports instead of only working on a large desktop canvas. The product brief already states that desktop remains the priority, but the app still needs a coherent responsive behavior for tablet and mobile.
@@ -49,6 +52,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
+
 - The workspace remains usable across desktop, tablet, and mobile widths, with no critical panel clipping, unusable controls, or broken layout hierarchy.
 - On large screens, the preview remains the dominant area while the editor and prompt keep a coherent secondary placement.
 - On smaller viewports, the layout adapts so the editor, prompt, preview, and `Settings` entry point remain reachable without overlap or unusable truncation.
@@ -56,24 +60,30 @@ flowchart LR
 - Without `Shift`, wheel or trackpad scrolling does not trigger preview zoom and preserves normal scrolling behavior.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+
 # AI Context
+
 - Summary: Tighten the Mermaid Generator workspace so it behaves responsively across viewports and only zooms the preview on wheel input when Shift is held.
 - Keywords: responsive, layout, mobile, tablet, desktop, preview, zoom, shift, wheel, interaction
 - Use when: Use when defining responsive behavior and safer preview navigation rules for the main Mermaid workspace.
 - Skip when: Skip when the work concerns OpenAI settings, export formats, or release workflow documentation.
 
 # References
+
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - `logics/tasks/task_000_orchestrate_mermaid_generator_mvp_delivery.md`
 
 # Backlog
+
 - `item_004_improve_responsive_workspace_and_require_shift_for_preview_zoom`

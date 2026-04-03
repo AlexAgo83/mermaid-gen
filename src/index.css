@@ -52,7 +52,9 @@ button {
   border-radius: 10px;
   padding: 10px 14px;
   cursor: pointer;
-  transition: border-color 140ms ease, background-color 140ms ease,
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
     color 140ms ease;
 }
 

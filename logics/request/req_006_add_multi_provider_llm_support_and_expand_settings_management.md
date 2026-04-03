@@ -1,4 +1,5 @@
 ## req_006_add_multi_provider_llm_support_and_expand_settings_management - Add multi-provider LLM support and expand settings management
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Ready
@@ -9,11 +10,13 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Expand Mermaid Generator from a single-provider OpenAI setup to a multi-provider LLM architecture.
 - Evolve `Settings` so users can manage provider choice, provider-specific API keys, and related generation preferences.
 - Keep the app compatible with the current static browser-first bring-your-own-key model while preparing a cleaner abstraction for future providers.
 
 # Context
+
 The product currently assumes one initial OpenAI path, but the long-term direction already leaves room for additional LLM providers behind a provider boundary.
 
 This request formalizes the next step: support multiple LLM APIs instead of only OpenAI, and adapt `Settings` so this no longer behaves like a single-key screen.
@@ -60,6 +63,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
+
 - The app supports multiple LLM providers through a provider abstraction instead of a single OpenAI-only integration path.
 - `Settings` lets the user select a provider and manage the provider-specific API key locally in the browser.
 - The prompt-generation flow uses the currently selected provider without changing the core app workflow.
@@ -69,6 +73,7 @@ flowchart LR
 - The request stays aligned with the existing static architecture ADR and product direction for provider flexibility.
 
 # Clarifications
+
 - The implementation should establish the full provider abstraction now, but the first enabled rollout can stay smaller than the final provider list.
 - The default rollout path should prioritize a small initial provider set such as `OpenAI`, `OpenRouter`, and `Anthropic` before the broader list is enabled.
 - `Settings` should support multiple locally stored provider keys, but only one provider should be active at a time for the generation flow.
@@ -78,27 +83,33 @@ flowchart LR
 - The browser-first BYOK model remains the default; managed shared credentials still belong to a future optional proxy layer rather than this request.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+
 # AI Context
+
 - Summary: Expand Mermaid Generator to support multiple LLM providers and evolve Settings into a provider-management surface while keeping the current browser-first BYOK architecture.
 - Keywords: llm, provider, multi-provider, settings, byok, local persistence, openai, anthropic, gemini, mistral, groq, together, openrouter
 - Use when: Use when defining provider abstraction, settings evolution, and local provider-key management for prompt generation.
 - Skip when: Skip when the work concerns Mermaid editing, export UX, or non-LLM workspace polish alone.
 
 # References
+
 - `logics/request/req_002_add_local_openai_key_setup_and_settings_entry_point.md`
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Backlog
+
 - `item_007_create_multi_provider_llm_adapter_boundary`
 - `item_008_expand_settings_for_provider_selection_and_local_keys`
 - `item_010_enable_initial_multi_provider_prompt_generation_rollout`

@@ -2,9 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/mermaid", async () => {
-  const actual = await vi.importActual<typeof import("@/lib/mermaid")>(
-    "@/lib/mermaid",
-  );
+  const actual =
+    await vi.importActual<typeof import("@/lib/mermaid")>("@/lib/mermaid");
 
   return {
     ...actual,

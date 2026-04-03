@@ -1,4 +1,5 @@
 ## req_004_refine_workspace_chrome_help_export_footer_and_preview_focus_behavior - Refine workspace chrome help export footer and preview focus behavior
+
 > From version: 0.1.0+focus-docs
 > Schema version: 1.0
 > Status: Ready
@@ -9,6 +10,7 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Refine the workspace chrome so the app feels more intentional, lighter, and less noisy.
 - Move explanatory copy into contextual help tooltips instead of leaving repeated helper sentences permanently visible.
 - Fix the Mermaid source editor bug where manual typing loses focus after the first typed character.
@@ -20,6 +22,7 @@
 - Improve prompt-based generation so produced Mermaid diagrams better respect the preview proportions and avoid runaway width or height.
 
 # Context
+
 The current workspace is functionally close to the intended product, but the surrounding chrome and several interaction details still feel unfinished.
 
 This request groups together the next layer of product polish around the main workspace shell:
@@ -72,6 +75,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
+
 - The header is sticky and remains visible while the rest of the page scrolls underneath it.
 - The helper sentences for `Mermaid source`, `Prompt draft`, and `Preview` are moved into help tooltips triggered from visible `(i)` icons near the relevant section labels.
 - The Mermaid source editor no longer loses focus after the first typed character during manual editing.
@@ -86,6 +90,7 @@ flowchart LR
 - The `Focus preview` bug and the final UI behavior are validated in a real browser flow, not only through static code inspection.
 
 # Clarifications
+
 - The sticky header should remain active in normal workspace mode and remain the only shell element preserved in `Focus preview` mode so the preview can use the rest of the available space directly.
 - Help affordances should use lightweight tooltip/popover behavior: hover and keyboard focus on desktop, tap-to-open and tap-outside-to-close on mobile.
 - `Focus preview` should hide the left rail and use the full app width instead of leaving a dead column on the side; preview-local headers and toolbars should disappear and any remaining focus actions should live in the main header.
@@ -99,27 +104,33 @@ flowchart LR
 - Treat this request as one product-level refinement package for now, but allow the backlog stage to split it into multiple coherent delivery slices if the implementation scope becomes too broad.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+
 # AI Context
+
 - Summary: Refine the Mermaid Generator workspace chrome with a sticky header, tooltip help affordances, a fixed focus-preview mode, a modal export flow, cleaner header copy, and generation guardrails for better diagram proportions.
 - Keywords: sticky header, tooltip, help icon, focus preview, export modal, footer, marketing copy, prompt generation, ratio, mermaid
 - Use when: Use when defining the next UI polish slice for the main Mermaid workspace shell and its related generation and export behaviors.
 - Skip when: Skip when the work concerns release workflow, deployment setup, or unrelated provider integration.
 
 # References
+
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - `logics/tasks/task_001_improve_responsive_workspace_and_require_shift_for_preview_zoom.md`
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Backlog
+
 - `item_005_polish_sticky_workspace_chrome_contextual_help_and_footer`
 - `item_009_fix_preview_focus_editor_continuity_and_export_modal_flow`
 - `item_011_add_prompt_generation_diagram_shape_guardrails`

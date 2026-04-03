@@ -49,7 +49,11 @@ export function ExportModal({
     event: ReactKeyboardEvent<HTMLButtonElement>,
     format: ExportFormat,
   ) => {
-    const nextFormat = getNextWrappedRadioValue(exportFormats, format, event.key);
+    const nextFormat = getNextWrappedRadioValue(
+      exportFormats,
+      format,
+      event.key,
+    );
 
     if (!nextFormat) {
       return;
@@ -104,7 +108,11 @@ export function ExportModal({
           </div>
 
           <form className="settings-form" onSubmit={onSubmit}>
-            <div className="export-options" role="radiogroup" aria-label="Export format">
+            <div
+              className="export-options"
+              role="radiogroup"
+              aria-label="Export format"
+            >
               <button
                 type="button"
                 data-radio-value="svg"
@@ -146,7 +154,11 @@ export function ExportModal({
             </div>
 
             {exportFormat === "png" ? (
-              <div className="scale-picker" role="radiogroup" aria-label="PNG scale">
+              <div
+                className="scale-picker"
+                role="radiogroup"
+                aria-label="PNG scale"
+              >
                 {exportScales.map((scale) => (
                   <button
                     key={scale}
@@ -201,7 +213,11 @@ export function ExportModal({
                 <button type="button" onClick={onClose}>
                   Close
                 </button>
-                <button className="button-primary" type="submit" disabled={isExporting}>
+                <button
+                  className="button-primary"
+                  type="submit"
+                  disabled={isExporting}
+                >
                   {isExporting ? "Downloading…" : "Download"}
                 </button>
               </div>

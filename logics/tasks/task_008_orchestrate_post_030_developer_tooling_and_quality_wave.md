@@ -1,4 +1,5 @@
 ## task_008_orchestrate_post_030_developer_tooling_and_quality_wave - Orchestrate post-0.3.0 developer tooling and quality wave
+
 > From version: 0.3.0
 > Schema version: 1.0
 > Status: Draft
@@ -10,6 +11,7 @@
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
 
 # Context
+
 This task delivers all the developer tooling, test visibility, CSS maintainability, and accessibility automation improvements identified in the post-0.3.0 audit across five sequential waves. The wave ordering is designed so that foundational tooling ships first (formatter, hooks), test infrastructure follows, then structural CSS refactors run on a fully validated baseline, and cross-browser + accessibility work closes the wave.
 
 Execution constraints:
@@ -66,6 +68,7 @@ flowchart TD
 - [ ] **FINAL**: update this task's status to Done, progress to 100%, and capture the validation report below.
 
 # Delivery checkpoints
+
 - Each wave must leave the repository in a coherent, commit-ready state before the next wave begins.
 - Update linked backlog item statuses during the wave that changes the behavior, not only at final closure.
 - Prefer one meaningful commit checkpoint per wave rather than stacking undocumented partial changes.
@@ -73,19 +76,20 @@ flowchart TD
 
 # AC Traceability
 
-| AC | Backlog item | Wave |
-|---|---|---|
-| req_022 AC1 | `item_047` | Wave 1 |
-| req_022 AC2 | `item_048` | Wave 0 |
-| req_022 AC3 | `item_049` | Wave 0 |
-| req_022 AC4 | `item_050` | Wave 1 |
-| req_022 AC5 | `item_051` | Wave 3 |
-| req_022 AC6 | `item_052` | Wave 2 |
-| req_022 AC7 | `item_053` | Wave 2 |
-| req_022 AC8 | `item_054` | Wave 3 |
-| req_022 AC9 | `item_055` | Wave 4 |
+| AC          | Backlog item | Wave   |
+| ----------- | ------------ | ------ |
+| req_022 AC1 | `item_047`   | Wave 1 |
+| req_022 AC2 | `item_048`   | Wave 0 |
+| req_022 AC3 | `item_049`   | Wave 0 |
+| req_022 AC4 | `item_050`   | Wave 1 |
+| req_022 AC5 | `item_051`   | Wave 3 |
+| req_022 AC6 | `item_052`   | Wave 2 |
+| req_022 AC7 | `item_053`   | Wave 2 |
+| req_022 AC8 | `item_054`   | Wave 3 |
+| req_022 AC9 | `item_055`   | Wave 4 |
 
 # Decision framing
+
 - Product framing: Not required
 - Product signals: developer experience, quality infrastructure
 - Product follow-up: Consider a 0.4.0 release once this wave is complete and all ACs are green.
@@ -94,6 +98,7 @@ flowchart TD
 - Architecture follow-up: Document the CSS module convention and the accessibility baseline approach once Wave 3 is complete.
 
 # Links
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 - Request(s):
@@ -110,12 +115,14 @@ flowchart TD
   - `item_055_extract_anthropic_api_version_as_named_constant`
 
 # AI Context
+
 - Summary: Orchestrate 9 backlog items across 5 waves — developer workflow (husky, Prettier), test visibility (coverage reporting, component render tests), CSS maintainability (header + modals split), cross-browser & accessibility (WebKit, axe-core), and code hygiene (Anthropic API version constant).
 - Keywords: developer tooling, husky, lint-staged, prettier, coverage, c8, component tests, CSS modules, CSS split, webkit, safari, axe-core, accessibility, quality wave
 - Use when: Use when implementing any part of the post-0.3.0 developer tooling and quality wave.
 - Skip when: Skip when the work concerns new product features, provider integrations, or bug fixes in existing functionality.
 
 # Validation
+
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 - `npm run lint`
 - `npm run typecheck`
@@ -127,6 +134,7 @@ flowchart TD
 - Manual visual verification of CSS split (after Wave 2)
 
 # Definition of Done (DoD)
+
 - [ ] All 9 backlog items are marked Done with progress 100%.
 - [ ] `npm run ci:local` is green.
 - [ ] `npm run test:e2e` is green on Chromium, Firefox, and WebKit.
@@ -139,4 +147,5 @@ flowchart TD
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+
 (to be completed after execution)

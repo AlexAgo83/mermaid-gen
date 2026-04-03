@@ -11,7 +11,9 @@ test("loads the foundation shell", async ({ page }) => {
     page.getByRole("heading", { name: "Mermaid Generator" }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Preview" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Open settings" }),
+  ).toBeVisible();
 });
 
 test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
@@ -32,10 +34,18 @@ test("keeps the workspace usable on a mobile viewport", async ({ page }) => {
         element.getBoundingClientRect().bottom === window.innerHeight,
     ),
   ).resolves.toBe(true);
-  await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Open export dialog" })).toBeVisible();
-  await navigationMenu.getByRole("button", { name: "Close navigation menu" }).click();
-  await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Open settings" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Open export dialog" }),
+  ).toBeVisible();
+  await navigationMenu
+    .getByRole("button", { name: "Close navigation menu" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Mermaid source" }),
+  ).toBeVisible();
 
   const previewHeading = page.getByRole("heading", { name: "Preview" });
   const previewStage = page.locator(".preview-stage");
@@ -72,7 +82,9 @@ test("requires Shift for wheel-based preview zoom", async ({ page }) => {
   await expect(previewDiagram).toBeVisible();
 
   const getTransform = async () =>
-    previewDiagram.evaluate((element) => (element as HTMLElement).style.transform);
+    previewDiagram.evaluate(
+      (element) => (element as HTMLElement).style.transform,
+    );
 
   const before = await getTransform();
   const bounds = await previewStage.boundingBox();
@@ -81,7 +93,10 @@ test("requires Shift for wheel-based preview zoom", async ({ page }) => {
     throw new Error("Preview stage bounds were not available.");
   }
 
-  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  await page.mouse.move(
+    bounds.x + bounds.width / 2,
+    bounds.y + bounds.height / 2,
+  );
   await page.mouse.wheel(0, -240);
   await expect.poll(getTransform).toBe(before);
 
@@ -110,7 +125,9 @@ test("lets preview zoom buttons update the viewport", async ({ page }) => {
   await expect(previewDiagram).toBeVisible();
 
   const getTransform = async () =>
-    previewDiagram.evaluate((element) => (element as HTMLElement).style.transform);
+    previewDiagram.evaluate(
+      (element) => (element as HTMLElement).style.transform,
+    );
 
   const before = await getTransform();
 
@@ -132,14 +149,20 @@ test("focus mode keeps the header and removes local preview chrome", async ({
 
   await page.getByRole("button", { name: "Focus preview" }).click();
 
-  await expect(page.getByRole("heading", { name: "Mermaid Generator" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Mermaid Generator" }),
+  ).toBeVisible();
   await expect(page.locator(".preview-stage")).toBeVisible();
   await expect(
     page.getByText(/Mermaid Generator v\d+\.\d+\.\d+ © 2026/i),
   ).toBeHidden();
   await expect(page.getByRole("heading", { name: "Preview" })).toBeHidden();
-  await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeHidden();
-  await expect(page.getByRole("heading", { name: "Prompt draft" })).toBeHidden();
+  await expect(
+    page.getByRole("heading", { name: "Mermaid source" }),
+  ).toBeHidden();
+  await expect(
+    page.getByRole("heading", { name: "Prompt draft" }),
+  ).toBeHidden();
 });
 
 test("opens the export modal from a single entry point", async ({ page }) => {
@@ -148,7 +171,9 @@ test("opens the export modal from a single entry point", async ({ page }) => {
 
   await page.getByRole("button", { name: "Open export dialog" }).click();
 
-  await expect(page.getByRole("dialog", { name: "Export diagram" })).toBeVisible();
+  await expect(
+    page.getByRole("dialog", { name: "Export diagram" }),
+  ).toBeVisible();
   await expect(page.getByText(/Choose the output format/i)).toBeVisible();
 });
 
@@ -159,7 +184,9 @@ test("keeps modal content reachable on a short mobile viewport", async ({
   await page.goto("/");
 
   const onboardingDialog = page.getByRole("dialog", { name: "Welcome" });
-  const onboardingScroll = page.locator(".onboarding-modal .modal-scroll-content");
+  const onboardingScroll = page.locator(
+    ".onboarding-modal .modal-scroll-content",
+  );
   await expect(onboardingDialog).toBeVisible();
   await expect(onboardingScroll).toBeVisible();
   await expect(
@@ -212,7 +239,10 @@ test("keeps modal overlay coverage responsive across desktop and mobile", async 
   await expect(page.getByRole("dialog", { name: "Settings" })).toBeVisible();
   await expect(
     page.evaluate(
-      () => !!document.elementFromPoint(window.innerWidth / 2, 10)?.closest(".topbar"),
+      () =>
+        !!document
+          .elementFromPoint(window.innerWidth / 2, 10)
+          ?.closest(".topbar"),
     ),
   ).resolves.toBe(true);
 
@@ -300,7 +330,9 @@ test("copies a shared Mermaid URL from export and restores it on open", async ({
   await page.getByRole("button", { name: "Skip" }).click();
   await page.locator(".editor-textarea").fill(source);
   await expect(page.locator(".preview-diagram")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Open export dialog" })).toBeEnabled();
+  await expect(
+    page.getByRole("button", { name: "Open export dialog" }),
+  ).toBeEnabled();
 
   await page.getByRole("button", { name: "Open export dialog" }).click();
   await page.getByRole("button", { name: "Copy share link" }).click();
@@ -309,7 +341,9 @@ test("copies a shared Mermaid URL from export and restores it on open", async ({
     "Share link copied to clipboard.",
   );
 
-  const shareUrl = await page.evaluate(async () => navigator.clipboard.readText());
+  const shareUrl = await page.evaluate(async () =>
+    navigator.clipboard.readText(),
+  );
 
   expect(shareUrl).toContain("?m=");
 
@@ -337,7 +371,9 @@ test("exposes changelog history from the header and the mobile navigation menu",
   await page.getByRole("button", { name: "Skip" }).click();
   await page.getByRole("button", { name: "Open changelog history" }).click();
 
-  const changelogDialog = page.getByRole("dialog", { name: "Changelog history" });
+  const changelogDialog = page.getByRole("dialog", {
+    name: "Changelog history",
+  });
   await expect(changelogDialog).toBeVisible();
   await expect(
     changelogDialog.getByRole("heading", { name: "Version 0.1.0" }),
@@ -348,7 +384,9 @@ test("exposes changelog history from the header and the mobile navigation menu",
   await page.getByRole("button", { name: "Open navigation menu" }).click();
   await page.getByRole("button", { name: "Open changelog history" }).click();
 
-  await expect(page.getByRole("dialog", { name: "Changelog history" })).toBeVisible();
+  await expect(
+    page.getByRole("dialog", { name: "Changelog history" }),
+  ).toBeVisible();
 });
 
 test("shows the expanded provider catalog in settings", async ({ page }) => {

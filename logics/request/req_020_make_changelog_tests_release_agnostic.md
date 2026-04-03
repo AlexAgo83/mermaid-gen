@@ -1,4 +1,5 @@
 ## req_020_make_changelog_tests_release_agnostic - Make changelog tests release-agnostic
+
 > From version: 0.2.0
 > Schema version: 1.0
 > Status: Ready
@@ -9,12 +10,14 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Stop coupling changelog tests to specific released version numbers such as `0.1.0` or `0.2.0`.
 - Preserve confidence that changelog history loading still works when a new versioned changelog file is added.
 - Make future releases possible without having to edit tests only because the newest changelog version changed.
 - Keep the real contract under test focused on ordering, structure, and backward compatibility.
 
 # Context
+
 The project now ships versioned changelog files under `changelogs/CHANGELOGS_<version>.md`.
 The current test suite includes assertions tied to exact version values at the top of the loaded history.
 
@@ -51,6 +54,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: Changelog tests do not depend on a hard-coded latest version such as `0.2.0`.
 - AC2: The automated tests still verify that changelog entries are returned in descending semantic version order.
 - AC3: The automated tests still verify that loaded changelog entries expose the parsed structure required by the changelog modal.
@@ -58,26 +62,31 @@ flowchart TD
 - AC5: Adding a new `CHANGELOGS_<version>.md` file does not require a test edit unless the actual changelog contract changes.
 
 # Clarifications
+
 - Recommended default: test relative ordering and structure, not an explicit list of released versions.
 - Recommended default: keep at least one normalization test for older or partial changelog entry shapes.
 - Recommended default: treat this as a quality and release-friction improvement, not as a changelog feature redesign.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 
 # AI Context
+
 - Summary: Refactor changelog tests so they validate ordering and structure without depending on a specific latest release number.
 - Keywords: changelog, tests, release, regression, semantic version, vitest, quality
 - Use when: Use when the changelog test suite should remain stable across future releases.
 - Skip when: Skip when the work concerns changelog UI rendering, release-note content, or version bump mechanics rather than automated test design.
 
 # References
+
 - `src/tests/changelog.spec.ts`
 - `src/lib/changelog.ts`
 - `src/components/modals/ChangelogModal.tsx`
@@ -87,4 +96,5 @@ flowchart TD
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 
 # Backlog
+
 - `item_035_make_changelog_tests_release_agnostic`

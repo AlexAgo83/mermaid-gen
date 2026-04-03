@@ -1,4 +1,5 @@
 ## req_022_strengthen_developer_tooling_test_visibility_and_css_maintainability - Strengthen developer tooling, test visibility, and CSS maintainability
+
 > From version: 0.3.0
 > Schema version: 1.0
 > Status: Draft
@@ -9,6 +10,7 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Give the team clear visibility into what code is and is not covered by tests, so coverage gaps are caught before they reach production.
 - Enforce code quality automatically at commit time instead of relying solely on CI to catch problems after a push.
 - Guarantee consistent code formatting across the codebase without manual review effort.
@@ -18,6 +20,7 @@
 - Surface accessibility regressions automatically in CI instead of relying on manual audits.
 
 # Context
+
 The 0.3.0 release is stable, all quality gates are green, and the codebase scores well on a manual audit: zero `any` types, zero console logs, proper error handling, strong ARIA coverage, and robust SVG sanitization. The issues below are not bugs or regressions — they are tooling and structural gaps that, left unaddressed, will slow down future development and increase the risk of silent quality drift.
 
 **Theme 1 — Test visibility**
@@ -42,8 +45,8 @@ Playwright is configured for Chromium and Firefox. Safari (WebKit) is absent fro
 
 Two CSS files have grown significantly:
 
-| File | Lines |
-|------|-------|
+| File                    | Lines |
+| ----------------------- | ----- |
 | `src/styles/header.css` | 5,317 |
 | `src/styles/modals.css` | 6,978 |
 
@@ -107,6 +110,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: Vitest coverage reporting is enabled and `npm run test` outputs a coverage summary. A minimum coverage threshold is configured and enforced.
 - AC2: `husky` and `lint-staged` are installed and configured so that `npm run lint` and `npm run typecheck` run automatically on staged files before each commit.
 - AC3: Prettier is installed, configured, and integrated with ESLint. Running `npx prettier --check .` on the current codebase produces no formatting violations.
@@ -119,6 +123,7 @@ flowchart TD
 - AC10: All existing automated tests remain green after every change in this request.
 
 # Clarifications
+
 - Recommended default: start with developer tooling (AC2–AC3) since these changes are self-contained and immediately improve the workflow for all subsequent work.
 - Recommended default: coverage reporting (AC1) should use Vitest's built-in c8 provider and start with a threshold around the current actual coverage, then ratchet upward.
 - Recommended default: for CSS splitting (AC6–AC7), prefer CSS Modules (`*.module.css`) co-located with their component files over a CSS-in-JS migration.
@@ -127,22 +132,26 @@ flowchart TD
 - Recommended default: WebKit E2E (AC5) may initially be allowed to fail without blocking CI if platform-specific issues surface, then stabilized incrementally.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Enable Vitest coverage reporting, add pre-commit hooks with husky/lint-staged, configure Prettier, add component-level render tests for key React components, extend Playwright to include WebKit, split the two largest CSS files into component-scoped modules, integrate axe-core accessibility checks in CI, and extract the Anthropic API version constant.
 - Keywords: coverage, c8, husky, lint-staged, pre-commit, Prettier, formatter, component tests, React Testing Library, WebKit, Safari, Playwright, CSS modules, CSS splitting, axe-core, accessibility, a11y, automation, developer experience
 - Use when: Use when planning the developer tooling and quality infrastructure improvements following the 0.3.0 release.
 - Skip when: Skip when the work concerns new product features, provider integrations, diagram capabilities, or bug fixes in existing functionality.
 
 # References
+
 - `src/lib/llm.ts`
 - `src/styles/header.css`
 - `src/styles/modals.css`
@@ -163,6 +172,7 @@ flowchart TD
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 
 # Backlog
+
 - `item_047_enable_vitest_coverage_reporting_with_threshold`
 - `item_048_add_pre_commit_hooks_with_husky_and_lint_staged`
 - `item_049_configure_prettier_and_integrate_with_eslint`

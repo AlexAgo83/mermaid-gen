@@ -1,7 +1,4 @@
-import type {
-  PointerEvent as ReactPointerEvent,
-  RefObject,
-} from "react";
+import type { PointerEvent as ReactPointerEvent, RefObject } from "react";
 import type { RenderState } from "@/lib/app-types";
 import { MinusIcon, PlusIcon } from "@/components/icons";
 
@@ -98,7 +95,10 @@ export function PreviewPanel({
           />
         ) : null}
 
-        <div className="preview-stage-controls" aria-label="Preview zoom controls">
+        <div
+          className="preview-stage-controls"
+          aria-label="Preview zoom controls"
+        >
           <button
             type="button"
             className="preview-stage-control"

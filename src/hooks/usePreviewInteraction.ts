@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useEffectEvent,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { RenderState, Viewport } from "@/lib/app-types";
 import type { SvgMetrics } from "@/lib/mermaid";
@@ -144,7 +138,9 @@ export function usePreviewInteraction(renderState: RenderState) {
     }
 
     const nextScale = clampScale(viewport.scale + delta);
-    setViewport(centerViewport(previewRef.current, renderState.metrics, nextScale));
+    setViewport(
+      centerViewport(previewRef.current, renderState.metrics, nextScale),
+    );
   };
 
   const resetPreview = () => {

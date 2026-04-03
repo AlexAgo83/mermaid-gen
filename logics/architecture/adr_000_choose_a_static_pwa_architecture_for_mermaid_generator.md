@@ -1,4 +1,5 @@
 ## adr_000_choose_a_static_pwa_architecture_for_mermaid_generator - Choose a static PWA architecture for Mermaid Generator
+
 > Date: 2026-04-02
 > Status: Accepted
 > Drivers: Static hosting, PWA eligibility, local-first authoring, fast iteration, provider flexibility, and alignment with the reference stack.
@@ -8,6 +9,7 @@
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
+
 Mermaid Generator should start as a static React and TypeScript single-page app with PWA support and local-first authoring flows.
 Mermaid rendering, preview updates, and export should stay in the client so the core editor remains deployable on static hosting.
 AI generation should be abstracted behind a provider boundary so the first OpenAI path does not lock the product to one vendor.
@@ -23,6 +25,7 @@ flowchart LR
 ```
 
 # Context
+
 The requested product needs a browser-based Mermaid editor and viewer with live preview, AI-assisted generation, and export.
 The project should stay close to the delivery profile of `electrical-plan-editor`, whose public repository shows a React 19, TypeScript, Vite, `vite-plugin-pwa`, Render static hosting, Vitest, Playwright, and Logics workflow stack.
 
@@ -34,6 +37,7 @@ Key constraints:
 - Provider secrets cannot be safely shipped as project-managed secrets inside a public static client bundle.
 
 # Decision
+
 Adopt a static SPA architecture aligned with the reference project:
 
 - React and TypeScript for the application shell and editor UI.
@@ -47,11 +51,13 @@ Adopt a static SPA architecture aligned with the reference project:
 This direction keeps the core value proposition simple to host and fast to iterate on while isolating the only likely server-shaped concern: managed LLM credentials and policy enforcement.
 
 # Alternatives considered
+
 - Build a fullstack app from day one with a mandatory backend proxy for every AI request.
 - Build a pure client app tightly coupled to OpenAI-specific request shapes and UI assumptions.
 - Build a desktop-first tool instead of a static web app.
 
 # Consequences
+
 - The editor, preview, and export flows can remain available on static hosting and can support offline-friendly behavior after initial asset caching.
 - The initial delivery can reuse proven stack and deployment patterns from `electrical-plan-editor`.
 - AI generation remains online-only and needs explicit UX around provider configuration, connectivity, and failures.
@@ -61,18 +67,21 @@ This direction keeps the core value proposition simple to host and fast to itera
 - Frontend implementation quality now has an explicit delivery guardrail: use the `logics-ui-steering` skill whenever generating or refining product UI code for this app.
 
 # Migration and rollout
+
 - Bootstrap the repo with the same baseline stack profile as the reference app: React, TypeScript, Vite, PWA plugin, Render static blueprint, and Logics workflow.
 - Implement the core local editor, live preview, and export path first so the product is usable without AI.
 - Add a provider adapter and the first browser-safe provider rollout without leaking project-managed secrets into the client bundle.
 - Add an optional proxy mode later only if shared provider credentials, rate governance, or provider normalization becomes necessary.
 
 # References
+
 - `logics/request/req_000_launch_mermaid_generator_web_app.md`
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - Reference app: `https://e-plan-editor.onrender.com/`
 - Reference repository: `https://github.com/AlexAgo83/electrical-plan-editor`
 
 # Follow-up work
+
 - Bootstrap the application shell and static deployment baseline.
 - Define the Mermaid document state model, preview pipeline, and export pipeline.
 - Define the AI provider interface and the first prompt-to-Mermaid contract.

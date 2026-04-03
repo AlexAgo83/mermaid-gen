@@ -1,4 +1,5 @@
 ## task_007_orchestrate_post_020_audit_hardening_and_quality_wave - Orchestrate post-0.2.0 audit hardening and quality wave
+
 > From version: 0.2.0
 > Schema version: 1.0
 > Status: Done
@@ -10,6 +11,7 @@
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
 
 # Context
+
 This task delivers all the improvements identified in the post-0.2.0 audit across five sequential waves. The wave ordering is designed so that high-priority bug fixes ship first, test coverage is added before structural refactors, and delivery/accessibility work closes the wave independently of code-level changes.
 
 Execution constraints:
@@ -70,28 +72,30 @@ flowchart TD
 - [x] **FINAL**: update this task's status to Done, progress to 100%, and capture the validation report below.
 
 # Delivery checkpoints
+
 - Each wave must leave the repository in a coherent, commit-ready state before the next wave begins.
 - Update linked backlog item statuses during the wave that changes the behavior, not only at final closure.
 - Prefer one meaningful commit checkpoint per wave rather than stacking undocumented partial changes.
 
 # AC Traceability
 
-| AC | Backlog item | Wave |
-|---|---|---|
-| req_020 AC1–AC5 | `item_035` | Wave 0 |
-| req_021 AC1 | `item_036` | Wave 1 |
-| req_021 AC2–AC3 | `item_037` | Wave 1 |
-| req_021 AC4 | `item_038` | Wave 1 |
-| req_021 AC5 | `item_039` | Wave 2 |
-| req_021 AC6 | `item_040` | Wave 2 |
-| req_021 AC7 (preview) | `item_041` | Wave 3 |
-| req_021 AC7 (export/changelog) | `item_042` | Wave 3 |
-| req_021 AC8–AC9 | `item_043` | Wave 3 |
-| req_021 AC10 | `item_044` | Wave 4 |
-| req_021 AC11 | `item_045` | Wave 4 |
-| req_021 AC12 | `item_046` | Wave 4 |
+| AC                             | Backlog item | Wave   |
+| ------------------------------ | ------------ | ------ |
+| req_020 AC1–AC5                | `item_035`   | Wave 0 |
+| req_021 AC1                    | `item_036`   | Wave 1 |
+| req_021 AC2–AC3                | `item_037`   | Wave 1 |
+| req_021 AC4                    | `item_038`   | Wave 1 |
+| req_021 AC5                    | `item_039`   | Wave 2 |
+| req_021 AC6                    | `item_040`   | Wave 2 |
+| req_021 AC7 (preview)          | `item_041`   | Wave 3 |
+| req_021 AC7 (export/changelog) | `item_042`   | Wave 3 |
+| req_021 AC8–AC9                | `item_043`   | Wave 3 |
+| req_021 AC10                   | `item_044`   | Wave 4 |
+| req_021 AC11                   | `item_045`   | Wave 4 |
+| req_021 AC12                   | `item_046`   | Wave 4 |
 
 # Decision framing
+
 - Product framing: Required
 - Product signals: experience scope, release workflow, conversion journey
 - Product follow-up: Consider a 0.3.0 release once this wave is complete and all ACs are green.
@@ -100,6 +104,7 @@ flowchart TD
 - Architecture follow-up: Update the ADR or add a security note documenting the CSP directives and the hook extraction architecture once Wave 4 is complete.
 
 # Links
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 - Request(s):
@@ -120,12 +125,14 @@ flowchart TD
   - `item_046_implement_arrow_key_navigation_for_provider_and_scale_radiogroups`
 
 # AI Context
+
 - Summary: Orchestrate 12 backlog items across 5 waves — changelog tests, bug fixes (CORS, exporters, E2E), test coverage (exporters unit tests, Playwright Firefox), structural refactors (App.tsx hooks, AppHeader, path alias), and delivery/accessibility (CSP, PWA icons, radiogroup keyboard nav).
 - Keywords: hardening, quality, audit, CORS, Anthropic, exporters, Playwright, Firefox, hooks, App.tsx, refactor, CSP, PWA, icons, accessibility, radiogroup, changelog tests
 - Use when: Use when implementing any part of the post-0.2.0 audit hardening wave.
 - Skip when: Skip when the work concerns a new provider integration, a new diagram feature, or changelog content.
 
 # Validation
+
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 - `npm run lint`
 - `npm run typecheck`
@@ -138,6 +145,7 @@ flowchart TD
 - Manual browser validation of CSP (after Wave 4)
 
 # Definition of Done (DoD)
+
 - [ ] All 12 backlog items are marked Done with progress 100%.
 - [ ] `npm run ci:local` is green.
 - [ ] `npm run test:e2e` is green on Chromium and Firefox.
@@ -148,6 +156,7 @@ flowchart TD
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+
 - `npm run ci:local` passed after each completed wave and on the final integrated state.
 - `npm run test:e2e` passed on both Chromium and Firefox with 32 green smoke scenarios, including the new radiogroup keyboard-navigation coverage.
 - `src/App.tsx` dropped from 1040 lines to 705 lines after the hook extraction wave.

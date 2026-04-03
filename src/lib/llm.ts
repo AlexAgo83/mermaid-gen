@@ -49,7 +49,8 @@ export const PROVIDERS: ProviderDefinition[] = [
   {
     id: "grok",
     label: "Grok",
-    description: "Direct xAI chat generation without an OpenRouter indirection.",
+    description:
+      "Direct xAI chat generation without an OpenRouter indirection.",
     keyLabel: "xAI API key",
     keyPlaceholder: "Paste your xAI API key",
     model: "grok-4",

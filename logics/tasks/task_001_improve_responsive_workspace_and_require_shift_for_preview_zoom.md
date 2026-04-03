@@ -1,4 +1,5 @@
 ## task_001_improve_responsive_workspace_and_require_shift_for_preview_zoom - Improve responsive workspace and require shift for preview zoom
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -10,6 +11,7 @@
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
 
 # Context
+
 - Derived from backlog item `item_004_improve_responsive_workspace_and_require_shift_for_preview_zoom`.
 - Source file: `logics/backlog/item_004_improve_responsive_workspace_and_require_shift_for_preview_zoom.md`.
 - Related request(s): `req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom`.
@@ -29,6 +31,7 @@ flowchart LR
 ```
 
 # Plan
+
 - [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
 - [x] 2. Rework the workspace layout for desktop, tablet, and mobile so core panels and actions remain usable without clipping or overlap.
 - [x] 3. Update preview wheel interaction so zoom only triggers while `Shift` is pressed and normal scrolling remains unchanged otherwise.
@@ -37,11 +40,13 @@ flowchart LR
 - [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
+
 - Each completed wave should leave the repository in a coherent, commit-ready state.
 - Update the linked Logics docs during the wave that changes the behavior, not only at final closure.
 - Prefer a reviewed commit checkpoint at the end of each meaningful wave instead of accumulating several undocumented partial states.
 
 # AC Traceability
+
 - AC1 -> Scope: The workspace remains usable across desktop, tablet, and mobile widths, with no critical panel clipping, unusable controls, or broken layout hierarchy. Proof: manual and browser-driven viewport validation confirms usable layout at large, medium, and small breakpoints.
 - AC2 -> Scope: On large screens, the preview remains the dominant area while the editor and prompt keep a coherent secondary placement. Proof: desktop validation confirms preview-first composition and secondary editor/prompt placement.
 - AC3 -> Scope: On smaller viewports, the layout adapts so the editor, prompt, preview, and `Settings` entry point remain reachable without overlap or unusable truncation. Proof: tablet and mobile validation confirms access to preview, source editor, prompt, and settings control.
@@ -49,6 +54,7 @@ flowchart LR
 - AC5 -> Scope: Without `Shift`, wheel or trackpad scrolling does not trigger preview zoom and preserves normal scrolling behavior. Proof: interaction validation confirms ordinary wheel input leaves preview scale unchanged and preserves scroll behavior.
 
 # Decision framing
+
 - Product framing: Required
 - Product signals: navigation and discoverability, experience scope
 - Product follow-up: Create or link a product brief before implementation moves deeper into delivery.
@@ -57,24 +63,28 @@ flowchart LR
 - Architecture follow-up: Review whether an architecture decision is needed before implementation becomes harder to reverse.
 
 # Links
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 - Backlog item: `item_004_improve_responsive_workspace_and_require_shift_for_preview_zoom`
 - Request(s): `req_003_improve_responsive_workspace_and_require_shift_for_preview_zoom`
 
 # AI Context
+
 - Summary: Tighten the Mermaid Generator workspace so it behaves responsively across viewports and only zooms the preview on wheel...
 - Keywords: responsive, layout, mobile, tablet, desktop, preview, zoom, shift, wheel, interaction
 - Use when: Use when defining responsive behavior and safer preview navigation rules for the main Mermaid workspace.
 - Skip when: Skip when the work concerns OpenAI settings, export formats, or release workflow documentation.
 
 # References
+
 - `logics/product/prod_000_mermaid_generator_product_direction.md`
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 - `logics/tasks/task_000_orchestrate_mermaid_generator_mvp_delivery.md`
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Validation
+
 - `npm run lint`
 - `npm run typecheck`
 - `npm run test`
@@ -84,6 +94,7 @@ flowchart LR
 - Browser-driven interaction check for wheel zoom with and without `Shift`
 
 # Definition of Done (DoD)
+
 - [x] Scope implemented and acceptance criteria covered.
 - [x] Validation commands executed and results captured.
 - [x] Linked request/backlog/task docs updated during completed waves and at closure.
@@ -91,6 +102,7 @@ flowchart LR
 - [x] Status is `Done` and progress is `100%`.
 
 # Report
+
 - Responsive delivery completed in one wave.
 - The workspace now keeps preview-first hierarchy on desktop and moves preview ahead of the editing rail on smaller widths so core actions stay reachable without overlap.
 - Wheel-based preview zoom now activates only while `Shift` is pressed; ordinary wheel input no longer triggers preview zoom.

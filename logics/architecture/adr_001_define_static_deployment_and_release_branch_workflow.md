@@ -1,4 +1,5 @@
 ## adr_001_define_static_deployment_and_release_branch_workflow - Define static deployment and release branch workflow
+
 > Date: 2026-04-02
 > Status: Accepted
 > Drivers: Predictable releases, branch separation between development and production, static hosting on Render, GitHub-based traceability, and reuse of the user's established release discipline.
@@ -8,6 +9,7 @@
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
+
 Mermaid Generator should keep day-to-day development on `main` and use a dedicated `release` branch as the Render deployment source once the remote repository exists.
 Releases should stay intentionally gated instead of deploying every `main` commit directly to production.
 The release operation should bundle version bump, changelog curation, local CI validation, promotion to `release`, tagging, push, GitHub CI validation, and GitHub release publication.
@@ -26,6 +28,7 @@ flowchart LR
 ```
 
 # Context
+
 The project will start locally and be published later to GitHub, then connected to a Render Static Site.
 The user already follows a release discipline on other projects and wants Mermaid Generator to inherit the same predictable flow instead of inventing a new deployment model.
 
@@ -38,6 +41,7 @@ Operational constraints:
 - GitHub tags and GitHub Releases remain part of the official delivery trail.
 
 # Decision
+
 Adopt a branch-gated static deployment workflow:
 
 - `main` is the integration branch for normal development and MVP iteration.
@@ -53,11 +57,13 @@ Adopt a branch-gated static deployment workflow:
 This gives the project a controlled release gate without adding unnecessary infrastructure.
 
 # Alternatives considered
+
 - Deploy every push from `main` directly to Render.
 - Keep only one branch and rely only on tags for release intent.
 - Introduce a more automated release train before the project has enough stability to justify it.
 
 # Consequences
+
 - Production deploy intent remains explicit because only curated changes reach `release`.
 - The workflow matches the user's existing habits, which lowers operational friction.
 - Release prep has a small manual cost, but that cost buys traceability and rollback clarity.
@@ -66,15 +72,18 @@ This gives the project a controlled release gate without adding unnecessary infr
 - The PWA should not blindly precache every Mermaid-heavy chunk if that materially increases install or update cost.
 
 # Migration and rollout
+
 - Keep the release operator flow centered on `main` -> local validation -> `release` -> tag -> GitHub release -> Render deployment.
 - Configure Render Static Site to build from `release`.
 - Keep post-deploy validation focused on the live version marker, editor/preview sync, export/share flows, settings, and mobile navigation.
 - Roll back broken releases by resetting `release` to the last known good commit or redeploying the last known good version tag.
 
 # References
+
 - `logics/request/req_001_create_branding_assets_marketing_readme_and_release_workflow_docs.md`
 - `README.md`
 
 # Follow-up work
+
 - Add repository versioning and changelog conventions to the bootstrap.
 - Keep README and operator-facing delivery notes aligned with this ADR as the deployment setup evolves.

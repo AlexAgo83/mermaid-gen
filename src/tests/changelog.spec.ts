@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest";
-import {
-  loadChangelogEntries,
-  normalizeChangelogEntry,
-} from "@/lib/changelog";
+import { loadChangelogEntries, normalizeChangelogEntry } from "@/lib/changelog";
 
 function compareVersionsDesc(left: string, right: string) {
   const leftParts = left.split(".").map((value) => Number.parseInt(value, 10));
-  const rightParts = right.split(".").map((value) => Number.parseInt(value, 10));
+  const rightParts = right
+    .split(".")
+    .map((value) => Number.parseInt(value, 10));
   const maxLength = Math.max(leftParts.length, rightParts.length);
 
   for (let index = 0; index < maxLength; index += 1) {
@@ -35,7 +34,9 @@ describe("changelog loader", () => {
       expect(entry.title).toBe(`Version ${entry.version}`);
       expect(entry.body.trim().length).toBeGreaterThan(0);
       expect(entry.sections.length).toBeGreaterThan(0);
-      expect(entry.sections.some((section) => section.title.length > 0)).toBe(true);
+      expect(entry.sections.some((section) => section.title.length > 0)).toBe(
+        true,
+      );
       expect(
         entry.sections.some((section) =>
           section.blocks.some((block) => block.type === "list"),

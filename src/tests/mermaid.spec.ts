@@ -25,9 +25,7 @@ describe("normalizeGeneratedMermaid", () => {
 
     const output = normalizeGeneratedMermaid(input);
 
-    expect(output).toContain(
-      'subgraph Cycle_de_donnees["Cycle de données"]',
-    );
+    expect(output).toContain('subgraph Cycle_de_donnees["Cycle de données"]');
     expect(output).toContain(
       "style Cycle_de_donnees fill:#f9f,stroke:#333,stroke-width:2px",
     );
@@ -59,9 +57,14 @@ describe("prepareGeneratedMermaidSource", () => {
   });
 
   it("returns an app-owned error when validation fails", async () => {
-    const validator = vi.fn().mockRejectedValue(new Error("Syntax error in text"));
+    const validator = vi
+      .fn()
+      .mockRejectedValue(new Error("Syntax error in text"));
 
-    const result = await prepareGeneratedMermaidSource("flowchart LR\nA -->", validator);
+    const result = await prepareGeneratedMermaidSource(
+      "flowchart LR\nA -->",
+      validator,
+    );
 
     expect(result).toEqual({
       ok: false,

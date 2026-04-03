@@ -53,11 +53,19 @@ export function OnboardingModal({
                 </button>
               ) : null}
               {onboardingStep < ONBOARDING_STEPS.length - 1 ? (
-                <button className="button-primary" type="button" onClick={onNext}>
+                <button
+                  className="button-primary"
+                  type="button"
+                  onClick={onNext}
+                >
                   Next
                 </button>
               ) : (
-                <button className="button-primary" type="button" onClick={onFinish}>
+                <button
+                  className="button-primary"
+                  type="button"
+                  onClick={onFinish}
+                >
                   Finish
                 </button>
               )}

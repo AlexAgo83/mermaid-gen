@@ -102,7 +102,11 @@ export function SettingsModal({
 
           <form className="settings-form" onSubmit={onSave}>
             <div className="settings-provider-shell">
-              <div className="settings-provider-nav" role="radiogroup" aria-label="Provider">
+              <div
+                className="settings-provider-nav"
+                role="radiogroup"
+                aria-label="Provider"
+              >
                 {PROVIDERS.map((provider) => {
                   const hasKey =
                     settingsDraft.providerKeys[provider.id].trim().length > 0;
@@ -119,7 +123,9 @@ export function SettingsModal({
                       }`}
                       role="radio"
                       aria-label={provider.label}
-                      aria-checked={settingsDraft.activeProviderId === provider.id}
+                      aria-checked={
+                        settingsDraft.activeProviderId === provider.id
+                      }
                       tabIndex={
                         settingsDraft.activeProviderId === provider.id ? 0 : -1
                       }
@@ -130,7 +136,9 @@ export function SettingsModal({
                         handleProviderKeyDown(event, provider.id);
                       }}
                     >
-                      <span className="provider-nav-label">{provider.label}</span>
+                      <span className="provider-nav-label">
+                        {provider.label}
+                      </span>
                       <span className="provider-nav-copy">
                         {provider.description}
                       </span>
@@ -150,12 +158,14 @@ export function SettingsModal({
                   </div>
                   <span
                     className={`provider-status-pill${
-                      settingsDraft.providerKeys[activeProvider.id].trim().length > 0
+                      settingsDraft.providerKeys[activeProvider.id].trim()
+                        .length > 0
                         ? " is-ready"
                         : ""
                     }`}
                   >
-                    {settingsDraft.providerKeys[activeProvider.id].trim().length > 0
+                    {settingsDraft.providerKeys[activeProvider.id].trim()
+                      .length > 0
                       ? "Ready on this device"
                       : "Needs a local key"}
                   </span>
@@ -177,7 +187,10 @@ export function SettingsModal({
                       type={isDraftKeyVisible ? "text" : "password"}
                       value={settingsDraft.providerKeys[activeProvider.id]}
                       onChange={(event) => {
-                        onChangeProviderKey(activeProvider.id, event.target.value);
+                        onChangeProviderKey(
+                          activeProvider.id,
+                          event.target.value,
+                        );
                       }}
                       placeholder={activeProvider.keyPlaceholder}
                       autoComplete="off"
@@ -188,9 +201,9 @@ export function SettingsModal({
                     </button>
                   </div>
                   <p className="settings-help">
-                    Keys stay on this device in local browser storage. You can keep
-                    multiple provider keys and switch the active provider without
-                    losing the others.
+                    Keys stay on this device in local browser storage. You can
+                    keep multiple provider keys and switch the active provider
+                    without losing the others.
                   </p>
                 </div>
               </div>

@@ -1,4 +1,11 @@
-import { lazy, Suspense, useDeferredValue, useEffect, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import "@/styles/header.css";
 import "@/styles/modals.css";
@@ -16,7 +23,11 @@ import type {
   RenderState,
   SourceOrigin,
 } from "@/lib/app-types";
-import { PROVIDERS, generateMermaidFromPrompt, type ProviderId } from "@/lib/llm";
+import {
+  PROVIDERS,
+  generateMermaidFromPrompt,
+  type ProviderId,
+} from "@/lib/llm";
 import {
   DEFAULT_MERMAID_SOURCE,
   extractSvgMetrics,
@@ -112,21 +123,22 @@ function App() {
   const [prompt, setPrompt] = useState("");
   const [isPreviewFocused, setIsPreviewFocused] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [settingsDraft, setSettingsDraft] = useState<ProviderSettings>(
-    loadProviderSettings,
-  );
+  const [settingsDraft, setSettingsDraft] =
+    useState<ProviderSettings>(loadProviderSettings);
   const [providerSettings, setProviderSettings] =
     useState<ProviderSettings>(loadProviderSettings);
   const [isDraftKeyVisible, setIsDraftKeyVisible] = useState(false);
   const [onboardingState, setOnboardingState] =
     useState<OnboardingState>(loadOnboardingState);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(
-    () => loadOnboardingState() === "pending" && !hasSharedMermaidSourceInLocation(),
+    () =>
+      loadOnboardingState() === "pending" &&
+      !hasSharedMermaidSourceInLocation(),
   );
   const [onboardingStep, setOnboardingStep] = useState(0);
-  const [helpTopic, setHelpTopic] = useState<"source" | "prompt" | "preview" | null>(
-    null,
-  );
+  const [helpTopic, setHelpTopic] = useState<
+    "source" | "prompt" | "preview" | null
+  >(null);
   const [isGenerationWarningOpen, setIsGenerationWarningOpen] = useState(false);
   const [isPromptErrorOpen, setIsPromptErrorOpen] = useState(false);
   const [isRendering, setIsRendering] = useState(true);
@@ -380,7 +392,9 @@ function App() {
   };
 
   return (
-    <div className={`app-shell${isPreviewFocused ? " is-preview-focused" : ""}`}>
+    <div
+      className={`app-shell${isPreviewFocused ? " is-preview-focused" : ""}`}
+    >
       <AppHeader
         isPreviewFocused={isPreviewFocused}
         isMobileHeader={isMobileHeader}
@@ -573,7 +587,9 @@ function App() {
           previewTransform={previewInteraction.previewTransform}
           canExport={canExport}
           onTogglePreviewHelp={() => {
-            setHelpTopic((current) => (current === "preview" ? null : "preview"));
+            setHelpTopic((current) =>
+              current === "preview" ? null : "preview",
+            );
           }}
           onPointerDown={previewInteraction.handlePointerDown}
           onPointerMove={previewInteraction.handlePointerMove}

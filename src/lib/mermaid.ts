@@ -171,8 +171,9 @@ export async function prepareGeneratedMermaidSource(
 }
 
 let mermaidReady = false;
-let mermaidModulePromise: Promise<typeof import("mermaid")["default"]> | null =
-  null;
+let mermaidModulePromise: Promise<
+  (typeof import("mermaid"))["default"]
+> | null = null;
 
 export const DEFAULT_MERMAID_SOURCE = `flowchart LR
     Idea[Prompt or code input] --> Draft[Editable Mermaid source]

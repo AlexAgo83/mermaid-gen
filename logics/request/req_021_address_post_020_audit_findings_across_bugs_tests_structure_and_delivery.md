@@ -1,4 +1,5 @@
 ## req_021_address_post_020_audit_findings_across_bugs_tests_structure_and_delivery - Address post-0.2.0 audit findings across bugs, tests, structure, and delivery
+
 > From version: 0.2.0
 > Schema version: 1.0
 > Status: Ready
@@ -9,6 +10,7 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Fix confirmed bugs surfaced by the 0.2.0 audit before they degrade the user experience in production.
 - Improve test coverage and robustness in areas the audit identified as unprotected or brittle.
 - Reduce structural concentration in `App.tsx` so routine product changes do not keep landing in one 1000-line file.
@@ -16,6 +18,7 @@
 - Improve accessibility on simulated radiogroup controls to meet expected keyboard navigation behavior.
 
 # Context
+
 The 0.2.0 release is stable and the local quality gates are green. A post-release audit identified a set of issues spread across four themes that do not individually block the app today but together form the next responsible hardening wave.
 
 **Theme 1 — Confirmed bugs**
@@ -109,6 +112,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: The Anthropic provider either succeeds in production or surfaces a clear inline error message explaining the CORS constraint — no silent failure.
 - AC2: `downloadDiagramAsSvg` is no longer declared `async` unless it actually awaits something.
 - AC3: The PNG export Blob URL is revoked on both the success and error paths.
@@ -124,6 +128,7 @@ flowchart TD
 - AC13: All existing automated tests remain green after every change in this request.
 
 # Clarifications
+
 - Recommended default: fix bugs first (AC1–AC4), then tests (AC5–AC6), then structure (AC7–AC9), then delivery and accessibility (AC10–AC12).
 - Recommended default: for the Anthropic CORS issue, display a provider-level warning banner in SettingsModal rather than building a proxy, unless a proxy solution is already planned elsewhere.
 - Recommended default: hook extractions should not change any observable behavior — treat them as internal refactors with the existing test suite as the regression guard.
@@ -132,22 +137,26 @@ flowchart TD
 - Recommended default: the E2E version string fix should prefer a dynamic assertion (e.g. matching the version injected by `__APP_VERSION__`) over a new hardcoded string.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Fix four confirmed post-0.2.0 bugs (Anthropic CORS, async/leak in exporters, stale E2E version string), close test coverage gaps in exporters and cross-browser Playwright, extract App.tsx into focused custom hooks, unify AppHeader button duplication, add a TypeScript path alias, add a CSP header, add PWA PNG icons, and implement arrow-key navigation for radiogroups.
 - Keywords: bug fix, CORS, Anthropic, exporters, async, Blob URL, E2E, Playwright, hooks, refactor, CSP, PWA, icons, accessibility, radiogroup, TypeScript alias
 - Use when: Use when planning the hardening and quality work for the release immediately following 0.2.0.
 - Skip when: Skip when the work concerns new provider integrations, changelog content, diagram feature additions, or the changelog test version-coupling issue already covered by req_020.
 
 # References
+
 - `src/App.tsx`
 - `src/lib/exporters.ts`
 - `src/lib/llm.ts`
@@ -167,6 +176,7 @@ flowchart TD
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 
 # Backlog
+
 - `item_036_surface_anthropic_cors_constraint_as_an_explicit_provider_warning`
 - `item_037_fix_exporters_async_inconsistency_and_blob_url_leak_on_error_path`
 - `item_038_fix_stale_version_string_in_e2e_smoke_test`

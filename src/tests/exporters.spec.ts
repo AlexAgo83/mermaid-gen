@@ -1,8 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  downloadDiagramAsPng,
-  downloadDiagramAsSvg,
-} from "@/lib/exporters";
+import { downloadDiagramAsPng, downloadDiagramAsSvg } from "@/lib/exporters";
 
 function createMockImageClass(mode: "load" | "error") {
   return class MockImage {
@@ -91,15 +88,15 @@ describe("exporters", () => {
       revokeObjectURL: revokeObjectUrlMock,
     });
     vi.stubGlobal("Image", createMockImageClass("load"));
-    vi.spyOn(document, "createElement").mockImplementation(
-      ((tagName: string) => {
-        if (tagName === "canvas") {
-          return mockCanvas;
-        }
+    vi.spyOn(document, "createElement").mockImplementation(((
+      tagName: string,
+    ) => {
+      if (tagName === "canvas") {
+        return mockCanvas;
+      }
 
-        return originalCreateElement(tagName);
-      }) as typeof document.createElement,
-    );
+      return originalCreateElement(tagName);
+    }) as typeof document.createElement);
 
     await downloadDiagramAsPng(
       "<svg>diagram</svg>",
@@ -112,7 +109,13 @@ describe("exporters", () => {
     expect(mockCanvas.height).toBe(300);
     expect(getContextMock).toHaveBeenCalledWith("2d");
     expect(setTransformMock).toHaveBeenCalledWith(3, 0, 0, 3, 0, 0);
-    expect(drawImageMock).toHaveBeenCalledWith(expect.anything(), 0, 0, 200, 100);
+    expect(drawImageMock).toHaveBeenCalledWith(
+      expect.anything(),
+      0,
+      0,
+      200,
+      100,
+    );
     expect(toBlobMock).toHaveBeenCalledWith(expect.any(Function), "image/png");
     expect(anchorClickMock).toHaveBeenCalledTimes(1);
     expect(revokeObjectUrlMock).toHaveBeenNthCalledWith(1, "blob:png-source");

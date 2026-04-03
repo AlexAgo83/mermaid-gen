@@ -1,4 +1,5 @@
 ## req_019_add_gemini_api_as_a_supported_provider - Add Gemini API as a supported provider
+
 > From version: 0.1.0
 > Schema version: 1.0
 > Status: Done
@@ -9,12 +10,14 @@
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
+
 - Extend Mermaid Generator’s browser-first multi-provider generation flow with support for `Gemini API`.
 - Keep Gemini aligned with the current BYOK model so the user can store a Gemini key locally and switch to it as the active provider.
 - Preserve the normalized provider contract so prompt-to-Mermaid generation does not require Gemini-specific branching throughout the app shell.
 - Reuse the current provider-management UX work rather than bolting Gemini on as a one-off special case.
 
 # Context
+
 The app already supports multiple browser-side LLM providers and has recently expanded the provider surface through `Grok` and `Mistral`.
 That makes `Gemini API` the next natural addition, especially because it is a credible low-cost or free-tier option for a lightweight prompt-to-Mermaid workflow.
 
@@ -55,6 +58,7 @@ flowchart TD
 ```
 
 # Acceptance criteria
+
 - AC1: The app supports `Gemini API` as a selectable provider for prompt-to-Mermaid generation.
 - AC2: `Settings` lets the user save and manage a Gemini API key locally in the browser.
 - AC3: The user can set Gemini as the active provider without losing keys saved for the other providers.
@@ -64,28 +68,33 @@ flowchart TD
 - AC7: The addition of Gemini does not regress desktop or mobile usability in the current settings and generation flows.
 
 # Clarifications
+
 - Recommended default: add Gemini as a first-class direct provider, not as an OpenRouter alias.
 - Recommended default: keep Gemini inside the same local persistence model as the existing providers.
 - Recommended default: reuse the current settings/provider-management surface instead of creating a Gemini-specific modal or setup flow.
 - Recommended default: use the same Mermaid-only output contract already expected from the other providers.
 
 # Definition of Ready (DoR)
+
 - [x] Problem statement is explicit and user impact is clear.
 - [x] Scope boundaries (in/out) are explicit.
 - [x] Acceptance criteria are testable.
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
+
 - Product brief(s): `prod_000_mermaid_generator_product_direction`
 - Architecture decision(s): `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
 
 # AI Context
+
 - Summary: Add Gemini API as another direct BYOK provider in the app’s prompt-to-Mermaid generation flow while preserving the current provider abstraction and settings model.
 - Keywords: gemini, google ai, provider, byok, settings, prompt generation, mermaid, multi-provider
 - Use when: Use when defining Gemini API support in the current browser-first multi-provider architecture.
 - Skip when: Skip when the work concerns generic provider UX refactors without Gemini, or deployment and release concerns unrelated to generation providers.
 
 # References
+
 - `logics/request/req_017_add_grok_and_mistral_providers_and_rework_settings_provider_ux.md`
 - `src/lib/llm.ts`
 - `src/lib/provider-settings.ts`
@@ -96,4 +105,5 @@ flowchart TD
 - `logics/architecture/adr_000_choose_a_static_pwa_architecture_for_mermaid_generator.md`
 
 # Backlog
+
 - `item_034_add_direct_gemini_provider_support_to_the_browser_side_llm_flow`
