@@ -1,4 +1,40 @@
-import type { ChangelogEntry } from "../../lib/changelog";
+import type {
+  ChangelogContentBlock,
+  ChangelogEntry,
+} from "../../lib/changelog";
+import { normalizeChangelogEntry } from "../../lib/changelog";
+
+function renderInlineMarkdown(text: string) {
+  const fragments = text.split(/(`[^`]+`)/g).filter(Boolean);
+
+  return fragments.map((fragment, index) => {
+    if (fragment.startsWith("`") && fragment.endsWith("`")) {
+      return <code key={`${fragment}-${index}`}>{fragment.slice(1, -1)}</code>;
+    }
+
+    return <span key={`${fragment}-${index}`}>{fragment}</span>;
+  });
+}
+
+function renderBlocks(blocks: ChangelogContentBlock[]) {
+  return blocks.map((block, index) => {
+    if (block.type === "list") {
+      return (
+        <ul key={`list-${index}`} className="changelog-block-list">
+          {block.items.map((item, itemIndex) => (
+            <li key={`${item}-${itemIndex}`}>{renderInlineMarkdown(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    return (
+      <p key={`paragraph-${index}`} className="changelog-block-paragraph">
+        {renderInlineMarkdown(block.text)}
+      </p>
+    );
+  });
+}
 
 type ChangelogModalProps = {
   isOpen: boolean;
@@ -18,6 +54,8 @@ export function ChangelogModal({
   if (!isOpen) {
     return null;
   }
+
+  const normalizedEntries = entries.map((entry) => normalizeChangelogEntry(entry));
 
   return (
     <div className="modal-backdrop" role="presentation">
@@ -45,9 +83,9 @@ export function ChangelogModal({
           ) : null}
           {error ? <p className="prompt-error">{error}</p> : null}
 
-          {!isLoading && !error && entries.length > 0 ? (
+          {!isLoading && !error && normalizedEntries.length > 0 ? (
             <div className="changelog-list" aria-live="polite">
-              {entries.map((entry) => (
+              {normalizedEntries.map((entry) => (
                 <article
                   key={entry.version}
                   className="changelog-entry"
@@ -59,7 +97,27 @@ export function ChangelogModal({
                       <p className="changelog-entry-kicker">{entry.slug}</p>
                     </div>
                   </header>
-                  <pre className="changelog-entry-body">{entry.body}</pre>
+                      <div className="changelog-entry-body">
+                        {entry.intro.length > 0 ? (
+                          <div className="changelog-entry-intro">
+                            {renderBlocks(entry.intro)}
+                          </div>
+                        ) : null}
+                        <div className="changelog-sections">
+                          {entry.sections.map((section) => (
+                            <details
+                              key={`${entry.version}-${section.title}`}
+                              className="changelog-section"
+                              open={section.title === "Major Highlights"}
+                            >
+                              <summary>{section.title}</summary>
+                              <div className="changelog-section-body">
+                                {renderBlocks(section.blocks)}
+                              </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
                 </article>
               ))}
             </div>
