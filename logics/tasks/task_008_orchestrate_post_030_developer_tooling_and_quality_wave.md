@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: In Progress
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 80%
+> Progress: 100%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -23,7 +23,7 @@ Execution constraints:
 
 ```mermaid
 %% logics-kind: task
-%% logics-signature: task|orchestrate-post-030-developer-tooling|item-047-to-055-post-030-audit-findings|0-wave-0-developer-workflow-item-048-049|python3-logics-skills-logics-doc-linter-
+%% logics-signature: task|orchestrate-post-0-3-0-developer-tooling|item-047-enable-vitest-coverage-reportin|wave-0-developer-workflow-item-048-item-|python3-logics-skills-logics-doc-linter-
 flowchart TD
     W0[Wave 0 — Developer workflow\nitem_048 · item_049] --> W1
     W1[Wave 1 — Test visibility\nitem_047 · item_050] --> W2
@@ -59,13 +59,13 @@ flowchart TD
   - [x] 3.3. Run `npm run ci:local` and `npm run test:e2e` on all three browsers. Fix or skip-annotate regressions.
   - [x] 3.4. Update `item_051`, `item_054` status to Done, commit.
 
-- [ ] **Wave 4 — Code hygiene** (`item_055`)
-  - [ ] 4.1. **Anthropic API version constant** (`item_055`): read `src/lib/llm.ts`. Extract `"2023-06-01"` into a `const ANTHROPIC_API_VERSION = "2023-06-01"` at the top of the file. Replace all inline usages with the constant.
-  - [ ] 4.2. Run `npm run ci:local`. Fix any regressions.
-  - [ ] 4.3. Update `item_055` status to Done, commit.
+- [x] **Wave 4 — Code hygiene** (`item_055`)
+  - [x] 4.1. **Anthropic API version constant** (`item_055`): read `src/lib/llm.ts`. Extract `"2023-06-01"` into a `const ANTHROPIC_API_VERSION = "2023-06-01"` at the top of the file. Replace all inline usages with the constant.
+  - [x] 4.2. Run `npm run ci:local`. Fix any regressions.
+  - [x] 4.3. Update `item_055` status to Done, commit.
 
-- [ ] **CHECKPOINT**: all 9 backlog items are Done, `npm run ci:local` is green, `npm run test:e2e` is green on Chromium, Firefox, and WebKit.
-- [ ] **FINAL**: update this task's status to Done, progress to 100%, and capture the validation report below.
+- [x] **CHECKPOINT**: all 9 backlog items are Done, `npm run ci:local` is green, `npm run test:e2e` is green on Chromium, Firefox, and WebKit.
+- [x] **FINAL**: update this task's status to Done, progress to 100%, and capture the validation report below.
 
 # Delivery checkpoints
 
@@ -132,19 +132,21 @@ flowchart TD
 - `npm run test:e2e` (Chromium + Firefox + WebKit after Wave 3)
 - `npx prettier --check .` (after Wave 0)
 - Manual visual verification of CSS split (after Wave 2)
+- Finish workflow executed on 2026-04-03.
+- Linked backlog/request close verification passed.
 
 # Definition of Done (DoD)
 
-- [ ] All 9 backlog items are marked Done with progress 100%.
-- [ ] `npm run ci:local` is green.
-- [ ] `npm run test:e2e` is green on Chromium, Firefox, and WebKit.
-- [ ] `npm run test` outputs a coverage report with enforced thresholds.
-- [ ] `npx prettier --check .` exits with code 0.
-- [ ] Pre-commit hooks are functional on a fresh `npm install`.
-- [ ] CSS files are split and no visual regression is present.
-- [ ] axe-core accessibility checks run in at least three E2E scenarios.
-- [ ] Linked request and backlog docs are updated during their respective waves.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] All 9 backlog items are marked Done with progress 100%.
+- [x] `npm run ci:local` is green.
+- [x] `npm run test:e2e` is green on Chromium, Firefox, and WebKit.
+- [x] `npm run test` outputs a coverage report with enforced thresholds.
+- [x] `npx prettier --check .` exits with code 0.
+- [x] Pre-commit hooks are functional on a fresh `npm install`.
+- [x] CSS files are split and no visual regression is present.
+- [x] axe-core accessibility checks run in at least three E2E scenarios.
+- [x] Linked request and backlog docs are updated during their respective waves.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 
@@ -174,3 +176,19 @@ flowchart TD
 - Added `@axe-core/playwright` smoke coverage for the workspace shell, settings modal, and export modal, plus a deliberate failing proof test.
 - Fixed real accessibility regressions found during rollout by labeling the editor/prompt textareas and raising link/tooltip contrast instead of suppressing the findings.
 - Validation: `npm run build`, targeted Playwright accessibility runs, `npm run test:e2e`, and `npm run ci:local`.
+
+## Wave 4
+
+- Extracted `ANTHROPIC_API_VERSION` in `src/lib/llm.ts` and replaced the inline Anthropic header value.
+- Closed `item_055` as part of the code-hygiene cleanup wave.
+- Validation: `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`, `npx prettier --check .`, `npm run ci:local`, and `npm run test:e2e`.
+
+## Final validation
+
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+- `npx prettier --check .`
+- `npm run ci:local`
+- `npm run test:e2e`
+- Finished on 2026-04-03.
+- Linked backlog item(s): `item_047_enable_vitest_coverage_reporting_with_threshold`, `item_048_add_pre_commit_hooks_with_husky_and_lint_staged`, `item_049_configure_prettier_and_integrate_with_eslint`, `item_050_add_component_render_tests_for_key_react_components`, `item_051_add_webkit_to_playwright_browser_matrix`, `item_052_split_header_css_into_component_scoped_modules`, `item_053_split_modals_css_into_component_scoped_modules`, `item_054_integrate_axe_core_accessibility_checks_in_ci`, `item_055_extract_anthropic_api_version_as_named_constant`
+- Related request(s): `req_022_strengthen_developer_tooling_test_visibility_and_css_maintainability`

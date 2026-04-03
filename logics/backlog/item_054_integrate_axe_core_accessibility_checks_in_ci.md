@@ -30,7 +30,7 @@
 
 ```mermaid
 %% logics-kind: backlog
-%% logics-signature: backlog|integrate-axe-core-in-ci|req-022-strengthen-developer-tooling|no-automated-accessibility-auditing|ac1-axe-core-playwright-is-installed
+%% logics-signature: backlog|integrate-axe-core-accessibility-checks-|req-022-strengthen-developer-tooling-tes|the-codebase-demonstrates-strong-manual-|ac1-axe-core-playwright-is-installed-and
 flowchart LR
     Request[req 022 accessibility automation] --> Problem[No automated a11y checks]
     Problem --> Scope[Install @axe-core/playwright + baseline]

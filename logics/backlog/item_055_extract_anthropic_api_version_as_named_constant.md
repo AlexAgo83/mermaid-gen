@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -28,7 +28,7 @@
 
 ```mermaid
 %% logics-kind: backlog
-%% logics-signature: backlog|extract-anthropic-api-version|req-022-strengthen-developer-tooling|api-version-hardcoded-inline|ac1-anthropic-api-version-is-named-constant
+%% logics-signature: backlog|extract-anthropic-api-version-as-named-c|req-022-strengthen-developer-tooling-tes|the-anthropic-api-version-string-2023-06|ac1-the-anthropic-api-version-in
 flowchart LR
     Request[req 022 code hygiene] --> Problem[API version hardcoded inline]
     Problem --> Scope[Extract as named constant]
@@ -76,4 +76,6 @@ flowchart LR
 # Notes
 
 - Derived from `req_022`, code hygiene theme, AC9.
-- Smallest item in the backlog — can be picked up opportunistically alongside any other `llm.ts` change.
+- Delivered in Wave 4 by extracting `ANTHROPIC_API_VERSION` at the top of `src/lib/llm.ts` and replacing the inline header value.
+- Validated in the final full-suite pass with `npm run ci:local`.
+- Task `task_008_orchestrate_post_030_developer_tooling_and_quality_wave` was finished via `logics_flow.py finish task` on 2026-04-03.

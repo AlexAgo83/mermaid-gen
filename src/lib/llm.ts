@@ -20,6 +20,7 @@ export type ProviderDefinition = {
 
 export const ANTHROPIC_BROWSER_WARNING =
   "Anthropic blocks direct browser calls from arbitrary origins. In a standard browser session, generation will fail unless you route requests through a local proxy that adds the required CORS permissions.";
+const ANTHROPIC_API_VERSION = "2023-06-01";
 
 export const PROVIDERS: ProviderDefinition[] = [
   {
@@ -213,7 +214,7 @@ async function generateWithAnthropic({
       headers: {
         "Content-Type": "application/json",
         "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        "anthropic-version": ANTHROPIC_API_VERSION,
       },
       body: JSON.stringify({
         model,

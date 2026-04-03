@@ -29,7 +29,7 @@
 
 ```mermaid
 %% logics-kind: backlog
-%% logics-signature: backlog|add-webkit-to-playwright|req-022-strengthen-developer-tooling|safari-absent-from-e2e-matrix|ac1-playwright-config-includes-webkit
+%% logics-signature: backlog|add-webkit-to-playwright-browser-matrix|req-022-strengthen-developer-tooling-tes|playwright-is-configured-for-chromium-an|ac1-playwright-config-ts-includes-a-webk
 flowchart LR
     Request[req 022 cross-browser] --> Problem[Safari absent from E2E matrix]
     Problem --> Scope[Add WebKit to Playwright config + CI]

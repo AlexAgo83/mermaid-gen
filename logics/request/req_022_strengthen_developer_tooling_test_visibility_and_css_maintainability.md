@@ -2,9 +2,9 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 95%
-> Confidence: 90%
+> Status: Done
+> Understanding: 100%
+> Confidence: 95%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -82,7 +82,7 @@ Constraints and framing:
 
 ```mermaid
 %% logics-kind: request
-%% logics-signature: request|strengthen-developer-tooling|give-the-team-clear-visibility-into|ac1-vitest-coverage-reporting-is
+%% logics-signature: request|strengthen-developer-tooling-test-visibi|give-the-team-clear-visibility-into|ac1-vitest-coverage-reporting-is-enabled
 flowchart TD
     Audit[Post-0.3.0 audit] --> Visibility[Test visibility]
     Audit --> Workflow[Developer workflow]
