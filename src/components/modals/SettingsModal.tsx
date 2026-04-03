@@ -6,6 +6,7 @@ import {
   type ProviderId,
 } from "@/lib/llm";
 import type { ProviderSettings } from "@/lib/app-types";
+import { getNextWrappedRadioValue } from "@/lib/radio-group";
 
 type SettingsModalProps = {
   isOpen: boolean;
@@ -48,6 +49,33 @@ export function SettingsModal({
   const savedProviderCount = PROVIDERS.filter(
     (provider) => settingsDraft.providerKeys[provider.id].trim().length > 0,
   ).length;
+  const providerIds = PROVIDERS.map((provider) => provider.id);
+
+  const handleProviderKeyDown = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    providerId: ProviderId,
+  ) => {
+    onDismissEscape(event);
+
+    const nextProviderId = getNextWrappedRadioValue(
+      providerIds,
+      providerId,
+      event.key,
+    );
+
+    if (!nextProviderId) {
+      return;
+    }
+
+    event.preventDefault();
+    onSelectProvider(nextProviderId);
+    event.currentTarget
+      .closest('[role="radiogroup"]')
+      ?.querySelector<HTMLButtonElement>(
+        `[data-radio-value="${String(nextProviderId)}"]`,
+      )
+      ?.focus();
+  };
 
   return (
     <div className="modal-backdrop" role="presentation">
@@ -83,6 +111,7 @@ export function SettingsModal({
                     <button
                       key={provider.id}
                       type="button"
+                      data-radio-value={provider.id}
                       className={`provider-nav-card${
                         settingsDraft.activeProviderId === provider.id
                           ? " is-active"
@@ -91,8 +120,14 @@ export function SettingsModal({
                       role="radio"
                       aria-label={provider.label}
                       aria-checked={settingsDraft.activeProviderId === provider.id}
+                      tabIndex={
+                        settingsDraft.activeProviderId === provider.id ? 0 : -1
+                      }
                       onClick={() => {
                         onSelectProvider(provider.id);
+                      }}
+                      onKeyDown={(event) => {
+                        handleProviderKeyDown(event, provider.id);
                       }}
                     >
                       <span className="provider-nav-label">{provider.label}</span>

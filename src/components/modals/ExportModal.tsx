@@ -1,5 +1,6 @@
-import type { FormEvent } from "react";
+import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import type { ExportFormat, RenderState } from "@/lib/app-types";
+import { getNextWrappedRadioValue } from "@/lib/radio-group";
 
 type ExportModalProps = {
   isOpen: boolean;
@@ -41,6 +42,48 @@ export function ExportModal({
           height: Math.round(renderState.metrics.height * exportScale),
         }
       : null;
+  const exportFormats: ExportFormat[] = ["svg", "png"];
+  const exportScales = [1, 2, 3] as const;
+
+  const handleFormatKeyDown = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    format: ExportFormat,
+  ) => {
+    const nextFormat = getNextWrappedRadioValue(exportFormats, format, event.key);
+
+    if (!nextFormat) {
+      return;
+    }
+
+    event.preventDefault();
+    onSelectFormat(nextFormat);
+    event.currentTarget
+      .closest('[role="radiogroup"]')
+      ?.querySelector<HTMLButtonElement>(
+        `[data-radio-value="${String(nextFormat)}"]`,
+      )
+      ?.focus();
+  };
+
+  const handleScaleKeyDown = (
+    event: ReactKeyboardEvent<HTMLButtonElement>,
+    scale: number,
+  ) => {
+    const nextScale = getNextWrappedRadioValue(exportScales, scale, event.key);
+
+    if (!nextScale) {
+      return;
+    }
+
+    event.preventDefault();
+    onSelectScale(nextScale);
+    event.currentTarget
+      .closest('[role="radiogroup"]')
+      ?.querySelector<HTMLButtonElement>(
+        `[data-radio-value="${String(nextScale)}"]`,
+      )
+      ?.focus();
+  };
 
   return (
     <div className="modal-backdrop" role="presentation">
@@ -64,11 +107,16 @@ export function ExportModal({
             <div className="export-options" role="radiogroup" aria-label="Export format">
               <button
                 type="button"
+                data-radio-value="svg"
                 className={`provider-card${exportFormat === "svg" ? " is-active" : ""}`}
                 role="radio"
                 aria-checked={exportFormat === "svg"}
+                tabIndex={exportFormat === "svg" ? 0 : -1}
                 onClick={() => {
                   onSelectFormat("svg");
+                }}
+                onKeyDown={(event) => {
+                  handleFormatKeyDown(event, "svg");
                 }}
               >
                 <span className="provider-card-label">SVG</span>
@@ -78,11 +126,16 @@ export function ExportModal({
               </button>
               <button
                 type="button"
+                data-radio-value="png"
                 className={`provider-card${exportFormat === "png" ? " is-active" : ""}`}
                 role="radio"
                 aria-checked={exportFormat === "png"}
+                tabIndex={exportFormat === "png" ? 0 : -1}
                 onClick={() => {
                   onSelectFormat("png");
+                }}
+                onKeyDown={(event) => {
+                  handleFormatKeyDown(event, "png");
                 }}
               >
                 <span className="provider-card-label">PNG</span>
@@ -94,15 +147,20 @@ export function ExportModal({
 
             {exportFormat === "png" ? (
               <div className="scale-picker" role="radiogroup" aria-label="PNG scale">
-                {[1, 2, 3].map((scale) => (
+                {exportScales.map((scale) => (
                   <button
                     key={scale}
                     type="button"
+                    data-radio-value={scale}
                     className={`scale-chip${exportScale === scale ? " is-active" : ""}`}
                     role="radio"
                     aria-checked={exportScale === scale}
+                    tabIndex={exportScale === scale ? 0 : -1}
                     onClick={() => {
                       onSelectScale(scale);
+                    }}
+                    onKeyDown={(event) => {
+                      handleScaleKeyDown(event, scale);
                     }}
                   >
                     {scale}x

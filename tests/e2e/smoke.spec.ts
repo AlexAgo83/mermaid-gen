@@ -362,3 +362,46 @@ test("shows the expanded provider catalog in settings", async ({ page }) => {
   await expect(page.getByRole("radio", { name: /Mistral/i })).toBeVisible();
   await expect(page.getByRole("radio", { name: /Gemini/i })).toBeVisible();
 });
+
+test("supports arrow-key navigation across provider and export radiogroups", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+
+  const openAiRadio = page.getByRole("radio", { name: "OpenAI" });
+  const openRouterRadio = page.getByRole("radio", { name: "OpenRouter" });
+  await openAiRadio.focus();
+  await page.keyboard.press("ArrowDown");
+
+  await expect(openRouterRadio).toHaveAttribute("aria-checked", "true");
+  await expect(openRouterRadio).toBeFocused();
+
+  await page.getByRole("button", { name: "Close" }).click();
+  await page.getByRole("button", { name: "Open export dialog" }).click();
+
+  const pngRadio = page.getByRole("radio", { name: "PNG" });
+  const svgRadio = page.getByRole("radio", { name: "SVG" });
+  await pngRadio.focus();
+  await page.keyboard.press("ArrowLeft");
+
+  await expect(svgRadio).toHaveAttribute("aria-checked", "true");
+  await expect(svgRadio).toBeFocused();
+
+  await page.keyboard.press("ArrowRight");
+  await expect(pngRadio).toHaveAttribute("aria-checked", "true");
+
+  const scale2xRadio = page.getByRole("radio", { name: "2x" });
+  const scale3xRadio = page.getByRole("radio", { name: "3x" });
+  const scale1xRadio = page.getByRole("radio", { name: "1x" });
+  await scale2xRadio.focus();
+  await page.keyboard.press("ArrowRight");
+
+  await expect(scale3xRadio).toHaveAttribute("aria-checked", "true");
+  await expect(scale3xRadio).toBeFocused();
+
+  await page.keyboard.press("ArrowRight");
+  await expect(scale1xRadio).toHaveAttribute("aria-checked", "true");
+  await expect(scale1xRadio).toBeFocused();
+});

@@ -1,10 +1,10 @@
 ## item_045_add_png_icons_to_pwa_manifest_for_installability - Add PNG icons to PWA manifest for installability
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
