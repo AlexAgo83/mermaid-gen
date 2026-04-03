@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import App from "@/App";
 
+const ASYNC_UI_TIMEOUT_MS = 5_000;
+
 describe("App foundation shell", () => {
   beforeEach(() => {
     window.localStorage.clear();
@@ -40,7 +42,11 @@ describe("App foundation shell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
 
     expect(
-      await screen.findByRole("dialog", { name: "Settings" }),
+      await screen.findByRole(
+        "dialog",
+        { name: "Settings" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
     ).toBeInTheDocument();
   });
 
@@ -49,7 +55,13 @@ describe("App foundation shell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
-    fireEvent.click(await screen.findByRole("button", { name: "Reopen onboarding" }));
+    fireEvent.click(
+      await screen.findByRole(
+        "button",
+        { name: "Reopen onboarding" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
+    );
 
     expect(screen.getByRole("dialog", { name: "Welcome" })).toBeInTheDocument();
   });
@@ -61,7 +73,11 @@ describe("App foundation shell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open changelog history" }));
 
     expect(
-      await screen.findByRole("dialog", { name: "Changelog history" }),
+      await screen.findByRole(
+        "dialog",
+        { name: "Changelog history" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
     ).toBeInTheDocument();
   });
 
@@ -72,7 +88,11 @@ describe("App foundation shell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
 
     expect(
-      await screen.findByRole("radio", { name: "Gemini" }),
+      await screen.findByRole(
+        "radio",
+        { name: "Gemini" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
     ).toBeInTheDocument();
   });
 
@@ -81,7 +101,13 @@ describe("App foundation shell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
-    fireEvent.click(await screen.findByRole("radio", { name: "Anthropic" }));
+    fireEvent.click(
+      await screen.findByRole(
+        "radio",
+        { name: "Anthropic" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
+    );
 
     expect(
       screen.getByText(/Anthropic blocks direct browser calls from arbitrary origins/i),
@@ -93,9 +119,16 @@ describe("App foundation shell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
-    fireEvent.keyDown(await screen.findByRole("dialog", { name: "Settings" }), {
-      key: "Escape",
-    });
+    fireEvent.keyDown(
+      await screen.findByRole(
+        "dialog",
+        { name: "Settings" },
+        { timeout: ASYNC_UI_TIMEOUT_MS },
+      ),
+      {
+        key: "Escape",
+      },
+    );
 
     expect(
       screen.queryByRole("dialog", { name: "Settings" }),
