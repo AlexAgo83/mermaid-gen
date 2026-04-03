@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: In Progress
 > Understanding: 95%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 20%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -35,11 +35,11 @@ flowchart TD
 
 # Plan
 
-- [ ] **Wave 0 — Developer workflow** (`item_048`, `item_049`)
-  - [ ] 0.1. **Pre-commit hooks** (`item_048`): install `husky` and `lint-staged` as devDependencies. Add a `prepare` script to `package.json`. Configure `.husky/pre-commit` to run `npx lint-staged`. Configure `lint-staged` in `package.json` to run `eslint --fix` on staged `.ts` and `.tsx` files.
-  - [ ] 0.2. **Prettier** (`item_049`): install `prettier` and `eslint-config-prettier` as devDependencies. Create `.prettierrc` with defaults matching the current code style (single quotes, trailing commas, etc. — infer from existing code). Update `eslint.config.js` to include `eslint-config-prettier`. Add `prettier --write` to `lint-staged` config. Add `format` and `format:check` npm scripts. Run `npx prettier --write .` and commit the baseline formatting as a standalone commit.
-  - [ ] 0.3. Run `npm run ci:local`. Fix any regressions.
-  - [ ] 0.4. Update `item_048`, `item_049` status to Done, commit.
+- [x] **Wave 0 — Developer workflow** (`item_048`, `item_049`)
+  - [x] 0.1. **Pre-commit hooks** (`item_048`): install `husky` and `lint-staged` as devDependencies. Add a `prepare` script to `package.json`. Configure `.husky/pre-commit` to run `npx lint-staged`. Configure `lint-staged` in `package.json` to run `eslint --fix` on staged `.ts` and `.tsx` files.
+  - [x] 0.2. **Prettier** (`item_049`): install `prettier` and `eslint-config-prettier` as devDependencies. Create `.prettierrc` with defaults matching the current code style (single quotes, trailing commas, etc. — infer from existing code). Update `eslint.config.js` to include `eslint-config-prettier`. Add `prettier --write` to `lint-staged` config. Add `format` and `format:check` npm scripts. Run `npx prettier --write .` and commit the baseline formatting as a standalone commit.
+  - [x] 0.3. Run `npm run ci:local`. Fix any regressions.
+  - [x] 0.4. Update `item_048`, `item_049` status to Done, commit.
 
 - [ ] **Wave 1 — Test visibility** (`item_047`, `item_050`)
   - [ ] 1.1. **Coverage reporting** (`item_047`): install `@vitest/coverage-v8` as a devDependency. Update `vitest.config.ts` to enable the `v8` coverage provider with a `reporter` (text + lcov) and a `thresholds` block. Run `npm run test` to determine baseline coverage, then set thresholds at or slightly below actual values. Add `coverage/` to `.gitignore`.
@@ -149,3 +149,9 @@ flowchart TD
 # Report
 
 (to be completed after execution)
+
+## Wave 0
+
+- Added Husky + lint-staged with a tracked `pre-commit` hook and a `prepare` install path.
+- Added Prettier plus `eslint-config-prettier`, `format`, and `format:check`, then recorded a standalone baseline formatting commit.
+- Validation: `npx prettier --check .` and `npm run ci:local`.

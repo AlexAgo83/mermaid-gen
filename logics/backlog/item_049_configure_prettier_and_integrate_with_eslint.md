@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -84,3 +84,4 @@ flowchart LR
 - Derived from `req_022`, developer workflow theme, AC3.
 - Depends on `item_048` for lint-staged integration. Can be installed independently but the pre-commit enforcement requires hooks to be in place.
 - The baseline formatting commit should be a standalone commit to keep the diff reviewable and separable from functional changes.
+- Completed in `task_008` Wave 0 with `.prettierrc`, `.prettierignore`, `eslint-config-prettier`, `format` scripts, and the standalone baseline formatting commit.

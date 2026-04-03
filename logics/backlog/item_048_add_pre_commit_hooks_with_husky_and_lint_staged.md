@@ -2,10 +2,10 @@
 
 > From version: 0.3.0
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -81,3 +81,4 @@ flowchart LR
 
 - Derived from `req_022`, developer workflow theme, AC2.
 - Typecheck is intentionally excluded from the pre-commit hook due to its execution time. It remains enforced in CI.
+- Completed in `task_008` Wave 0 with Husky `prepare`, a tracked `.husky/pre-commit` hook, and `lint-staged` wiring in `package.json`.
