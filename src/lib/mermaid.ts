@@ -19,6 +19,24 @@ export type GeneratedMermaidValidationResult =
 export const GENERATED_MERMAID_VALIDATION_ERROR =
   "The generated Mermaid could not be validated. Your current diagram was kept unchanged. Refine the prompt and try again.";
 
+const UNSAFE_SVG_TAGS = [
+  "script",
+  "iframe",
+  "object",
+  "embed",
+  "audio",
+  "video",
+  "canvas",
+  "form",
+  "input",
+  "textarea",
+  "select",
+] as const;
+
+const URL_ATTRS = ["href", "xlink:href"] as const;
+const EVENT_HANDLER_ATTR_PATTERN = /^on/i;
+const JAVASCRIPT_PROTOCOL_PATTERN = /^\s*javascript:/i;
+
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -162,13 +180,59 @@ export const DEFAULT_MERMAID_SOURCE = `flowchart LR
     Preview --> Export[SVG and PNG export]
     Export --> Share[Docs reviews and handoff]`;
 
+export function sanitizeRenderedSvg(svgMarkup: string) {
+  const parser = new DOMParser();
+  const document = parser.parseFromString(svgMarkup, "image/svg+xml");
+  const parserError = document.querySelector("parsererror");
+
+  if (parserError) {
+    throw new Error("Rendered Mermaid output could not be parsed as SVG.");
+  }
+
+  const svg = document.querySelector("svg");
+
+  if (!svg) {
+    throw new Error("Rendered Mermaid output did not contain an SVG root.");
+  }
+
+  for (const selector of UNSAFE_SVG_TAGS) {
+    for (const element of Array.from(document.querySelectorAll(selector))) {
+      element.remove();
+    }
+  }
+
+  for (const element of Array.from(document.querySelectorAll("*"))) {
+    for (const attribute of Array.from(element.attributes)) {
+      const attributeName = attribute.name;
+      const attributeValue = attribute.value;
+
+      if (EVENT_HANDLER_ATTR_PATTERN.test(attributeName)) {
+        element.removeAttribute(attributeName);
+        continue;
+      }
+
+      if (
+        URL_ATTRS.includes(attributeName as (typeof URL_ATTRS)[number]) &&
+        JAVASCRIPT_PROTOCOL_PATTERN.test(attributeValue)
+      ) {
+        element.removeAttribute(attributeName);
+      }
+    }
+  }
+
+  svg.setAttribute("focusable", "false");
+  return svg.outerHTML;
+}
+
 async function getMermaid() {
   if (!mermaidModulePromise) {
     mermaidModulePromise = import("mermaid").then(({ default: mermaid }) => {
       if (!mermaidReady) {
+        // Keep Mermaid in strict mode and sanitize its SVG output again before
+        // it crosses the preview injection boundary.
         mermaid.initialize({
           startOnLoad: false,
-          securityLevel: "loose",
+          securityLevel: "strict",
           theme: "base",
           themeVariables: {
             fontFamily: "IBM Plex Sans, Segoe UI, sans-serif",
@@ -205,7 +269,7 @@ export async function renderMermaidDiagram(source: string) {
 
   const id = `mermaid-${crypto.randomUUID()}`;
   const { svg } = await mermaid.render(id, source);
-  return svg;
+  return sanitizeRenderedSvg(svg);
 }
 
 export function extractSvgMetrics(svgMarkup: string): SvgMetrics {

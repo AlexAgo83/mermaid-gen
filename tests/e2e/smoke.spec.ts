@@ -134,7 +134,7 @@ test("focus mode keeps the header and removes local preview chrome", async ({
 
   await expect(page.getByRole("heading", { name: "Mermaid Generator" })).toBeVisible();
   await expect(page.locator(".preview-stage")).toBeVisible();
-  await expect(page.getByText("Mermaid Generator © 2026")).toBeHidden();
+  await expect(page.getByText(/Mermaid Generator v0\.1\.0 © 2026/i)).toBeHidden();
   await expect(page.getByRole("heading", { name: "Preview" })).toBeHidden();
   await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeHidden();
   await expect(page.getByRole("heading", { name: "Prompt draft" })).toBeHidden();
@@ -326,4 +326,36 @@ test("lets the user reopen onboarding from settings", async ({ page }) => {
   await page.getByRole("button", { name: "Reopen onboarding" }).click();
 
   await expect(page.getByRole("dialog", { name: "Welcome" })).toBeVisible();
+});
+
+test("exposes changelog history from the header and the mobile navigation menu", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open changelog history" }).click();
+
+  const changelogDialog = page.getByRole("dialog", { name: "Changelog history" });
+  await expect(changelogDialog).toBeVisible();
+  await expect(
+    changelogDialog.getByRole("heading", { name: "Version 0.1.0" }),
+  ).toBeVisible({ timeout: 15_000 });
+  await changelogDialog.getByRole("button", { name: "Close" }).click();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open navigation menu" }).click();
+  await page.getByRole("button", { name: "Open changelog history" }).click();
+
+  await expect(page.getByRole("dialog", { name: "Changelog history" })).toBeVisible();
+});
+
+test("shows the expanded provider catalog in settings", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+
+  await expect(page.getByRole("radio", { name: /OpenAI/i })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Anthropic/i })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Grok/i })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Mistral/i })).toBeVisible();
 });

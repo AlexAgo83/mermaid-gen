@@ -1,4 +1,10 @@
-export const PROVIDER_IDS = ["openai", "openrouter", "anthropic"] as const;
+export const PROVIDER_IDS = [
+  "openai",
+  "openrouter",
+  "anthropic",
+  "grok",
+  "mistral",
+] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];
 
@@ -36,6 +42,22 @@ export const PROVIDERS: ProviderDefinition[] = [
     keyPlaceholder: "sk-ant-...",
     model: "claude-3-7-sonnet-20250219",
   },
+  {
+    id: "grok",
+    label: "Grok",
+    description: "Direct xAI chat generation without an OpenRouter indirection.",
+    keyLabel: "xAI API key",
+    keyPlaceholder: "Paste your xAI API key",
+    model: "grok-4",
+  },
+  {
+    id: "mistral",
+    label: "Mistral",
+    description: "Direct Mistral chat generation through La Plateforme.",
+    keyLabel: "Mistral API key",
+    keyPlaceholder: "Paste your Mistral API key",
+    model: "mistral-medium-latest",
+  },
 ];
 
 type GenerateRequest = {
@@ -67,6 +89,31 @@ function stripCodeFence(content: string) {
 async function readError(response: Response) {
   const body = await response.text();
   return body.slice(0, 200);
+}
+
+function extractAssistantText(
+  content:
+    | string
+    | Array<{
+        type?: string;
+        text?: string;
+      }>
+    | null
+    | undefined,
+) {
+  if (typeof content === "string") {
+    return content.trim();
+  }
+
+  if (!Array.isArray(content)) {
+    return "";
+  }
+
+  return content
+    .filter((entry) => entry.type === "text" && entry.text)
+    .map((entry) => entry.text)
+    .join("\n")
+    .trim();
 }
 
 async function generateWithOpenAiCompatibleApi({
@@ -116,12 +163,17 @@ async function generateWithOpenAiCompatibleApi({
   const payload = (await response.json()) as {
     choices?: Array<{
       message?: {
-        content?: string;
+        content?:
+          | string
+          | Array<{
+              type?: string;
+              text?: string;
+            }>;
       };
     }>;
   };
 
-  const content = payload.choices?.[0]?.message?.content?.trim();
+  const content = extractAssistantText(payload.choices?.[0]?.message?.content);
 
   if (!content) {
     throw new Error(`${providerLabel} returned an empty response.`);
@@ -217,6 +269,22 @@ export async function generateMermaidFromPrompt({
         apiKey,
         prompt,
         model: provider.model,
+      });
+    case "grok":
+      return generateWithOpenAiCompatibleApi({
+        apiKey,
+        prompt,
+        endpoint: "https://api.x.ai/v1/chat/completions",
+        model: provider.model,
+        providerLabel: provider.label,
+      });
+    case "mistral":
+      return generateWithOpenAiCompatibleApi({
+        apiKey,
+        prompt,
+        endpoint: "https://api.mistral.ai/v1/chat/completions",
+        model: provider.model,
+        providerLabel: provider.label,
       });
     default:
       throw new Error(`Unsupported provider: ${providerId satisfies never}`);

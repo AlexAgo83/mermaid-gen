@@ -1,10 +1,10 @@
 ## adr_001_define_static_deployment_and_release_branch_workflow - Define static deployment and release branch workflow
 > Date: 2026-04-02
-> Status: Draft
+> Status: Accepted
 > Drivers: Predictable releases, branch separation between development and production, static hosting on Render, GitHub-based traceability, and reuse of the user's established release discipline.
-> Related request: `req_001_create_branding_assets_marketing_readme_and_release_workflow_docs`
-> Related backlog: (none yet)
-> Related task: (none yet)
+> Related request: `req_001_create_branding_assets_marketing_readme_and_release_workflow_docs`, `req_014_define_a_render_deployment_plan_for_mermaid_generator`, `req_015_reduce_render_bundle_weight_and_pwa_precache_cost`, `req_016_harden_runtime_security_delivery_performance_and_repo_maintainability`
+> Related backlog: `item_023_define_render_deployment_contract_and_release_source_strategy`, `item_024_document_render_setup_validation_and_rollback_runbook`, `item_026_align_render_cache_and_pwa_precache_behavior_with_static_asset_delivery`
+> Related task: `task_005_orchestrate_render_hardening_provider_expansion_and_in_app_changelog_delivery`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
@@ -42,6 +42,7 @@ Adopt a branch-gated static deployment workflow:
 
 - `main` is the integration branch for normal development and MVP iteration.
 - `release` is the deployment branch that Render tracks for the production static website.
+- Render should be configured as a `Static Site` with root directory left empty, build command `npm ci && npm run build`, and publish directory `dist`.
 - A release starts on `main` by preparing the new version and updating changelog material.
 - Before promotion, run the project CI checks locally.
 - Once validated, apply the release changes onto `release`.
@@ -61,13 +62,14 @@ This gives the project a controlled release gate without adding unnecessary infr
 - The workflow matches the user's existing habits, which lowers operational friction.
 - Release prep has a small manual cost, but that cost buys traceability and rollback clarity.
 - Documentation, versioning, changelog hygiene, and GitHub release notes become part of the normal shipping discipline instead of afterthoughts.
+- Render cache behavior should stay intentional: hashed `/assets/*` files can be long-lived, while HTML, manifest, and service-worker entry points stay freshness-oriented.
+- The PWA should not blindly precache every Mermaid-heavy chunk if that materially increases install or update cost.
 
 # Migration and rollout
-- Keep the ADR as the target workflow while the project is still local-only.
-- Once the repository is pushed to GitHub, create the `release` branch.
+- Keep the release operator flow centered on `main` -> local validation -> `release` -> tag -> GitHub release -> Render deployment.
 - Configure Render Static Site to build from `release`.
-- Add or align GitHub CI so the same local validation path also exists remotely.
-- Use the first MVP release to validate the branch promotion, tagging, and GitHub Release path end to end.
+- Keep post-deploy validation focused on the live version marker, editor/preview sync, export/share flows, settings, and mobile navigation.
+- Roll back broken releases by resetting `release` to the last known good commit or redeploying the last known good version tag.
 
 # References
 - `logics/request/req_001_create_branding_assets_marketing_readme_and_release_workflow_docs.md`
@@ -75,6 +77,4 @@ This gives the project a controlled release gate without adding unnecessary infr
 
 # Follow-up work
 - Add repository versioning and changelog conventions to the bootstrap.
-- Add CI scripts and release validation commands once the app stack exists.
-- Wire Render Static Site to the `release` branch after the GitHub repository is published.
-- Create a future delivery task or checklist that operationalizes the release steps in the repo.
+- Keep README and operator-facing delivery notes aligned with this ADR as the deployment setup evolves.

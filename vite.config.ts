@@ -7,11 +7,44 @@ export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(packageJson.version),
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.includes("/node_modules/react/") ||
+            id.includes("/node_modules/react-dom/")
+          ) {
+            return "react-vendor";
+          }
+
+          return undefined;
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "icon.svg"],
+      workbox: {
+        globIgnores: [
+          "**/assets/mermaid.core-*.js",
+          "**/assets/wardley-*.js",
+          "**/assets/cytoscape.esm-*.js",
+          "**/assets/katex-*.js",
+        ],
+        runtimeCaching: [
+          {
+            urlPattern: /\/assets\/.*\.(?:js|css)$/,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "app-assets-runtime",
+            },
+          },
+        ],
+      },
       manifest: {
         name: "Mermaid Generator",
         short_name: "Mermaid Gen",

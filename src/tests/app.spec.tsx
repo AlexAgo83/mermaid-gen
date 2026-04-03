@@ -33,31 +33,44 @@ describe("App foundation shell", () => {
     ).toBeInTheDocument();
   });
 
-  it("opens settings from the top bar", () => {
+  it("opens settings from the top bar", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
 
-    expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("dialog", { name: "Settings" }),
+    ).toBeInTheDocument();
   });
 
-  it("can reopen onboarding from settings", () => {
+  it("can reopen onboarding from settings", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
-    fireEvent.click(screen.getByRole("button", { name: "Reopen onboarding" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Reopen onboarding" }));
 
     expect(screen.getByRole("dialog", { name: "Welcome" })).toBeInTheDocument();
   });
 
-  it("closes settings with Escape", () => {
+  it("opens changelog history from the top bar", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open changelog history" }));
+
+    expect(
+      await screen.findByRole("dialog", { name: "Changelog history" }),
+    ).toBeInTheDocument();
+  });
+
+  it("closes settings with Escape", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Skip" }));
     fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
-    fireEvent.keyDown(screen.getByRole("dialog", { name: "Settings" }), {
+    fireEvent.keyDown(await screen.findByRole("dialog", { name: "Settings" }), {
       key: "Escape",
     });
 

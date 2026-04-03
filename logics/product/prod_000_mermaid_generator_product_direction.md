@@ -1,10 +1,10 @@
 ## prod_000_mermaid_generator_product_direction - Mermaid Generator product direction
 > Date: 2026-04-02
 > Status: Active
-> Related request: `req_000_launch_mermaid_generator_web_app`, `req_004_refine_workspace_chrome_help_export_footer_and_preview_focus_behavior`, `req_005_add_first_run_onboarding_modal_with_reactivation_from_settings`, `req_006_add_multi_provider_llm_support_and_expand_settings_management`
-> Related backlog: `item_005_polish_sticky_workspace_chrome_contextual_help_and_footer`, `item_006_add_first_run_onboarding_modal_and_settings_reactivation`, `item_007_create_multi_provider_llm_adapter_boundary`, `item_008_expand_settings_for_provider_selection_and_local_keys`, `item_009_fix_preview_focus_editor_continuity_and_export_modal_flow`, `item_010_enable_initial_multi_provider_prompt_generation_rollout`, `item_011_add_prompt_generation_diagram_shape_guardrails`
-> Related task: `task_002_orchestrate_workspace_polish_onboarding_and_multi_provider_rollout`
-> Related architecture: `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`
+> Related request: `req_000_launch_mermaid_generator_web_app`, `req_004_refine_workspace_chrome_help_export_footer_and_preview_focus_behavior`, `req_005_add_first_run_onboarding_modal_with_reactivation_from_settings`, `req_006_add_multi_provider_llm_support_and_expand_settings_management`, `req_017_add_grok_and_mistral_providers_and_rework_settings_provider_ux`, `req_018_add_an_in_app_changelog_modal_accessible_from_settings_and_mobile_navigation`
+> Related backlog: `item_005_polish_sticky_workspace_chrome_contextual_help_and_footer`, `item_006_add_first_run_onboarding_modal_and_settings_reactivation`, `item_007_create_multi_provider_llm_adapter_boundary`, `item_008_expand_settings_for_provider_selection_and_local_keys`, `item_009_fix_preview_focus_editor_continuity_and_export_modal_flow`, `item_010_enable_initial_multi_provider_prompt_generation_rollout`, `item_011_add_prompt_generation_diagram_shape_guardrails`, `item_030_add_direct_grok_and_mistral_provider_support_to_the_llm_adapter_layer`, `item_031_rework_settings_provider_management_for_a_growing_provider_catalog`, `item_032_add_a_scrollable_in_app_changelog_history_modal`, `item_033_add_changelog_entry_points_to_settings_and_mobile_burger_navigation`
+> Related task: `task_002_orchestrate_workspace_polish_onboarding_and_multi_provider_rollout`, `task_005_orchestrate_render_hardening_provider_expansion_and_in_app_changelog_delivery`
+> Related architecture: `adr_000_choose_a_static_pwa_architecture_for_mermaid_generator`, `adr_001_define_static_deployment_and_release_branch_workflow`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 
 # Overview
@@ -69,10 +69,11 @@ The product should reduce that friction by giving users one tight loop: describe
 - Keep the prompt generation area visible when the active provider has no key configured, but lock it with a short explanation and a clear call to action toward `Settings`.
 - Keep `Settings` modal-based while it acts as a compact provider-management surface with one active provider and multiple saved local keys.
 - Prefer a dedicated code editor experience such as CodeMirror for the Mermaid source rather than a plain textarea in a later refinement wave.
-- Start the AI generation flow with an initial browser-safe provider set built around `OpenAI`, `OpenRouter`, and `Anthropic`, while keeping model selection hidden in the first provider-management iteration.
+- Keep the browser-first provider model but allow the catalog to grow beyond the initial `OpenAI`, `OpenRouter`, and `Anthropic` set when direct adapters such as `Grok` and `Mistral` are added.
 - Treat zoom and pan as preview navigation only; exports should capture the full diagram rather than the current viewport framing.
 - The preview toolbar should cover zoom in, zoom out, reset, fit to screen, wheel zoom, preview focus, and a single export entry point; a minimap can wait.
 - Support first-run onboarding and contextual help without turning the workspace into a coach-mark-heavy guided product.
+- Expose release visibility lightly inside the product through an in-app changelog history modal rather than a full documentation center.
 - Treat desktop and tablet landscape as the primary layout targets first, with a clean responsive fallback rather than a full mobile-first authoring experience in the MVP.
 
 # Success signals

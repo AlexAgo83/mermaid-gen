@@ -1,4 +1,6 @@
 import {
+  lazy,
+  Suspense,
   useDeferredValue,
   useEffect,
   useEffectEvent,
@@ -10,13 +12,25 @@ import type {
   FormEvent,
   KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
-  ReactNode,
 } from "react";
+import "./styles/header.css";
+import "./styles/modals.css";
 import "./App.css";
+import { OnboardingModal } from "./components/modals/OnboardingModal";
+import { AppHeader } from "./components/shell/AppHeader";
+import { PreviewPanel } from "./components/workspace/PreviewPanel";
+import type {
+  OnboardingState,
+  ProviderSettings,
+  RenderErrorCopy,
+  RenderState,
+  SourceOrigin,
+  Viewport,
+} from "./lib/app-types";
+import { loadChangelogEntries, type ChangelogEntry } from "./lib/changelog";
 import { downloadDiagramAsPng, downloadDiagramAsSvg } from "./lib/exporters";
 import {
   generateMermaidFromPrompt,
-  PROVIDER_IDS,
   PROVIDERS,
   type ProviderId,
 } from "./lib/llm";
@@ -28,100 +42,47 @@ import {
   type SvgMetrics,
 } from "./lib/mermaid";
 import {
+  loadIsMobileHeader,
+  loadOnboardingState,
+  ONBOARDING_STATE_STORAGE_KEY,
+} from "./lib/onboarding";
+import {
+  LEGACY_OPENAI_STORAGE_KEY,
+  loadProviderSettings,
+  normalizeProviderSettings,
+  PROVIDER_SETTINGS_STORAGE_KEY,
+} from "./lib/provider-settings";
+import {
   buildSharedMermaidUrl,
   loadSharedMermaidSourceFromLocation,
 } from "./lib/share";
 
-type Viewport = {
-  scale: number;
-  x: number;
-  y: number;
-};
+const SettingsModal = lazy(async () => {
+  const module = await import("./components/modals/SettingsModal");
+  return { default: module.SettingsModal };
+});
 
-type RenderErrorCopy = {
-  title: string;
-  message: string;
-};
+const ExportModal = lazy(async () => {
+  const module = await import("./components/modals/ExportModal");
+  return { default: module.ExportModal };
+});
 
-type RenderState =
-  | {
-      status: "loading";
-      error: null;
-      svg: string;
-      metrics: SvgMetrics | null;
-    }
-  | {
-      status: "ready";
-      error: null;
-      svg: string;
-      metrics: SvgMetrics;
-    }
-  | {
-      status: "error";
-      error: RenderErrorCopy;
-      svg: string;
-      metrics: null;
-    };
-
-type ProviderKeyStore = Record<ProviderId, string>;
-
-type ProviderSettings = {
-  activeProviderId: ProviderId;
-  providerKeys: ProviderKeyStore;
-};
-
-type HelpTopic = "source" | "prompt" | "preview" | null;
-type ExportFormat = "svg" | "png";
-type OnboardingState = "pending" | "dismissed" | "completed";
-type SourceOrigin = "manual" | "generated";
+const ChangelogModal = lazy(async () => {
+  const module = await import("./components/modals/ChangelogModal");
+  return { default: module.ChangelogModal };
+});
 
 const MIN_SCALE = 0.35;
 const MAX_SCALE = 2.4;
-const PROVIDER_SETTINGS_STORAGE_KEY = "mermaid-gen.provider-settings";
-const ONBOARDING_STATE_STORAGE_KEY = "mermaid-gen.onboarding-state";
-const LEGACY_OPENAI_STORAGE_KEY = "mermaid-gen.openai-key";
 
-const HELP_COPY: Record<Exclude<HelpTopic, null>, string> = {
+const HELP_COPY = {
   source:
     "Paste Mermaid directly or keep refining the current draft. This source stays canonical, so preview and export always derive from it.",
   prompt:
     "Turn a short brief into Mermaid with your selected provider. The selected provider returns Mermaid that replaces the current editor content.",
   preview:
     "Use preview as the review surface. Hold Shift while scrolling to zoom, drag to pan, and export the full diagram rather than the current viewport framing.",
-};
-
-const ONBOARDING_STEPS = [
-  {
-    title: "Welcome",
-    body: "Mermaid Generator keeps the whole diagram loop in one browser workspace: write or describe, review the result, then export a clean asset.",
-    detail:
-      "The preview stays primary so you can judge structure quickly without losing the underlying Mermaid source.",
-  },
-  {
-    title: "Code editor",
-    body: "The Mermaid source remains the artifact you control. Paste existing Mermaid or refine generated output directly in the editor.",
-    detail:
-      "Every preview and export comes from this source, so manual edits stay first-class.",
-  },
-  {
-    title: "Prompt",
-    body: "Use the prompt panel when you want a first draft from text. Pick a provider in Settings, save its key locally, then generate Mermaid without leaving the app.",
-    detail:
-      "The generated output is still editable, so AI stays a starting point rather than a black box.",
-  },
-  {
-    title: "Preview",
-    body: "Review the diagram in the large preview stage. Fit the diagram, zoom, pan, or switch into preview focus when you want a cleaner review surface.",
-    detail:
-      "Hold Shift while scrolling to zoom and drag the stage to move around larger diagrams.",
-  },
-  {
-    title: "Export",
-    body: "When the diagram is ready, open Export to choose SVG or PNG and, for PNG, the raster scale before downloading.",
-    detail:
-      "Exports always use the full rendered diagram rather than the current zoom position.",
-  },
-] as const;
+} as const;
 
 function loadInitialSource() {
   return loadSharedMermaidSourceFromLocation() ?? DEFAULT_MERMAID_SOURCE;
@@ -148,96 +109,6 @@ function fitViewport(container: HTMLElement, metrics: SvgMetrics): Viewport {
   const scale = clampScale(Math.min(widthScale, heightScale) * 0.92);
 
   return centerViewport(container, metrics, scale);
-}
-
-function createEmptyProviderKeys(): ProviderKeyStore {
-  return {
-    openai: "",
-    openrouter: "",
-    anthropic: "",
-  };
-}
-
-function normalizeProviderSettings(
-  value: Partial<ProviderSettings> | null | undefined,
-): ProviderSettings {
-  const providerKeys = createEmptyProviderKeys();
-
-  for (const providerId of PROVIDER_IDS) {
-    const candidate = value?.providerKeys?.[providerId];
-    providerKeys[providerId] = typeof candidate === "string" ? candidate : "";
-  }
-
-  const activeProviderId = PROVIDER_IDS.includes(
-    value?.activeProviderId as ProviderId,
-  )
-    ? (value?.activeProviderId as ProviderId)
-    : "openai";
-
-  return {
-    activeProviderId,
-    providerKeys,
-  };
-}
-
-function loadProviderSettings() {
-  if (typeof window === "undefined") {
-    return normalizeProviderSettings(null);
-  }
-
-  const storedSettings = window.localStorage.getItem(
-    PROVIDER_SETTINGS_STORAGE_KEY,
-  );
-
-  if (storedSettings) {
-    try {
-      return normalizeProviderSettings(
-        JSON.parse(storedSettings) as Partial<ProviderSettings>,
-      );
-    } catch {
-      window.localStorage.removeItem(PROVIDER_SETTINGS_STORAGE_KEY);
-    }
-  }
-
-  const legacyOpenAiKey =
-    window.localStorage.getItem(LEGACY_OPENAI_STORAGE_KEY) ?? "";
-
-  return normalizeProviderSettings({
-    activeProviderId: "openai",
-    providerKeys: {
-      ...createEmptyProviderKeys(),
-      openai: legacyOpenAiKey,
-    },
-  });
-}
-
-function loadOnboardingState(): OnboardingState {
-  if (typeof window === "undefined") {
-    return "pending";
-  }
-
-  const storedValue = window.localStorage.getItem(ONBOARDING_STATE_STORAGE_KEY);
-
-  if (
-    storedValue === "dismissed" ||
-    storedValue === "completed" ||
-    storedValue === "pending"
-  ) {
-    return storedValue;
-  }
-
-  return "pending";
-}
-
-function loadIsMobileHeader() {
-  if (
-    typeof window === "undefined" ||
-    typeof window.matchMedia !== "function"
-  ) {
-    return false;
-  }
-
-  return window.matchMedia("(max-width: 920px)").matches;
 }
 
 function hasSharedMermaidSourceInLocation() {
@@ -289,146 +160,6 @@ function isInteractivePreviewTarget(target: EventTarget | null) {
   );
 }
 
-type HeaderActionButtonProps = {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  active?: boolean;
-  variant?: "default" | "primary";
-  children: ReactNode;
-};
-
-function HeaderActionButton({
-  label,
-  onClick,
-  disabled = false,
-  active = false,
-  variant = "default",
-  children,
-}: HeaderActionButtonProps) {
-  return (
-    <div className="topbar-action-item">
-      <button
-        type="button"
-        className={`topbar-icon-button${
-          variant === "primary" ? " is-primary" : ""
-        }${active ? " is-active" : ""}`}
-        aria-label={label}
-        onClick={onClick}
-        disabled={disabled}
-      >
-        {children}
-      </button>
-      <span className="topbar-action-tooltip" role="tooltip">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-type MobileMenuActionButtonProps = {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  active?: boolean;
-  variant?: "default" | "primary";
-  children: ReactNode;
-};
-
-function MobileMenuActionButton({
-  label,
-  onClick,
-  disabled = false,
-  active = false,
-  variant = "default",
-  children,
-}: MobileMenuActionButtonProps) {
-  return (
-    <button
-      type="button"
-      className={`mobile-menu-action${
-        variant === "primary" ? " is-primary" : ""
-      }${active ? " is-active" : ""}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <span className="mobile-menu-action-icon" aria-hidden="true">
-        {children}
-      </span>
-      <span>{label}</span>
-    </button>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M8 3.25v9.5M3.25 8h9.5" />
-    </svg>
-  );
-}
-
-function MinusIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M3.25 8h9.5" />
-    </svg>
-  );
-}
-
-function ResetIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M4.2 6.1A4.55 4.55 0 1 1 4.9 10.9" />
-      <path d="M4.25 3.75v2.9h2.9" />
-    </svg>
-  );
-}
-
-function FitIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M5.25 2.75h-2.5v2.5M10.75 2.75h2.5v2.5M5.25 13.25h-2.5v-2.5M10.75 13.25h2.5v-2.5" />
-      <path d="M6.1 6.1h3.8v3.8H6.1z" />
-    </svg>
-  );
-}
-
-function FocusIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M5.25 2.75h-2.5v2.5M10.75 2.75h2.5v2.5M5.25 13.25h-2.5v-2.5M10.75 13.25h2.5v-2.5" />
-    </svg>
-  );
-}
-
-function ExportIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M8 2.75v6.5" />
-      <path d="M5.6 6.85 8 9.25l2.4-2.4" />
-      <path d="M3.25 11.25v2h9.5v-2" />
-    </svg>
-  );
-}
-
-function SettingsIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M8 4.9a3.1 3.1 0 1 1 0 6.2 3.1 3.1 0 0 1 0-6.2Z" />
-      <path d="M8 2.5v1.3M8 12.2v1.3M13.5 8h-1.3M3.8 8H2.5M11.9 4.1l-.9.9M5 11l-.9.9M11.9 11.9l-.9-.9M5 5l-.9-.9" />
-    </svg>
-  );
-}
-
-function BurgerIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M3 4.25h10M3 8h10M3 11.75h10" />
-    </svg>
-  );
-}
-
 function App() {
   const [source, setSource] = useState(loadInitialSource);
   const [prompt, setPrompt] = useState("");
@@ -441,7 +172,7 @@ function App() {
     useState<ProviderSettings>(loadProviderSettings);
   const [isDraftKeyVisible, setIsDraftKeyVisible] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
-  const [exportFormat, setExportFormat] = useState<ExportFormat>("png");
+  const [exportFormat, setExportFormat] = useState<"svg" | "png">("png");
   const [exportScale, setExportScale] = useState(2);
   const [exportError, setExportError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
@@ -453,14 +184,21 @@ function App() {
     () => loadOnboardingState() === "pending" && !hasSharedMermaidSourceInLocation(),
   );
   const [onboardingStep, setOnboardingStep] = useState(0);
-  const [helpTopic, setHelpTopic] = useState<HelpTopic>(null);
+  const [helpTopic, setHelpTopic] = useState<"source" | "prompt" | "preview" | null>(
+    null,
+  );
   const [isGenerationWarningOpen, setIsGenerationWarningOpen] = useState(false);
+  const [isPromptErrorOpen, setIsPromptErrorOpen] = useState(false);
   const [isRendering, setIsRendering] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [promptError, setPromptError] = useState<string | null>(null);
   const [generationNotice, setGenerationNotice] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileHeader, setIsMobileHeader] = useState(loadIsMobileHeader);
+  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+  const [isChangelogLoading, setIsChangelogLoading] = useState(false);
+  const [changelogEntries, setChangelogEntries] = useState<ChangelogEntry[]>([]);
+  const [changelogError, setChangelogError] = useState<string | null>(null);
   const [sourceOrigin, setSourceOrigin] = useState<SourceOrigin>("manual");
   const [viewport, setViewport] = useState<Viewport>({
     scale: 1,
@@ -473,9 +211,11 @@ function App() {
     svg: "",
     metrics: null,
   });
+
   const deferredSource = useDeferredValue(source);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const settingsDialogRef = useRef<HTMLDivElement | null>(null);
+  const isChangelogRequestInFlightRef = useRef(false);
   const dragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -640,6 +380,7 @@ function App() {
     });
 
     observer.observe(container);
+
     return () => {
       observer.disconnect();
     };
@@ -659,19 +400,56 @@ function App() {
     setGenerationNotice(describeDiagramBalance(renderState.metrics));
   }, [renderState, sourceOrigin]);
 
+  useEffect(() => {
+    if (promptError) {
+      return;
+    }
+
+    setIsPromptErrorOpen(false);
+  }, [promptError]);
+
+  const requestChangelogEntries = useEffectEvent(() => {
+    if (
+      changelogEntries.length > 0 ||
+      isChangelogRequestInFlightRef.current
+    ) {
+      return;
+    }
+
+    isChangelogRequestInFlightRef.current = true;
+    setIsChangelogLoading(true);
+    setChangelogError(null);
+
+    void loadChangelogEntries()
+      .then((entries) => {
+        setChangelogEntries(entries);
+      })
+      .catch(() => {
+        setChangelogError("Unable to load changelog history right now.");
+      })
+      .finally(() => {
+        isChangelogRequestInFlightRef.current = false;
+        setIsChangelogLoading(false);
+      });
+  });
+
+  useEffect(() => {
+    requestChangelogEntries();
+  }, []);
+
+  useEffect(() => {
+    if (!isChangelogOpen) {
+      return;
+    }
+
+    requestChangelogEntries();
+  }, [isChangelogOpen]);
+
   const canExport = renderState.status === "ready";
   const activeProvider = getProvider(providerSettings.activeProviderId);
   const activeProviderKey =
     providerSettings.providerKeys[providerSettings.activeProviderId].trim();
   const hasActiveProviderKey = activeProviderKey.length > 0;
-  const activeDraftProvider = getProvider(settingsDraft.activeProviderId);
-  const exportSize =
-    renderState.status === "ready"
-      ? {
-          width: Math.round(renderState.metrics.width * exportScale),
-          height: Math.round(renderState.metrics.height * exportScale),
-        }
-      : null;
 
   const previewTransform = useMemo(
     () =>
@@ -679,16 +457,32 @@ function App() {
     [viewport],
   );
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   const openSettings = () => {
     setHelpTopic(null);
-    setIsMobileMenuOpen(false);
+    closeMobileMenu();
     setSettingsDraft(providerSettings);
     setIsDraftKeyVisible(false);
     setIsSettingsOpen(true);
   };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
+  const openExport = () => {
+    closeMobileMenu();
+
+    if (canExport) {
+      setExportError(null);
+      setHelpTopic(null);
+      setIsExportOpen(true);
+    }
+  };
+
+  const openChangelog = () => {
+    closeMobileMenu();
+    setIsSettingsOpen(false);
+    setIsChangelogOpen(true);
   };
 
   const handleZoom = (delta: number) => {
@@ -706,6 +500,7 @@ function App() {
       return;
     }
 
+    closeMobileMenu();
     setViewport(centerViewport(previewRef.current, renderState.metrics, 1));
   };
 
@@ -714,7 +509,14 @@ function App() {
       return;
     }
 
+    closeMobileMenu();
     setViewport(fitViewport(previewRef.current, renderState.metrics));
+  };
+
+  const handleTogglePreviewFocus = () => {
+    closeMobileMenu();
+    setHelpTopic(null);
+    setIsPreviewFocused((current) => !current);
   };
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -916,171 +718,22 @@ function App() {
 
   return (
     <div className={`app-shell${isPreviewFocused ? " is-preview-focused" : ""}`}>
-      <header className="topbar">
-        <div className="brand">
-          <img className="brand-mark" src="/icon.svg" alt="" />
-          <div className="brand-copy">
-            <h1>Mermaid Generator</h1>
-          </div>
-        </div>
-        <div className="topbar-actions">
-          {isPreviewFocused ? <div className="focus-pill">Preview focus</div> : null}
-          {!isMobileHeader ? (
-            <div className="topbar-action-row">
-              <HeaderActionButton
-                label="Reset preview position"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleReset();
-                }}
-                disabled={!canExport}
-              >
-                <ResetIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
-                label="Fit preview"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleFit();
-                }}
-                disabled={!canExport}
-              >
-                <FitIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
-                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
-                onClick={() => {
-                  closeMobileMenu();
-                  setHelpTopic(null);
-                  setIsPreviewFocused((current) => !current);
-                }}
-                disabled={!canExport}
-                active={isPreviewFocused}
-              >
-                <FocusIcon />
-              </HeaderActionButton>
-              <HeaderActionButton
-                label="Open export dialog"
-                onClick={() => {
-                  closeMobileMenu();
-                  if (canExport) {
-                    setExportError(null);
-                    setHelpTopic(null);
-                    setIsExportOpen(true);
-                  }
-                }}
-                disabled={!canExport}
-                variant="primary"
-              >
-                <ExportIcon />
-              </HeaderActionButton>
-              <HeaderActionButton label="Open settings" onClick={openSettings}>
-                <SettingsIcon />
-              </HeaderActionButton>
-            </div>
-          ) : (
-            <button
-              type="button"
-              className="topbar-menu-toggle"
-              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isMobileMenuOpen}
-              onClick={() => {
-                setIsMobileMenuOpen((current) => !current);
-              }}
-            >
-              <BurgerIcon />
-            </button>
-          )}
-        </div>
-      </header>
-
-      {isMobileHeader && isMobileMenuOpen ? (
-        <>
-          <button
-            type="button"
-            className="mobile-menu-backdrop"
-            aria-label="Close navigation menu"
-            onClick={closeMobileMenu}
-          />
-          <div
-            className="mobile-menu-sheet"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="mobile-menu-title"
-          >
-            <div className="mobile-menu-header">
-              <div>
-                <h2 id="mobile-menu-title">Navigation menu</h2>
-                <p className="panel-subtitle">
-                  Open workspace actions without leaving the mobile layout.
-                </p>
-              </div>
-              <button
-                type="button"
-                className="mobile-menu-close"
-                aria-label="Close navigation menu"
-                onClick={closeMobileMenu}
-              >
-                Close
-              </button>
-            </div>
-            <div className="mobile-menu-group">
-              <MobileMenuActionButton label="Open settings" onClick={openSettings}>
-                <SettingsIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
-                label="Open export dialog"
-                onClick={() => {
-                  closeMobileMenu();
-                  if (canExport) {
-                    setExportError(null);
-                    setHelpTopic(null);
-                    setIsExportOpen(true);
-                  }
-                }}
-                disabled={!canExport}
-                variant="primary"
-              >
-                <ExportIcon />
-              </MobileMenuActionButton>
-            </div>
-            <div className="mobile-menu-group">
-              <MobileMenuActionButton
-                label="Reset preview position"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleReset();
-                }}
-                disabled={!canExport}
-              >
-                <ResetIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
-                label="Fit preview"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleFit();
-                }}
-                disabled={!canExport}
-              >
-                <FitIcon />
-              </MobileMenuActionButton>
-              <MobileMenuActionButton
-                label={isPreviewFocused ? "Exit preview focus" : "Focus preview"}
-                onClick={() => {
-                  closeMobileMenu();
-                  setHelpTopic(null);
-                  setIsPreviewFocused((current) => !current);
-                }}
-                disabled={!canExport}
-                active={isPreviewFocused}
-              >
-                <FocusIcon />
-              </MobileMenuActionButton>
-            </div>
-          </div>
-        </>
-      ) : null}
+      <AppHeader
+        isPreviewFocused={isPreviewFocused}
+        isMobileHeader={isMobileHeader}
+        isMobileMenuOpen={isMobileMenuOpen}
+        canExport={canExport}
+        onOpenSettings={openSettings}
+        onOpenExport={openExport}
+        onOpenChangelog={openChangelog}
+        onTogglePreviewFocus={handleTogglePreviewFocus}
+        onToggleMobileMenu={() => {
+          setIsMobileMenuOpen((current) => !current);
+        }}
+        onCloseMobileMenu={closeMobileMenu}
+        onResetPreview={handleReset}
+        onFitPreview={handleFit}
+      />
 
       <main className="workspace-layout">
         <section className="left-rail">
@@ -1180,30 +833,52 @@ function App() {
                     : `Generate with ${activeProvider.label}`}
                 </button>
                 <div className="prompt-feedback">
-                  {generationNotice ? (
-                    <div className="prompt-warning-wrap">
-                      <button
-                        type="button"
-                        className="warning-trigger"
-                        aria-label="Show generation warning"
-                        aria-expanded={isGenerationWarningOpen}
-                        onClick={() => {
-                          setIsGenerationWarningOpen((current) => !current);
-                        }}
-                      >
-                        !
-                      </button>
-                      {isGenerationWarningOpen ? (
-                        <div className="warning-popover" role="note">
-                          {generationNotice}
-                        </div>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  {promptError ? (
-                    <p className="prompt-error">{promptError}</p>
-                  ) : null}
+                  <div className="prompt-indicators">
+                    {generationNotice ? (
+                      <div className="prompt-warning-wrap">
+                        <button
+                          type="button"
+                          className="warning-trigger"
+                          aria-label="Show generation warning"
+                          aria-expanded={isGenerationWarningOpen}
+                          onClick={() => {
+                            setIsGenerationWarningOpen((current) => !current);
+                          }}
+                        >
+                          !
+                        </button>
+                        {isGenerationWarningOpen ? (
+                          <div className="warning-popover" role="note">
+                            {generationNotice}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                    {promptError ? (
+                      <div className="prompt-warning-wrap">
+                        <button
+                          type="button"
+                          className="warning-trigger warning-trigger-error"
+                          aria-label="Show prompt generation error"
+                          aria-expanded={isPromptErrorOpen}
+                          onClick={() => {
+                            setIsPromptErrorOpen((current) => !current);
+                          }}
+                        >
+                          !
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
+                {promptError && isPromptErrorOpen ? (
+                  <div
+                    className="warning-popover error-popover prompt-error-popover"
+                    role="alert"
+                  >
+                    {promptError}
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div className="prompt-locked">
@@ -1219,94 +894,28 @@ function App() {
           </div>
         </section>
 
-        <section className="panel panel-preview">
-          {!isPreviewFocused ? (
-            <div className="panel-header preview-header">
-              <div className="panel-heading-group">
-                <div className="title-row">
-                  <h2>Preview</h2>
-                  <button
-                    type="button"
-                    className="help-trigger"
-                    aria-label="Show preview help"
-                    aria-expanded={helpTopic === "preview"}
-                    onClick={() => {
-                      setHelpTopic((current) =>
-                        current === "preview" ? null : "preview",
-                      );
-                    }}
-                  >
-                    i
-                  </button>
-                </div>
-                {helpTopic === "preview" ? (
-                  <div className="help-popover" role="note">
-                    {HELP_COPY.preview}
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          ) : null}
-
-          <div
-            ref={previewRef}
-            className={`preview-stage${
-              renderState.status === "ready" ? " is-draggable" : ""
-            }`}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-          >
-            {isRendering ? (
-              <div className="preview-message">Rendering Mermaid preview…</div>
-            ) : null}
-
-            {renderState.status === "error" && !isRendering ? (
-              <div className="preview-message preview-error">
-                <h3>{renderState.error.title}</h3>
-                <p>{renderState.error.message}</p>
-              </div>
-            ) : null}
-
-            {renderState.status === "ready" ? (
-              <div
-                className="preview-diagram"
-                style={{
-                  width: renderState.metrics.width,
-                  height: renderState.metrics.height,
-                  transform: previewTransform,
-                }}
-                dangerouslySetInnerHTML={{ __html: renderState.svg }}
-              />
-            ) : null}
-
-            <div className="preview-stage-controls" aria-label="Preview zoom controls">
-              <button
-                type="button"
-                className="preview-stage-control"
-                aria-label="Zoom out"
-                onClick={() => {
-                  handleZoom(-0.1);
-                }}
-                disabled={!canExport}
-              >
-                <MinusIcon />
-              </button>
-              <button
-                type="button"
-                className="preview-stage-control"
-                aria-label="Zoom in"
-                onClick={() => {
-                  handleZoom(0.1);
-                }}
-                disabled={!canExport}
-              >
-                <PlusIcon />
-              </button>
-            </div>
-          </div>
-        </section>
+        <PreviewPanel
+          isPreviewFocused={isPreviewFocused}
+          isPreviewHelpOpen={helpTopic === "preview"}
+          previewHelp={HELP_COPY.preview}
+          renderState={renderState}
+          isRendering={isRendering}
+          previewRef={previewRef}
+          previewTransform={previewTransform}
+          canExport={canExport}
+          onTogglePreviewHelp={() => {
+            setHelpTopic((current) => (current === "preview" ? null : "preview"));
+          }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onZoomIn={() => {
+            handleZoom(0.1);
+          }}
+          onZoomOut={() => {
+            handleZoom(-0.1);
+          }}
+        />
       </main>
 
       <footer className="app-footer">
@@ -1320,339 +929,104 @@ function App() {
         </a>
       </footer>
 
-      {isSettingsOpen ? (
-        <div className="modal-backdrop" role="presentation">
-          <div
-            ref={settingsDialogRef}
-            className="settings-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="settings-title"
-            tabIndex={-1}
-            onKeyDownCapture={handleSettingsEscapeDismiss}
-          >
-            <div className="modal-scroll-content">
-              <div className="panel-header">
-                <div>
-                  <h2 id="settings-title">Settings</h2>
-                  <p className="panel-subtitle">
-                    Choose the active provider and keep keys local to this browser.
-                  </p>
-                </div>
-              </div>
+      <Suspense fallback={null}>
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          dialogRef={settingsDialogRef}
+          settingsDraft={settingsDraft}
+          isDraftKeyVisible={isDraftKeyVisible}
+          onClose={() => {
+            setIsSettingsOpen(false);
+          }}
+          onSave={handleSaveSettings}
+          onReopenOnboarding={() => {
+            setIsSettingsOpen(false);
+            setOnboardingStep(0);
+            setIsOnboardingOpen(true);
+          }}
+          onToggleKeyVisibility={() => {
+            setIsDraftKeyVisible((current) => !current);
+          }}
+          onDismissEscape={handleSettingsEscapeDismiss}
+          onSelectProvider={(providerId) => {
+            setSettingsDraft((current) => ({
+              ...current,
+              activeProviderId: providerId,
+            }));
+            setIsDraftKeyVisible(false);
+          }}
+          onChangeProviderKey={(providerId, value) => {
+            setSettingsDraft((current) => ({
+              ...current,
+              providerKeys: {
+                ...current.providerKeys,
+                [providerId]: value,
+              },
+            }));
+          }}
+          onRemoveProviderKey={(providerId) => {
+            setSettingsDraft((current) => ({
+              ...current,
+              providerKeys: {
+                ...current.providerKeys,
+                [providerId]: "",
+              },
+            }));
+          }}
+        />
+      </Suspense>
 
-              <form className="settings-form" onSubmit={handleSaveSettings}>
-                <div className="provider-picker" role="radiogroup" aria-label="Provider">
-                  {PROVIDERS.map((provider) => {
-                    const hasKey =
-                      settingsDraft.providerKeys[provider.id].trim().length > 0;
+      <Suspense fallback={null}>
+        <ExportModal
+          isOpen={isExportOpen}
+          exportFormat={exportFormat}
+          exportScale={exportScale}
+          exportError={exportError}
+          isExporting={isExporting}
+          isShareLinkCopying={isShareLinkCopying}
+          renderState={renderState}
+          onClose={() => {
+            setIsExportOpen(false);
+          }}
+          onSubmit={handleExport}
+          onCopyShareLink={() => {
+            void handleCopyShareLink();
+          }}
+          onSelectFormat={setExportFormat}
+          onSelectScale={setExportScale}
+        />
+      </Suspense>
 
-                    return (
-                      <button
-                        key={provider.id}
-                        type="button"
-                        className={`provider-card${
-                          settingsDraft.activeProviderId === provider.id
-                            ? " is-active"
-                            : ""
-                        }`}
-                        role="radio"
-                        aria-checked={settingsDraft.activeProviderId === provider.id}
-                        onClick={() => {
-                          setSettingsDraft((current) => ({
-                            ...current,
-                            activeProviderId: provider.id,
-                          }));
-                          setIsDraftKeyVisible(false);
-                        }}
-                      >
-                        <span className="provider-card-label">{provider.label}</span>
-                        <span className="provider-card-copy">
-                          {provider.description}
-                        </span>
-                        <span className="provider-card-status">
-                          {hasKey ? "Key saved locally" : "No key saved"}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onboardingStep={onboardingStep}
+        onSkip={() => {
+          setOnboardingState("dismissed");
+          setIsOnboardingOpen(false);
+        }}
+        onBack={() => {
+          setOnboardingStep((current) => current - 1);
+        }}
+        onNext={() => {
+          setOnboardingStep((current) => current + 1);
+        }}
+        onFinish={() => {
+          setOnboardingState("completed");
+          setIsOnboardingOpen(false);
+        }}
+      />
 
-                <label className="settings-field" htmlFor="provider-key">
-                  {activeDraftProvider.keyLabel}
-                </label>
-                <div className="settings-key-row">
-                  <input
-                    id="provider-key"
-                    className="settings-input"
-                    type={isDraftKeyVisible ? "text" : "password"}
-                    value={settingsDraft.providerKeys[settingsDraft.activeProviderId]}
-                    onChange={(event) => {
-                      const nextValue = event.target.value;
-                      setSettingsDraft((current) => ({
-                        ...current,
-                        providerKeys: {
-                          ...current.providerKeys,
-                          [current.activeProviderId]: nextValue,
-                        },
-                      }));
-                    }}
-                  placeholder={activeDraftProvider.keyPlaceholder}
-                  autoComplete="off"
-                  onKeyDown={handleSettingsEscapeDismiss}
-                />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsDraftKeyVisible((current) => !current);
-                    }}
-                  >
-                    {isDraftKeyVisible ? "Hide" : "Reveal"}
-                  </button>
-                </div>
-                <p className="settings-help">
-                  Keys stay on this device in local browser storage. You can keep
-                  multiple provider keys and switch the active provider without
-                  losing the others.
-                </p>
-                <div className="settings-actions">
-                  <div className="settings-actions-left">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSettingsDraft((current) => ({
-                          ...current,
-                          providerKeys: {
-                            ...current.providerKeys,
-                            [current.activeProviderId]: "",
-                          },
-                        }));
-                      }}
-                    >
-                      Remove key
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsSettingsOpen(false);
-                        setOnboardingStep(0);
-                        setIsOnboardingOpen(true);
-                      }}
-                    >
-                      Reopen onboarding
-                    </button>
-                  </div>
-                  <div className="settings-actions-right">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsSettingsOpen(false);
-                      }}
-                    >
-                      Close
-                    </button>
-                    <button className="button-primary" type="submit">
-                      Save settings
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {isExportOpen ? (
-        <div className="modal-backdrop" role="presentation">
-          <div
-            className="settings-modal export-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="export-title"
-          >
-            <div className="modal-scroll-content">
-              <div className="panel-header">
-                <div>
-                  <h2 id="export-title">Export diagram</h2>
-                  <p className="panel-subtitle">
-                    Choose the output format and raster scale before downloading.
-                  </p>
-                </div>
-              </div>
-
-              <form className="settings-form" onSubmit={handleExport}>
-                <div className="export-options" role="radiogroup" aria-label="Export format">
-                  <button
-                    type="button"
-                    className={`provider-card${exportFormat === "svg" ? " is-active" : ""}`}
-                    role="radio"
-                    aria-checked={exportFormat === "svg"}
-                    onClick={() => {
-                      setExportFormat("svg");
-                    }}
-                  >
-                    <span className="provider-card-label">SVG</span>
-                    <span className="provider-card-copy">
-                      Vector export for docs and further editing.
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`provider-card${exportFormat === "png" ? " is-active" : ""}`}
-                    role="radio"
-                    aria-checked={exportFormat === "png"}
-                    onClick={() => {
-                      setExportFormat("png");
-                    }}
-                  >
-                    <span className="provider-card-label">PNG</span>
-                    <span className="provider-card-copy">
-                      Raster export with selectable output scale.
-                    </span>
-                  </button>
-                </div>
-
-                {exportFormat === "png" ? (
-                  <div className="scale-picker" role="radiogroup" aria-label="PNG scale">
-                    {[1, 2, 3].map((scale) => (
-                      <button
-                        key={scale}
-                        type="button"
-                        className={`scale-chip${exportScale === scale ? " is-active" : ""}`}
-                        role="radio"
-                        aria-checked={exportScale === scale}
-                        onClick={() => {
-                          setExportScale(scale);
-                        }}
-                      >
-                        {scale}x
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-
-                {renderState.status === "ready" ? (
-                  <p className="settings-help">
-                    Source diagram: {Math.round(renderState.metrics.width)} x{" "}
-                    {Math.round(renderState.metrics.height)} px
-                    {exportSize && exportFormat === "png"
-                      ? ` · PNG output: ${exportSize.width} x ${exportSize.height} px`
-                      : ""}
-                  </p>
-                ) : null}
-
-                <p className="settings-help export-share-copy">
-                  Copy a share link when you want this Mermaid source to reopen
-                  with the editor prefilled and the preview already in sync.
-                </p>
-
-                {exportError ? <p className="prompt-error">{exportError}</p> : null}
-
-                <div className="settings-actions">
-                  <div className="settings-actions-left">
-                    <button
-                      type="button"
-                      className="button-secondary"
-                      onClick={() => {
-                        void handleCopyShareLink();
-                      }}
-                      disabled={isShareLinkCopying}
-                    >
-                      {isShareLinkCopying ? "Copying link…" : "Copy share link"}
-                    </button>
-                  </div>
-                  <div className="settings-actions-right">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsExportOpen(false);
-                      }}
-                    >
-                      Close
-                    </button>
-                    <button className="button-primary" type="submit" disabled={isExporting}>
-                      {isExporting ? "Downloading…" : "Download"}
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {isOnboardingOpen ? (
-        <div className="modal-backdrop" role="presentation">
-          <div
-            className="settings-modal onboarding-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="onboarding-title"
-          >
-            <div className="modal-scroll-content modal-scroll-content-onboarding">
-              <div className="onboarding-kicker">
-                Step {onboardingStep + 1} of {ONBOARDING_STEPS.length}
-              </div>
-              <div className="panel-header">
-                <div>
-                  <h2 id="onboarding-title">{ONBOARDING_STEPS[onboardingStep].title}</h2>
-                  <p className="panel-subtitle">
-                    {ONBOARDING_STEPS[onboardingStep].body}
-                  </p>
-                </div>
-              </div>
-              <p className="onboarding-detail">
-                {ONBOARDING_STEPS[onboardingStep].detail}
-              </p>
-              <div className="settings-actions">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOnboardingState("dismissed");
-                    setIsOnboardingOpen(false);
-                  }}
-                >
-                  Skip
-                </button>
-                <div className="settings-actions-right">
-                  {onboardingStep > 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOnboardingStep((current) => current - 1);
-                      }}
-                    >
-                      Back
-                    </button>
-                  ) : null}
-                  {onboardingStep < ONBOARDING_STEPS.length - 1 ? (
-                    <button
-                      className="button-primary"
-                      type="button"
-                      onClick={() => {
-                        setOnboardingStep((current) => current + 1);
-                      }}
-                    >
-                      Next
-                    </button>
-                  ) : (
-                    <button
-                      className="button-primary"
-                      type="button"
-                      onClick={() => {
-                        setOnboardingState("completed");
-                        setIsOnboardingOpen(false);
-                      }}
-                    >
-                      Finish
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      <Suspense fallback={null}>
+        <ChangelogModal
+          isOpen={isChangelogOpen}
+          entries={changelogEntries}
+          isLoading={isChangelogLoading}
+          error={changelogError}
+          onClose={() => {
+            setIsChangelogOpen(false);
+          }}
+        />
+      </Suspense>
 
       {shareToastMessage ? (
         <div className="app-toast" role="status" aria-live="polite">

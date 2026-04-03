@@ -4,7 +4,13 @@ import {
   normalizeGeneratedMermaid,
   prepareGeneratedMermaidSource,
   renderMermaidDiagram,
+  sanitizeRenderedSvg,
 } from "../lib/mermaid";
+
+type SvgElementWithMeasurementShims = SVGElement & {
+  getBBox?: () => { x: number; y: number; width: number; height: number };
+  getComputedTextLength?: () => number;
+};
 
 describe("normalizeGeneratedMermaid", () => {
   it("normalizes invalid subgraph identifiers and matching style targets", () => {
@@ -66,5 +72,71 @@ describe("prepareGeneratedMermaidSource", () => {
 
   it("rejects invalid Mermaid instead of returning Mermaid error svg markup", async () => {
     await expect(renderMermaidDiagram("flowchart LR\nA -->")).rejects.toThrow();
+  });
+
+  it("renders visible flowchart labels in the sanitized svg output", async () => {
+    const svgPrototype = SVGElement.prototype as SvgElementWithMeasurementShims;
+    const originalGetBBox = svgPrototype.getBBox;
+    const originalGetComputedTextLength = svgPrototype.getComputedTextLength;
+
+    Object.defineProperty(svgPrototype, "getBBox", {
+      configurable: true,
+      value: () => ({
+        x: 0,
+        y: 0,
+        width: 120,
+        height: 24,
+      }),
+    });
+    Object.defineProperty(svgPrototype, "getComputedTextLength", {
+      configurable: true,
+      value: () => 120,
+    });
+
+    try {
+      const svg = await renderMermaidDiagram(
+        "flowchart LR\nA[Visible label] --> B[Still visible]",
+      );
+
+      expect(svg).toContain("Visible label");
+      expect(svg).toContain("Still visible");
+      expect(svg).toContain("foreignObject");
+    } finally {
+      if (originalGetBBox) {
+        Object.defineProperty(svgPrototype, "getBBox", {
+          configurable: true,
+          value: originalGetBBox,
+        });
+      } else {
+        delete svgPrototype.getBBox;
+      }
+
+      if (originalGetComputedTextLength) {
+        Object.defineProperty(svgPrototype, "getComputedTextLength", {
+          configurable: true,
+          value: originalGetComputedTextLength,
+        });
+      } else {
+        delete svgPrototype.getComputedTextLength;
+      }
+    }
+  });
+
+  it("sanitizes unsafe SVG content before preview injection", () => {
+    const unsafeSvg = `<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)">
+      <script>alert(1)</script>
+      <a href="javascript:alert(2)">x</a>
+      <foreignObject><div>bad</div></foreignObject>
+      <g onclick="alert(3)"><text>safe</text></g>
+    </svg>`;
+
+    const sanitized = sanitizeRenderedSvg(unsafeSvg);
+
+    expect(sanitized).toContain("<svg");
+    expect(sanitized).not.toContain("script");
+    expect(sanitized).not.toContain("javascript:");
+    expect(sanitized).not.toContain("onclick=");
+    expect(sanitized).not.toContain("onload=");
+    expect(sanitized).toContain("foreignObject");
   });
 });

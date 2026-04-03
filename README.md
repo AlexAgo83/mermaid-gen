@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Status" src="https://img.shields.io/badge/status-planning-0E7380?style=for-the-badge" />
+  <img alt="Status" src="https://img.shields.io/badge/status-stable%20v0.1.0-0E7380?style=for-the-badge" />
   <img alt="Live preview" src="https://img.shields.io/badge/live%20preview-mermaid%20first-12A6A3?style=for-the-badge" />
   <img alt="Export" src="https://img.shields.io/badge/export-modal%20SVG%20%7C%20PNG%20%7C%20share%20link-FFB65A?style=for-the-badge" />
   <img alt="AI" src="https://img.shields.io/badge/AI-multi--provider%20BYOK-0A3440?style=for-the-badge" />
@@ -19,7 +19,7 @@
 
 ## Why Mermaid Generator
 
-Mermaid Generator is being built for a simple reason: diagram work is usually fragmented.
+Mermaid Generator exists for a simple reason: diagram work is usually fragmented.
 
 You write Mermaid in one place, sanity-check it in another, open an AI tool somewhere else to get a first draft, then spend extra time exporting something presentable. This project compresses that into one loop:
 
@@ -66,8 +66,10 @@ Describe the system, process, or flow you want to visualize. Mermaid Generator t
 - Modal export flow with SVG output, PNG scale selection, and share-link copy from the same surface.
 - Shared modal scroll and overlay rules keep Settings, Export, and onboarding usable on short viewports while mobile modals fully dominate the page and desktop preserves only the header as a shell exception.
 - First-run onboarding with five steps: welcome, editor, prompt, preview, and export.
-- Browser-first multi-provider settings for OpenAI, OpenRouter, and Anthropic keys.
+- Browser-first multi-provider settings for OpenAI, OpenRouter, Anthropic, Grok, and Mistral keys.
+- In-app changelog history accessible from `Settings` and the mobile navigation menu.
 - Generated Mermaid is validated before it can replace the editor source, and failed preview renders fall back to app-owned error copy rather than raw Mermaid parser output.
+- Preview rendering uses Mermaid strict mode plus SVG sanitization before the preview injects markup into the page.
 - Light generation guardrails that bias prompts toward balanced diagrams and warn when the result is still unusually wide or tall.
 
 ## Provider Setup
@@ -79,6 +81,14 @@ Prompt-based generation stays bring-your-own-key and browser-first for now.
 - Save its API key locally in the browser.
 - Switch the active provider at any time without losing the other saved keys.
 
+Supported direct providers:
+
+- `OpenAI`
+- `OpenRouter`
+- `Anthropic`
+- `Grok`
+- `Mistral`
+
 The active provider controls whether the prompt surface is unlocked and which adapter handles generation.
 
 ## Export Flow
@@ -88,6 +98,40 @@ The active provider controls whether the prompt surface is unlocked and which ad
 - Choose `PNG` when you need a raster image, then pick the output scale.
 - Use `Copy share link` when you want a URL that restores the current Mermaid source directly in the app.
 - Downloads always use the full rendered diagram rather than the current pan or zoom position.
+
+## Changelog In App
+
+- Open `Settings`, then use `View changelog history`.
+- On mobile, the same action is available from the burger menu.
+- The changelog modal loads the curated release-note files from `changelogs/` and lets users browse the available history inside the app.
+
+## Deployment On Render
+
+Canonical Render contract:
+
+- Service type: `Static Site`
+- Root directory: leave empty
+- Build command: `npm ci && npm run build`
+- Publish directory: `dist`
+- Production branch: `release`
+
+Release source strategy:
+
+- `main` stays the integration branch.
+- `release` is the branch Render should deploy.
+- Version tags such as `v0.1.0` mark release snapshots and GitHub releases.
+- Promote validated release work from `main` to `release`, then push `main`, `release`, and the version tag.
+
+Operator validation and rollback:
+
+- Before promotion, run `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build`, `npm run quality:pwa`, and `npm run test:e2e`.
+- After deploy, verify the live header/footer version, editor-to-preview sync, export modal, share-link restore flow, provider settings, and mobile navigation.
+- If a release is broken, move `release` back to the last known good commit or redeploy the last known good tag, then let Render rebuild from that point.
+
+Delivery note:
+
+- Render now treats hashed `/assets/*` files as long-lived immutable assets.
+- The PWA precache deliberately excludes the heaviest Mermaid runtime chunks so install/update cost stays bounded while runtime asset caching still warms them during normal online use.
 
 ## What Makes It Different
 
