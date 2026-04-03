@@ -7,8 +7,6 @@
 - Includes compact header controls, preview focus mode, first-run onboarding, mobile navigation, modal standardization, and shareable Mermaid URLs from the export flow.
 - Hardens generated Mermaid validation and replaces raw Mermaid parser failures with app-owned preview error copy.
 
-## Generated Commit Summary
-
 ## Product and Workspace
 
 - Build Mermaid workspace and export flow
