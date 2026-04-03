@@ -110,6 +110,16 @@
   max-width: 42rem;
 }
 
+.settings-provider-warning {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #e1c48a;
+  border-radius: 10px;
+  background: #fff8ea;
+  color: #6f582f;
+  font-size: 0.92rem;
+}
+
 .settings-provider-detail-header h3,
 .changelog-entry-header h3 {
   margin: 0;

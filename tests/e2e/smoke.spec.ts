@@ -134,7 +134,9 @@ test("focus mode keeps the header and removes local preview chrome", async ({
 
   await expect(page.getByRole("heading", { name: "Mermaid Generator" })).toBeVisible();
   await expect(page.locator(".preview-stage")).toBeVisible();
-  await expect(page.getByText(/Mermaid Generator v0\.1\.0 © 2026/i)).toBeHidden();
+  await expect(
+    page.getByText(/Mermaid Generator v\d+\.\d+\.\d+ © 2026/i),
+  ).toBeHidden();
   await expect(page.getByRole("heading", { name: "Preview" })).toBeHidden();
   await expect(page.getByRole("heading", { name: "Mermaid source" })).toBeHidden();
   await expect(page.getByRole("heading", { name: "Prompt draft" })).toBeHidden();

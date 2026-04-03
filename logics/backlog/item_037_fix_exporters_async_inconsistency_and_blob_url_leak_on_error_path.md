@@ -1,10 +1,10 @@
 ## item_037_fix_exporters_async_inconsistency_and_blob_url_leak_on_error_path - Fix exporters async inconsistency and Blob URL leak on error path
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

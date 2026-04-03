@@ -9,7 +9,7 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
-export async function downloadDiagramAsSvg(svgMarkup: string, filename: string) {
+export function downloadDiagramAsSvg(svgMarkup: string, filename: string) {
   const blob = new Blob([svgMarkup], {
     type: "image/svg+xml;charset=utf-8",
   });
@@ -34,7 +34,10 @@ export async function downloadDiagramAsPng(
 
   await new Promise<void>((resolve, reject) => {
     image.onload = () => resolve();
-    image.onerror = () => reject(new Error("PNG export failed to load SVG."));
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("PNG export failed to load SVG."));
+    };
     image.src = url;
   });
 

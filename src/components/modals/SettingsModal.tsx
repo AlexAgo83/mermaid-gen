@@ -1,6 +1,10 @@
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import type { RefObject } from "react";
-import { PROVIDERS, type ProviderId } from "../../lib/llm";
+import {
+  ANTHROPIC_BROWSER_WARNING,
+  PROVIDERS,
+  type ProviderId,
+} from "../../lib/llm";
 import type { ProviderSettings } from "../../lib/app-types";
 
 type SettingsModalProps = {
@@ -123,6 +127,11 @@ export function SettingsModal({
                 </div>
 
                 <div className="settings-provider-detail-body">
+                  {activeProvider.id === "anthropic" ? (
+                    <p className="settings-provider-warning" role="alert">
+                      {ANTHROPIC_BROWSER_WARNING}
+                    </p>
+                  ) : null}
                   <label className="settings-field" htmlFor="provider-key">
                     {activeProvider.keyLabel}
                   </label>

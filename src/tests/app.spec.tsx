@@ -76,6 +76,18 @@ describe("App foundation shell", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows the Anthropic browser warning when Anthropic is selected", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Skip" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open settings" }));
+    fireEvent.click(await screen.findByRole("radio", { name: "Anthropic" }));
+
+    expect(
+      screen.getByText(/Anthropic blocks direct browser calls from arbitrary origins/i),
+    ).toBeInTheDocument();
+  });
+
   it("closes settings with Escape", async () => {
     render(<App />);
 

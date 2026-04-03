@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  ANTHROPIC_BROWSER_WARNING,
   generateMermaidFromPrompt,
   PROVIDER_IDS,
   PROVIDERS,
@@ -80,5 +81,20 @@ describe("provider catalog", () => {
         prompt: "Generate a simple flow.",
       }),
     ).rejects.toThrow(/Gemini request failed \(403\)/i);
+  });
+
+  it("surfaces Anthropic browser CORS failures with provider-specific copy", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new TypeError("Failed to fetch")),
+    );
+
+    await expect(
+      generateMermaidFromPrompt({
+        providerId: "anthropic",
+        apiKey: "anthropic-key",
+        prompt: "Generate a simple flow.",
+      }),
+    ).rejects.toThrow(ANTHROPIC_BROWSER_WARNING);
   });
 });

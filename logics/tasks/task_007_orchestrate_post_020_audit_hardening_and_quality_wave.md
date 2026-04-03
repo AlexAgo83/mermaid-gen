@@ -4,7 +4,7 @@
 > Status: In Progress
 > Understanding: 98%
 > Confidence: 97%
-> Progress: 8%
+> Progress: 33%
 > Complexity: High
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -39,12 +39,12 @@ flowchart TD
   - [x] 0.3. Run `npm run test -- src/tests/changelog.spec.ts` and verify all AC1–AC5 pass.
   - [x] 0.4. Update `item_035` status to Done, commit.
 
-- [ ] **Wave 1 — Bug fixes** (`item_036`, `item_037`, `item_038`)
-  - [ ] 1.1. **Anthropic CORS warning** (`item_036`): read `src/components/modals/SettingsModal.tsx` and `src/lib/llm.ts`. Add an inline warning banner when the Anthropic provider is selected. Improve the prompt-panel error message for network-level failures on the Anthropic path.
-  - [ ] 1.2. **exporters.ts fixes** (`item_037`): read `src/lib/exporters.ts`. Remove `async` from `downloadDiagramAsSvg`. Add `URL.revokeObjectURL` to the `image.onerror` branch of `downloadDiagramAsPng`.
-  - [ ] 1.3. **E2E version string** (`item_038`): read `tests/e2e/smoke.spec.ts`. Update the version assertion to match the current build version dynamically or update it to `0.2.0` with a comment documenting the update strategy.
-  - [ ] 1.4. Run `npm run ci:local`. Fix any regressions before proceeding.
-  - [ ] 1.5. Update `item_036`, `item_037`, `item_038` status to Done, commit.
+- [x] **Wave 1 — Bug fixes** (`item_036`, `item_037`, `item_038`)
+  - [x] 1.1. **Anthropic CORS warning** (`item_036`): read `src/components/modals/SettingsModal.tsx` and `src/lib/llm.ts`. Add an inline warning banner when the Anthropic provider is selected. Improve the prompt-panel error message for network-level failures on the Anthropic path.
+  - [x] 1.2. **exporters.ts fixes** (`item_037`): read `src/lib/exporters.ts`. Remove `async` from `downloadDiagramAsSvg`. Add `URL.revokeObjectURL` to the `image.onerror` branch of `downloadDiagramAsPng`.
+  - [x] 1.3. **E2E version string** (`item_038`): read `tests/e2e/smoke.spec.ts`. Update the version assertion to match the current build version dynamically or update it to `0.2.0` with a comment documenting the update strategy.
+  - [x] 1.4. Run `npm run ci:local`. Fix any regressions before proceeding.
+  - [x] 1.5. Update `item_036`, `item_037`, `item_038` status to Done, commit.
 
 - [ ] **Wave 2 — Test coverage** (`item_039`, `item_040`)
   - [ ] 2.1. **exporters unit tests** (`item_039`): create `src/tests/exporters.spec.ts`. Mock `URL.createObjectURL`, `URL.revokeObjectURL`, `HTMLCanvasElement.prototype.toBlob`, and anchor `click`. Cover SVG path (Blob creation, anchor trigger, URL revocation) and PNG path (canvas pipeline, correct scale, anchor trigger, revocation on success and on `image.onerror`).

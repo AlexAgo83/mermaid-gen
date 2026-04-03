@@ -1,10 +1,10 @@
 ## item_038_fix_stale_version_string_in_e2e_smoke_test - Fix stale version string in E2E smoke test
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 99%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

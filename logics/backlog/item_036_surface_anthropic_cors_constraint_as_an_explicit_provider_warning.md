@@ -1,10 +1,10 @@
 ## item_036_surface_anthropic_cors_constraint_as_an_explicit_provider_warning - Surface Anthropic CORS constraint as an explicit provider warning
 > From version: 0.2.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Hardening
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

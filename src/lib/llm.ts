@@ -18,6 +18,9 @@ export type ProviderDefinition = {
   model: string;
 };
 
+export const ANTHROPIC_BROWSER_WARNING =
+  "Anthropic blocks direct browser calls from arbitrary origins. In a standard browser session, generation will fail unless you route requests through a local proxy that adds the required CORS permissions.";
+
 export const PROVIDERS: ProviderDefinition[] = [
   {
     id: "openai",
@@ -201,25 +204,37 @@ async function generateWithAnthropic({
   prompt: string;
   model: string;
 }) {
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: 1200,
-      system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    }),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 1200,
+        system: SYSTEM_PROMPT,
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      }),
+    });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        `Anthropic browser requests are blocked by CORS. ${ANTHROPIC_BROWSER_WARNING}`,
+      );
+    }
+
+    throw error;
+  }
 
   if (!response.ok) {
     throw new Error(
