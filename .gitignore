@@ -11,3 +11,6 @@ coverage/
 playwright-report/
 test-results/
 tmp/
+
+logics/.cache/hybrid_assist_audit.jsonl
+logics/.cache/hybrid_assist_measurements.jsonl
