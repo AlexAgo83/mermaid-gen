@@ -1,0 +1,37 @@
+{
+  "common": {
+    "close": "Close",
+    "save": "Save settings",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "skip": "Skip",
+    "download": "Download",
+    "downloading": "Downloading…"
+  },
+  "header": {
+    "title": "Mermaid Generator",
+    "previewFocus": "Preview focus",
+    "resetPreview": "Reset preview position",
+    "fitPreview": "Fit preview",
+    "focusPreview": "Focus preview",
+    "exitPreviewFocus": "Exit preview focus",
+    "openChangelog": "Open changelog history",
+    "openExport": "Open export dialog",
+    "openSettings": "Open settings",
+    "openNavigation": "Open navigation menu",
+    "closeNavigation": "Close navigation menu",
+    "navigationMenu": "Navigation menu",
+    "navigationHint": "Open workspace actions without leaving the mobile layout."
+  },
+  "settings": {
+    "reopenOnboarding": "Reopen onboarding"
+  },
+  "onboarding": {
+    "step": "Step {step} of {total}"
+  },
+  "export": {
+    "copyingLink": "Copying link…",
+    "copyShareLink": "Copy share link"
+  }
+}

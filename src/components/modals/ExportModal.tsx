@@ -1,6 +1,7 @@
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import "./modal-shared.css";
 import "./ExportModal.css";
+import { t } from "@/i18n";
 import type { ExportFormat, RenderState } from "@/lib/app-types";
 import { getNextWrappedRadioValue } from "@/lib/radio-group";
 
@@ -208,19 +209,21 @@ export function ExportModal({
                   onClick={onCopyShareLink}
                   disabled={isShareLinkCopying}
                 >
-                  {isShareLinkCopying ? "Copying link…" : "Copy share link"}
+                  {isShareLinkCopying
+                    ? t("export.copyingLink")
+                    : t("export.copyShareLink")}
                 </button>
               </div>
               <div className="settings-actions-right">
                 <button type="button" onClick={onClose}>
-                  Close
+                  {t("common.close")}
                 </button>
                 <button
                   className="button-primary"
                   type="submit"
                   disabled={isExporting}
                 >
-                  {isExporting ? "Downloading…" : "Download"}
+                  {isExporting ? t("common.downloading") : t("common.download")}
                 </button>
               </div>
             </div>

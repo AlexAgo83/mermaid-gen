@@ -1,5 +1,6 @@
 import "./modal-shared.css";
 import "./ChangelogModal.css";
+import { t } from "@/i18n";
 import type { ChangelogContentBlock, ChangelogEntry } from "@/lib/changelog";
 import { normalizeChangelogEntry } from "@/lib/changelog";
 
@@ -75,7 +76,7 @@ export function ChangelogModal({
               </p>
             </div>
             <button type="button" onClick={onClose}>
-              Close
+              {t("common.close")}
             </button>
           </div>
 

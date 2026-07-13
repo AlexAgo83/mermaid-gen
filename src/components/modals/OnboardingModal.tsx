@@ -1,6 +1,7 @@
 import "./modal-shared.css";
 import "./OnboardingModal.css";
 import { ONBOARDING_STEPS } from "@/lib/onboarding";
+import { t } from "@/i18n";
 
 type OnboardingModalProps = {
   isOpen: boolean;
@@ -35,7 +36,10 @@ export function OnboardingModal({
       >
         <div className="modal-scroll-content modal-scroll-content-onboarding">
           <div className="onboarding-kicker">
-            Step {onboardingStep + 1} of {ONBOARDING_STEPS.length}
+            {t("onboarding.step", {
+              step: onboardingStep + 1,
+              total: ONBOARDING_STEPS.length,
+            })}
           </div>
           <div className="panel-header">
             <div>
@@ -46,12 +50,12 @@ export function OnboardingModal({
           <p className="onboarding-detail">{step.detail}</p>
           <div className="settings-actions">
             <button type="button" onClick={onSkip}>
-              Skip
+              {t("common.skip")}
             </button>
             <div className="settings-actions-right">
               {onboardingStep > 0 ? (
                 <button type="button" onClick={onBack}>
-                  Back
+                  {t("common.back")}
                 </button>
               ) : null}
               {onboardingStep < ONBOARDING_STEPS.length - 1 ? (
@@ -60,7 +64,7 @@ export function OnboardingModal({
                   type="button"
                   onClick={onNext}
                 >
-                  Next
+                  {t("common.next")}
                 </button>
               ) : (
                 <button
@@ -68,7 +72,7 @@ export function OnboardingModal({
                   type="button"
                   onClick={onFinish}
                 >
-                  Finish
+                  {t("common.finish")}
                 </button>
               )}
             </div>

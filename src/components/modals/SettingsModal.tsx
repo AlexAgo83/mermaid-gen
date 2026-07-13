@@ -9,6 +9,7 @@ import {
 } from "@/lib/llm";
 import type { ProviderSettings } from "@/lib/app-types";
 import { getNextWrappedRadioValue } from "@/lib/radio-group";
+import { t } from "@/i18n";
 
 type SettingsModalProps = {
   isOpen: boolean;
@@ -222,15 +223,15 @@ export function SettingsModal({
                   Remove key
                 </button>
                 <button type="button" onClick={onReopenOnboarding}>
-                  Reopen onboarding
+                  {t("settings.reopenOnboarding")}
                 </button>
               </div>
               <div className="settings-actions-right">
                 <button type="button" onClick={onClose}>
-                  Close
+                  {t("common.close")}
                 </button>
                 <button className="button-primary" type="submit">
-                  Save settings
+                  {t("common.save")}
                 </button>
               </div>
             </div>

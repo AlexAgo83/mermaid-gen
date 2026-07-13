@@ -9,6 +9,7 @@ import {
   ResetIcon,
   SettingsIcon,
 } from "@/components/icons";
+import { t } from "@/i18n";
 
 type ActionButtonProps = {
   label: string;
@@ -102,24 +103,24 @@ export function AppHeader({
         <div className="brand">
           <img className="brand-mark" src="/icon.svg" alt="" />
           <div className="brand-copy">
-            <h1>Mermaid Generator</h1>
+            <h1>{t("header.title")}</h1>
           </div>
         </div>
         <div className="topbar-actions">
           {isPreviewFocused ? (
-            <div className="focus-pill">Preview focus</div>
+            <div className="focus-pill">{t("header.previewFocus")}</div>
           ) : null}
           {!isMobileHeader ? (
             <div className="topbar-action-row">
               <ActionButton
-                label="Reset preview position"
+                label={t("header.resetPreview")}
                 onClick={onResetPreview}
                 disabled={!canExport}
               >
                 <ResetIcon />
               </ActionButton>
               <ActionButton
-                label="Fit preview"
+                label={t("header.fitPreview")}
                 onClick={onFitPreview}
                 disabled={!canExport}
               >
@@ -127,7 +128,9 @@ export function AppHeader({
               </ActionButton>
               <ActionButton
                 label={
-                  isPreviewFocused ? "Exit preview focus" : "Focus preview"
+                  isPreviewFocused
+                    ? t("header.exitPreviewFocus")
+                    : t("header.focusPreview")
                 }
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
@@ -136,20 +139,23 @@ export function AppHeader({
                 <FocusIcon />
               </ActionButton>
               <ActionButton
-                label="Open changelog history"
+                label={t("header.openChangelog")}
                 onClick={onOpenChangelog}
               >
                 <ChangelogIcon />
               </ActionButton>
               <ActionButton
-                label="Open export dialog"
+                label={t("header.openExport")}
                 onClick={onOpenExport}
                 disabled={!canExport}
                 emphasis="primary"
               >
                 <ExportIcon />
               </ActionButton>
-              <ActionButton label="Open settings" onClick={onOpenSettings}>
+              <ActionButton
+                label={t("header.openSettings")}
+                onClick={onOpenSettings}
+              >
                 <SettingsIcon />
               </ActionButton>
             </div>
@@ -159,8 +165,8 @@ export function AppHeader({
               className="topbar-menu-toggle"
               aria-label={
                 isMobileMenuOpen
-                  ? "Close navigation menu"
-                  : "Open navigation menu"
+                  ? t("header.closeNavigation")
+                  : t("header.openNavigation")
               }
               aria-expanded={isMobileMenuOpen}
               onClick={onToggleMobileMenu}
@@ -176,7 +182,7 @@ export function AppHeader({
           <button
             type="button"
             className="mobile-menu-backdrop"
-            aria-label="Close navigation menu"
+            aria-label={t("header.closeNavigation")}
             onClick={onCloseMobileMenu}
           />
           <div
@@ -187,37 +193,35 @@ export function AppHeader({
           >
             <div className="mobile-menu-header">
               <div>
-                <h2 id="mobile-menu-title">Navigation menu</h2>
-                <p className="panel-subtitle">
-                  Open workspace actions without leaving the mobile layout.
-                </p>
+                <h2 id="mobile-menu-title">{t("header.navigationMenu")}</h2>
+                <p className="panel-subtitle">{t("header.navigationHint")}</p>
               </div>
               <button
                 type="button"
                 className="mobile-menu-close"
-                aria-label="Close navigation menu"
+                aria-label={t("header.closeNavigation")}
                 onClick={onCloseMobileMenu}
               >
-                Close
+                {t("common.close")}
               </button>
             </div>
             <div className="mobile-menu-group">
               <ActionButton
-                label="Open settings"
+                label={t("header.openSettings")}
                 onClick={onOpenSettings}
                 variant="mobile-menu"
               >
                 <SettingsIcon />
               </ActionButton>
               <ActionButton
-                label="Open changelog history"
+                label={t("header.openChangelog")}
                 onClick={onOpenChangelog}
                 variant="mobile-menu"
               >
                 <ChangelogIcon />
               </ActionButton>
               <ActionButton
-                label="Open export dialog"
+                label={t("header.openExport")}
                 onClick={onOpenExport}
                 disabled={!canExport}
                 variant="mobile-menu"
@@ -228,7 +232,7 @@ export function AppHeader({
             </div>
             <div className="mobile-menu-group">
               <ActionButton
-                label="Reset preview position"
+                label={t("header.resetPreview")}
                 onClick={onResetPreview}
                 disabled={!canExport}
                 variant="mobile-menu"
@@ -236,7 +240,7 @@ export function AppHeader({
                 <ResetIcon />
               </ActionButton>
               <ActionButton
-                label="Fit preview"
+                label={t("header.fitPreview")}
                 onClick={onFitPreview}
                 disabled={!canExport}
                 variant="mobile-menu"
@@ -245,7 +249,9 @@ export function AppHeader({
               </ActionButton>
               <ActionButton
                 label={
-                  isPreviewFocused ? "Exit preview focus" : "Focus preview"
+                  isPreviewFocused
+                    ? t("header.exitPreviewFocus")
+                    : t("header.focusPreview")
                 }
                 onClick={onTogglePreviewFocus}
                 disabled={!canExport}
