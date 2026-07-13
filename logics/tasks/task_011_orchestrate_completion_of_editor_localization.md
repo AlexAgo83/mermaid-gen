@@ -58,6 +58,7 @@
 - `npm run ci:local` passed: ESLint, copy guard, TypeScript, 48 tests, production build, and PWA validation.
 - The local Logics Manager source checkout reported `i18n: valid` without modifying the global installation.
 - `logics-manager flow validate task_011_orchestrate_completion_of_editor_localization --fixable --explain` returned zero findings before closeout.
+- Post-push CI exposed a WebKit-only contrast violation on a focused header tooltip behind the settings modal; hiding background tooltips while a modal is active makes the targeted WebKit accessibility E2E pass.
 - The global audit still reports historical stale/closure findings in unrelated workflow chains; this task introduces no targeted audit finding.
 
 # Report
