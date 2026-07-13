@@ -3,7 +3,7 @@
 > Date: 2026-07-13
 > Status: Proposed
 > Related request: `req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs`
-> Related backlog: `item_060_migrate_editor_prompt_preview_and_accessibility_chrome`, `item_061_migrate_settings_and_provider_control_product_copy`, `item_062_migrate_export_and_changelog_dialog_chrome`, `item_063_enforce_catalog_coverage_and_close_the_editor_migration`
+> Related backlog: `item_060_migrate_editor_prompt_preview_and_accessibility_chrome`
 > Related task: `task_011_orchestrate_completion_of_editor_localization`
 > Related architecture: (none yet)
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
@@ -56,5 +56,5 @@ flowchart LR
 
 # References
 
-- Product back-reference: `req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs`
+- Product back-reference: `item_060_migrate_editor_prompt_preview_and_accessibility_chrome`
 - Task back-reference: `task_011_orchestrate_completion_of_editor_localization`

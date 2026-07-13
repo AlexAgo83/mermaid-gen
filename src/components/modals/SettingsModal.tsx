@@ -2,11 +2,7 @@ import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import type { RefObject } from "react";
 import "./modal-shared.css";
 import "./SettingsModal.css";
-import {
-  ANTHROPIC_BROWSER_WARNING,
-  PROVIDERS,
-  type ProviderId,
-} from "@/lib/llm";
+import { PROVIDERS, type ProviderId } from "@/lib/llm";
 import type { ProviderSettings } from "@/lib/app-types";
 import { getNextWrappedRadioValue } from "@/lib/radio-group";
 import { t } from "@/i18n";
@@ -94,13 +90,17 @@ export function SettingsModal({
         <div className="modal-scroll-content">
           <div className="panel-header">
             <div>
-              <h2 id="settings-title">Settings</h2>
-              <p className="panel-subtitle">
-                Choose the active provider, keep keys local to this browser, and
-                review app release notes.
-              </p>
+              <h2 id="settings-title">{t("settings.title")}</h2>
+              <p className="panel-subtitle">{t("settings.subtitle")}</p>
             </div>
-            <span>{savedProviderCount} provider keys saved locally</span>
+            <span>
+              {t(
+                savedProviderCount === 1
+                  ? "settings.savedKeyCount.one"
+                  : "settings.savedKeyCount.other",
+                { count: savedProviderCount },
+              )}
+            </span>
           </div>
 
           <form className="settings-form" onSubmit={onSave}>
@@ -108,7 +108,7 @@ export function SettingsModal({
               <div
                 className="settings-provider-nav"
                 role="radiogroup"
-                aria-label="Provider"
+                aria-label={t("settings.providerGroup")}
               >
                 {PROVIDERS.map((provider) => {
                   const hasKey =
@@ -146,7 +146,9 @@ export function SettingsModal({
                         {provider.description}
                       </span>
                       <span className="provider-nav-status">
-                        {hasKey ? "Key saved locally" : "No key saved"}
+                        {hasKey
+                          ? t("settings.keySaved")
+                          : t("settings.keyMissing")}
                       </span>
                     </button>
                   );
@@ -169,15 +171,15 @@ export function SettingsModal({
                   >
                     {settingsDraft.providerKeys[activeProvider.id].trim()
                       .length > 0
-                      ? "Ready on this device"
-                      : "Needs a local key"}
+                      ? t("settings.providerReady")
+                      : t("settings.providerNeedsKey")}
                   </span>
                 </div>
 
                 <div className="settings-provider-detail-body">
                   {activeProvider.id === "anthropic" ? (
                     <p className="settings-provider-warning" role="alert">
-                      {ANTHROPIC_BROWSER_WARNING}
+                      {t("settings.browserWarning")}
                     </p>
                   ) : null}
                   <label className="settings-field" htmlFor="provider-key">
@@ -200,13 +202,13 @@ export function SettingsModal({
                       onKeyDown={onDismissEscape}
                     />
                     <button type="button" onClick={onToggleKeyVisibility}>
-                      {isDraftKeyVisible ? "Hide" : "Reveal"}
+                      {isDraftKeyVisible
+                        ? t("settings.hideKey")
+                        : t("settings.revealKey")}
                     </button>
                   </div>
                   <p className="settings-help">
-                    Keys stay on this device in local browser storage. You can
-                    keep multiple provider keys and switch the active provider
-                    without losing the others.
+                    {t("settings.keyStorageHelp")}
                   </p>
                 </div>
               </div>
@@ -220,7 +222,7 @@ export function SettingsModal({
                     onRemoveProviderKey(activeProvider.id);
                   }}
                 >
-                  Remove key
+                  {t("settings.removeKey")}
                 </button>
                 <button type="button" onClick={onReopenOnboarding}>
                   {t("settings.reopenOnboarding")}

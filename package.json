@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test --reporter=line",
     "quality:pwa": "node scripts/quality/check-pwa-build-artifacts.mjs",
-    "ci:local": "npm run lint && npm run typecheck && npm run test && npm run build && npm run quality:pwa"
+    "quality:i18n-copy": "node scripts/quality/check-i18n-copy.mjs",
+    "ci:local": "npm run lint && npm run quality:i18n-copy && npm run typecheck && npm run test && npm run build && npm run quality:pwa"
   },
   "dependencies": {
     "mermaid": "^11.12.0",

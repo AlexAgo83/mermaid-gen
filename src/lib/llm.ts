@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export const PROVIDER_IDS = [
   "openai",
   "openrouter",
@@ -88,7 +90,7 @@ function getProvider(providerId: ProviderId) {
   const provider = PROVIDERS.find((candidate) => candidate.id === providerId);
 
   if (!provider) {
-    throw new Error(`Unsupported provider: ${providerId}`);
+    throw new Error(t("prompt.providerUnsupported", { provider: providerId }));
   }
 
   return provider;
@@ -171,7 +173,11 @@ async function generateWithOpenAiCompatibleApi({
 
   if (!response.ok) {
     throw new Error(
-      `${providerLabel} request failed (${response.status}). ${await readError(response)}`,
+      t("prompt.providerRequestFailed", {
+        provider: providerLabel,
+        status: response.status,
+        detail: await readError(response),
+      }),
     );
   }
 
@@ -191,7 +197,9 @@ async function generateWithOpenAiCompatibleApi({
   const content = extractAssistantText(payload.choices?.[0]?.message?.content);
 
   if (!content) {
-    throw new Error(`${providerLabel} returned an empty response.`);
+    throw new Error(
+      t("prompt.providerEmptyResponse", { provider: providerLabel }),
+    );
   }
 
   return stripCodeFence(content);
@@ -231,7 +239,10 @@ async function generateWithAnthropic({
   } catch (error) {
     if (error instanceof TypeError) {
       throw new Error(
-        `Anthropic browser requests are blocked by CORS. ${ANTHROPIC_BROWSER_WARNING}`,
+        t("prompt.providerBrowserBlocked", {
+          provider: "Anthropic",
+          detail: ANTHROPIC_BROWSER_WARNING,
+        }),
       );
     }
 
@@ -240,7 +251,11 @@ async function generateWithAnthropic({
 
   if (!response.ok) {
     throw new Error(
-      `Anthropic request failed (${response.status}). ${await readError(response)}`,
+      t("prompt.providerRequestFailed", {
+        provider: "Anthropic",
+        status: response.status,
+        detail: await readError(response),
+      }),
     );
   }
 
@@ -258,7 +273,9 @@ async function generateWithAnthropic({
     .trim();
 
   if (!content) {
-    throw new Error("Anthropic returned an empty response.");
+    throw new Error(
+      t("prompt.providerEmptyResponse", { provider: "Anthropic" }),
+    );
   }
 
   return stripCodeFence(content);
@@ -323,6 +340,10 @@ export async function generateMermaidFromPrompt({
         providerLabel: provider.label,
       });
     default:
-      throw new Error(`Unsupported provider: ${providerId satisfies never}`);
+      throw new Error(
+        t("prompt.providerUnsupported", {
+          provider: providerId satisfies never,
+        }),
+      );
   }
 }

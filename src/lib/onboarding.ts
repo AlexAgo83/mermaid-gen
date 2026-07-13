@@ -1,35 +1,32 @@
+import { t } from "@/i18n";
+
 export const ONBOARDING_STATE_STORAGE_KEY = "mermaid-gen.onboarding-state";
 
 export const ONBOARDING_STEPS = [
   {
-    title: "Welcome",
-    body: "Mermaid Generator keeps the whole diagram loop in one browser workspace: write or describe, review the result, then export a clean asset.",
-    detail:
-      "The preview stays primary so you can judge structure quickly without losing the underlying Mermaid source.",
+    title: t("onboarding.welcome.title"),
+    body: t("onboarding.welcome.body"),
+    detail: t("onboarding.welcome.detail"),
   },
   {
-    title: "Code editor",
-    body: "The Mermaid source remains the artifact you control. Paste existing Mermaid or refine generated output directly in the editor.",
-    detail:
-      "Every preview and export comes from this source, so manual edits stay first-class.",
+    title: t("onboarding.editor.title"),
+    body: t("onboarding.editor.body"),
+    detail: t("onboarding.editor.detail"),
   },
   {
-    title: "Prompt",
-    body: "Use the prompt panel when you want a first draft from text. Pick a provider in Settings, save its key locally, then generate Mermaid without leaving the app.",
-    detail:
-      "The generated output is still editable, so AI stays a starting point rather than a black box.",
+    title: t("onboarding.prompt.title"),
+    body: t("onboarding.prompt.body"),
+    detail: t("onboarding.prompt.detail"),
   },
   {
-    title: "Preview",
-    body: "Review the diagram in the large preview stage. Fit the diagram, zoom, pan, or switch into preview focus when you want a cleaner review surface.",
-    detail:
-      "Hold Shift while scrolling to zoom and drag the stage to move around larger diagrams.",
+    title: t("onboarding.preview.title"),
+    body: t("onboarding.preview.body"),
+    detail: t("onboarding.preview.detail"),
   },
   {
-    title: "Export",
-    body: "When the diagram is ready, open Export to choose SVG or PNG and, for PNG, the raster scale before downloading.",
-    detail:
-      "Exports always use the full rendered diagram rather than the current zoom position.",
+    title: t("onboarding.export.title"),
+    body: t("onboarding.export.body"),
+    detail: t("onboarding.export.detail"),
   },
 ] as const;
 

@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export type SvgMetrics = {
   width: number;
   height: number;
@@ -16,8 +18,7 @@ export type GeneratedMermaidValidationResult =
       error: string;
     };
 
-export const GENERATED_MERMAID_VALIDATION_ERROR =
-  "The generated Mermaid could not be validated. Your current diagram was kept unchanged. Refine the prompt and try again.";
+export const GENERATED_MERMAID_VALIDATION_ERROR = t("prompt.validationFailed");
 
 const UNSAFE_SVG_TAGS = [
   "script",

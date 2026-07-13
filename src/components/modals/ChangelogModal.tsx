@@ -70,10 +70,8 @@ export function ChangelogModal({
         <div className="modal-scroll-content">
           <div className="panel-header">
             <div>
-              <h2 id="changelog-title">Changelog history</h2>
-              <p className="panel-subtitle">
-                Review shipped releases without leaving the workspace.
-              </p>
+              <h2 id="changelog-title">{t("changelog.title")}</h2>
+              <p className="panel-subtitle">{t("changelog.subtitle")}</p>
             </div>
             <button type="button" onClick={onClose}>
               {t("common.close")}
@@ -81,7 +79,7 @@ export function ChangelogModal({
           </div>
 
           {isLoading ? (
-            <p className="settings-help">Loading changelog history…</p>
+            <p className="settings-help">{t("changelog.loading")}</p>
           ) : null}
           {error ? <p className="prompt-error">{error}</p> : null}
 

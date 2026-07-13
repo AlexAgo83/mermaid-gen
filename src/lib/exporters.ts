@@ -1,4 +1,5 @@
 import type { SvgMetrics } from "@/lib/mermaid";
+import { t } from "@/i18n";
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -36,7 +37,7 @@ export async function downloadDiagramAsPng(
     image.onload = () => resolve();
     image.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error("PNG export failed to load SVG."));
+      reject(new Error(t("export.pngLoadFailed")));
     };
     image.src = url;
   });
@@ -48,7 +49,7 @@ export async function downloadDiagramAsPng(
 
   if (!context) {
     URL.revokeObjectURL(url);
-    throw new Error("PNG export failed to create a canvas context.");
+    throw new Error(t("export.canvasFailed"));
   }
 
   context.setTransform(scale, 0, 0, scale, 0, 0);
@@ -61,7 +62,7 @@ export async function downloadDiagramAsPng(
   URL.revokeObjectURL(url);
 
   if (!pngBlob) {
-    throw new Error("PNG export failed to create an image blob.");
+    throw new Error(t("export.blobFailed"));
   }
 
   downloadBlob(pngBlob, `${filename}.png`);

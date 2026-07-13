@@ -1,6 +1,7 @@
 import type { PointerEvent as ReactPointerEvent, RefObject } from "react";
 import type { RenderState } from "@/lib/app-types";
 import { MinusIcon, PlusIcon } from "@/components/icons";
+import { t } from "@/i18n";
 
 type PreviewPanelProps = {
   isPreviewFocused: boolean;
@@ -41,11 +42,11 @@ export function PreviewPanel({
         <div className="panel-header preview-header">
           <div className="panel-heading-group">
             <div className="title-row">
-              <h2>Preview</h2>
+              <h2>{t("preview.title")}</h2>
               <button
                 type="button"
                 className="help-trigger"
-                aria-label="Show preview help"
+                aria-label={t("preview.showHelp")}
                 aria-expanded={isPreviewHelpOpen}
                 onClick={onTogglePreviewHelp}
               >
@@ -72,7 +73,7 @@ export function PreviewPanel({
         onPointerCancel={onPointerUp}
       >
         {isRendering ? (
-          <div className="preview-message">Rendering Mermaid preview…</div>
+          <div className="preview-message">{t("preview.rendering")}</div>
         ) : null}
 
         {renderState.status === "error" && !isRendering ? (
@@ -97,12 +98,12 @@ export function PreviewPanel({
 
         <div
           className="preview-stage-controls"
-          aria-label="Preview zoom controls"
+          aria-label={t("preview.zoomControls")}
         >
           <button
             type="button"
             className="preview-stage-control"
-            aria-label="Zoom out"
+            aria-label={t("preview.zoomOut")}
             onClick={onZoomOut}
             disabled={!canExport}
           >
@@ -111,7 +112,7 @@ export function PreviewPanel({
           <button
             type="button"
             className="preview-stage-control"
-            aria-label="Zoom in"
+            aria-label={t("preview.zoomIn")}
             onClick={onZoomIn}
             disabled={!canExport}
           >

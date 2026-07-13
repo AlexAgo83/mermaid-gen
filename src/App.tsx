@@ -15,6 +15,7 @@ import { PreviewPanel } from "@/components/workspace/PreviewPanel";
 import { useChangelog } from "@/hooks/useChangelog";
 import { useExport } from "@/hooks/useExport";
 import { usePreviewInteraction } from "@/hooks/usePreviewInteraction";
+import { t } from "@/i18n";
 import type {
   OnboardingState,
   ProviderSettings,
@@ -62,15 +63,6 @@ const ChangelogModal = lazy(async () => {
   return { default: module.ChangelogModal };
 });
 
-const HELP_COPY = {
-  source:
-    "Paste Mermaid directly or keep refining the current draft. This source stays canonical, so preview and export always derive from it.",
-  prompt:
-    "Turn a short brief into Mermaid with your selected provider. The selected provider returns Mermaid that replaces the current editor content.",
-  preview:
-    "Use preview as the review surface. Hold Shift while scrolling to zoom, drag to pan, and export the full diagram rather than the current viewport framing.",
-} as const;
-
 function loadInitialSource() {
   return loadSharedMermaidSourceFromLocation() ?? DEFAULT_MERMAID_SOURCE;
 }
@@ -83,11 +75,11 @@ function describeDiagramBalance(metrics: SvgMetrics) {
   const ratio = metrics.width / metrics.height;
 
   if (ratio > 3.4) {
-    return "This generated diagram is very wide. Ask for grouped stages or shorter labels if you want a more balanced export.";
+    return t("prompt.wideDiagram");
   }
 
   if (ratio < 0.38) {
-    return "This generated diagram is very tall. Ask for fewer stacked levels or broader grouping if you want a more balanced export.";
+    return t("prompt.tallDiagram");
   }
 
   return null;
@@ -100,16 +92,14 @@ function getProvider(providerId: ProviderId) {
 function getRenderErrorCopy(sourceOrigin: SourceOrigin): RenderErrorCopy {
   if (sourceOrigin === "generated") {
     return {
-      title: "Generated Mermaid needs another pass",
-      message:
-        "This generated draft could not be rendered. Refine the prompt or edit the source directly, then try again.",
+      title: t("prompt.generatedRenderTitle"),
+      message: t("prompt.generatedRenderMessage"),
     };
   }
 
   return {
-    title: "Preview unavailable",
-    message:
-      "This Mermaid source could not be rendered. Review the editor content and correct the syntax to restore the preview.",
+    title: t("prompt.manualRenderTitle"),
+    message: t("prompt.manualRenderMessage"),
   };
 }
 
@@ -373,9 +363,7 @@ function App() {
       setSource(preparedSource.source);
     } catch (error) {
       setPromptError(
-        error instanceof Error
-          ? error.message
-          : "Unable to generate Mermaid from this prompt.",
+        error instanceof Error ? error.message : t("prompt.generationFailed"),
       );
     } finally {
       setIsGenerating(false);
@@ -423,11 +411,11 @@ function App() {
             <div className="panel-header">
               <div className="panel-heading-group">
                 <div className="title-row">
-                  <h2 id="editor-title">Mermaid source</h2>
+                  <h2 id="editor-title">{t("editor.title")}</h2>
                   <button
                     type="button"
                     className="help-trigger"
-                    aria-label="Show Mermaid source help"
+                    aria-label={t("editor.showHelp")}
                     aria-expanded={helpTopic === "source"}
                     onClick={() => {
                       setHelpTopic((current) =>
@@ -440,11 +428,18 @@ function App() {
                 </div>
                 {helpTopic === "source" ? (
                   <div className="help-popover" role="note">
-                    {HELP_COPY.source}
+                    {t("editor.help")}
                   </div>
                 ) : null}
               </div>
-              <span>{source.split("\n").length} lines</span>
+              <span>
+                {t(
+                  source.split("\n").length === 1
+                    ? "editor.lineCount.one"
+                    : "editor.lineCount.other",
+                  { count: source.split("\n").length },
+                )}
+              </span>
             </div>
             <div className="editor-surface">
               <textarea
@@ -465,11 +460,11 @@ function App() {
             <div className="panel-header">
               <div className="panel-heading-group">
                 <div className="title-row">
-                  <h2 id="prompt-title">Prompt draft</h2>
+                  <h2 id="prompt-title">{t("prompt.title")}</h2>
                   <button
                     type="button"
                     className="help-trigger"
-                    aria-label="Show prompt help"
+                    aria-label={t("prompt.showHelp")}
                     aria-expanded={helpTopic === "prompt"}
                     onClick={() => {
                       setHelpTopic((current) =>
@@ -482,14 +477,18 @@ function App() {
                 </div>
                 {helpTopic === "prompt" ? (
                   <div className="help-popover" role="note">
-                    {HELP_COPY.prompt}
+                    {t("prompt.help")}
                   </div>
                 ) : null}
               </div>
               <span>
                 {hasActiveProviderKey
-                  ? `${activeProvider.label} ready`
-                  : `Set up ${activeProvider.label}`}
+                  ? t("prompt.providerReady", {
+                      provider: activeProvider.label,
+                    })
+                  : t("prompt.providerSetup", {
+                      provider: activeProvider.label,
+                    })}
               </span>
             </div>
             <textarea
@@ -499,7 +498,7 @@ function App() {
               onChange={(event) => {
                 setPrompt(event.target.value);
               }}
-              placeholder="Describe a system, process, or architecture to generate Mermaid from text."
+              placeholder={t("prompt.placeholder")}
               disabled={!hasActiveProviderKey || isGenerating}
             />
             {hasActiveProviderKey ? (
@@ -513,8 +512,10 @@ function App() {
                   disabled={prompt.trim().length === 0 || isGenerating}
                 >
                   {isGenerating
-                    ? "Generating…"
-                    : `Generate with ${activeProvider.label}`}
+                    ? t("prompt.generating")
+                    : t("prompt.generateWith", {
+                        provider: activeProvider.label,
+                      })}
                 </button>
                 <div className="prompt-feedback">
                   <div className="prompt-indicators">
@@ -523,7 +524,7 @@ function App() {
                         <button
                           type="button"
                           className="warning-trigger"
-                          aria-label="Show generation warning"
+                          aria-label={t("prompt.showWarning")}
                           aria-expanded={isGenerationWarningOpen}
                           onClick={() => {
                             setIsGenerationWarningOpen((current) => !current);
@@ -543,7 +544,7 @@ function App() {
                         <button
                           type="button"
                           className="warning-trigger warning-trigger-error"
-                          aria-label="Show prompt generation error"
+                          aria-label={t("prompt.showError")}
                           aria-expanded={isPromptErrorOpen}
                           onClick={() => {
                             setIsPromptErrorOpen((current) => !current);
@@ -566,11 +567,10 @@ function App() {
               </div>
             ) : (
               <div className="prompt-locked">
-                Add a {activeProvider.label} API key in Settings to unlock
-                prompt-based generation on this device.
+                {t("prompt.locked", { provider: activeProvider.label })}
                 <div className="prompt-locked-actions">
                   <button type="button" onClick={openSettings}>
-                    Configure provider
+                    {t("prompt.configureProvider")}
                   </button>
                 </div>
               </div>
@@ -581,7 +581,7 @@ function App() {
         <PreviewPanel
           isPreviewFocused={isPreviewFocused}
           isPreviewHelpOpen={helpTopic === "preview"}
-          previewHelp={HELP_COPY.preview}
+          previewHelp={t("preview.help")}
           renderState={renderState}
           isRendering={isRendering}
           previewRef={previewInteraction.previewRef}
@@ -611,7 +611,7 @@ function App() {
           target="_blank"
           rel="noreferrer"
         >
-          Mermaid Generator v{__APP_VERSION__} © 2026
+          {t("footer.attribution", { version: __APP_VERSION__ })}
         </a>
       </footer>
 

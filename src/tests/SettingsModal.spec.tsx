@@ -58,15 +58,13 @@ describe("SettingsModal", () => {
       screen.getByRole("dialog", { name: "Settings" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("1 provider keys saved locally"),
+      screen.getByText("1 provider key saved locally"),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Anthropic" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /Anthropic blocks direct browser calls from arbitrary origins/i,
-      ),
+      screen.getByText(/Direct browser calls for this provider are blocked/i),
     ).toBeInTheDocument();
     expect(screen.getByDisplayValue("sk-ant-123")).toHaveAttribute(
       "type",

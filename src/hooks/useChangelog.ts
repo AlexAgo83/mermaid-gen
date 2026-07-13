@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import type { ChangelogEntry } from "@/lib/changelog";
 import { loadChangelogEntries } from "@/lib/changelog";
+import { t } from "@/i18n";
 
 export function useChangelog() {
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
@@ -25,7 +26,7 @@ export function useChangelog() {
         setChangelogEntries(entries);
       })
       .catch(() => {
-        setChangelogError("Unable to load changelog history right now.");
+        setChangelogError(t("changelog.loadFailed"));
       })
       .finally(() => {
         isRequestInFlightRef.current = false;

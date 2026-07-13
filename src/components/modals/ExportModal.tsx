@@ -103,10 +103,8 @@ export function ExportModal({
         <div className="modal-scroll-content">
           <div className="panel-header">
             <div>
-              <h2 id="export-title">Export diagram</h2>
-              <p className="panel-subtitle">
-                Choose the output format and raster scale before downloading.
-              </p>
+              <h2 id="export-title">{t("export.title")}</h2>
+              <p className="panel-subtitle">{t("export.subtitle")}</p>
             </div>
           </div>
 
@@ -114,7 +112,7 @@ export function ExportModal({
             <div
               className="export-options"
               role="radiogroup"
-              aria-label="Export format"
+              aria-label={t("export.formatGroup")}
             >
               <button
                 type="button"
@@ -132,7 +130,7 @@ export function ExportModal({
               >
                 <span className="provider-card-label">SVG</span>
                 <span className="provider-card-copy">
-                  Vector export for docs and further editing.
+                  {t("export.svgDescription")}
                 </span>
               </button>
               <button
@@ -151,7 +149,7 @@ export function ExportModal({
               >
                 <span className="provider-card-label">PNG</span>
                 <span className="provider-card-copy">
-                  Raster export with selectable output scale.
+                  {t("export.pngDescription")}
                 </span>
               </button>
             </div>
@@ -160,7 +158,7 @@ export function ExportModal({
               <div
                 className="scale-picker"
                 role="radiogroup"
-                aria-label="PNG scale"
+                aria-label={t("export.scaleGroup")}
               >
                 {exportScales.map((scale) => (
                   <button
@@ -186,17 +184,18 @@ export function ExportModal({
 
             {renderState.status === "ready" ? (
               <p className="settings-help">
-                Source diagram: {Math.round(renderState.metrics.width)} x{" "}
-                {Math.round(renderState.metrics.height)} px
+                {t("export.sourceSize", {
+                  width: Math.round(renderState.metrics.width),
+                  height: Math.round(renderState.metrics.height),
+                })}
                 {exportSize && exportFormat === "png"
-                  ? ` · PNG output: ${exportSize.width} x ${exportSize.height} px`
+                  ? t("export.pngOutputSize", exportSize)
                   : ""}
               </p>
             ) : null}
 
             <p className="settings-help export-share-copy">
-              Copy a share link when you want this Mermaid source to reopen with
-              the editor prefilled and the preview already in sync.
+              {t("export.shareHelp")}
             </p>
 
             {exportError ? <p className="prompt-error">{exportError}</p> : null}

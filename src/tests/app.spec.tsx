@@ -110,9 +110,7 @@ describe("App foundation shell", () => {
     );
 
     expect(
-      screen.getByText(
-        /Anthropic blocks direct browser calls from arbitrary origins/i,
-      ),
+      screen.getByText(/Direct browser calls for this provider are blocked/i),
     ).toBeInTheDocument();
   });
 

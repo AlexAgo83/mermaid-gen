@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import type { ExportFormat, RenderState } from "@/lib/app-types";
 import { downloadDiagramAsPng, downloadDiagramAsSvg } from "@/lib/exporters";
 import { buildSharedMermaidUrl } from "@/lib/share";
+import { t } from "@/i18n";
 
 export function useExport(renderState: RenderState, source: string) {
   const [isExportOpen, setIsExportOpen] = useState(false);
@@ -69,9 +70,7 @@ export function useExport(renderState: RenderState, source: string) {
       setIsExportOpen(false);
     } catch (error) {
       setExportError(
-        error instanceof Error
-          ? error.message
-          : "Unable to export the diagram.",
+        error instanceof Error ? error.message : t("export.failed"),
       );
     } finally {
       setIsExporting(false);
@@ -84,7 +83,7 @@ export function useExport(renderState: RenderState, source: string) {
       typeof navigator === "undefined" ||
       typeof navigator.clipboard?.writeText !== "function"
     ) {
-      setExportError("Clipboard access is unavailable for share links.");
+      setExportError(t("export.clipboardUnavailable"));
       return;
     }
 
@@ -94,9 +93,9 @@ export function useExport(renderState: RenderState, source: string) {
     try {
       const shareUrl = buildSharedMermaidUrl(source, window.location);
       await navigator.clipboard.writeText(shareUrl);
-      setShareToastMessage("Share link copied to clipboard.");
+      setShareToastMessage(t("export.shareCopied"));
     } catch {
-      setExportError("Unable to copy the share link right now.");
+      setExportError(t("export.shareCopyFailed"));
     } finally {
       setIsShareLinkCopying(false);
     }

@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export type ChangelogEntry = {
   version: string;
   slug: string;
@@ -197,7 +199,7 @@ export async function loadChangelogEntries() {
       return normalizeChangelogEntry({
         version,
         slug: `v${version}`,
-        title: `Version ${version}`,
+        title: t("changelog.versionTitle", { version }),
         body,
       });
     }),
