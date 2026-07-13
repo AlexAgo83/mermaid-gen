@@ -2,75 +2,24 @@
 
 This file defines the working context for Codex in this repository.
 
-## Language
-
-Use English for all communication, code comments, and documentation.
-
 ## Workflow
 
-The `logics` folder defines a lightweight product flow:
+Use the canonical `logics-manager` CLI to create, promote, start, and finish Logics docs:
 
-- `logics/architecture`: Architecture notes, decisions, and diagrams.
-- `logics/product`: Product briefs and product decision framing docs.
-- `logics/request`: Incoming requests or ideas (problem statement + context).
-- `logics/backlog`: Scoped items with acceptance criteria + priority.
-- `logics/tasks`: Execution plans derived from backlog items (plan + progress + validation).
-- `logics/specs`: Lightweight functional specs derived from backlog/tasks.
-- `logics/external`: Generated artifacts (images, exports) that don't fit other logics folders.
+- `python3 -m logics_manager flow new request --title "..."`
+- `python3 -m logics_manager flow promote request-to-backlog logics/request/req_NNN_*.md`
+- `python3 -m logics_manager flow start logics/tasks/task_NNN_*.md --owner "$LOGICS_AGENT"`
+- `python3 -m logics_manager flow progress task logics/tasks/task_NNN_*.md --progress <n>%`
+- `python3 -m logics_manager flow finish task logics/tasks/task_NNN_*.md`
+- `python3 -m logics_manager lint --require-status`
+- `python3 -m logics_manager audit --legacy-cutoff-version 1.1.0 --group-by-doc`
 
-## Indicators
+Bundled agent skills (e.g. `/corpus` for scaffolding a full request chain) can be installed once per machine with `logics-manager skills install`.
 
-Use the following indicators in request/backlog/task items:
+Claude runtime artifacts are generated outside the repository from the integrated runtime.
+Do not edit generated runtime artifacts by hand unless you are deliberately repairing a generated artifact.
 
-- `From version: X.X.X` : The version when the need was first identified.
-- `Understanding: ??%` : Your estimated understanding of the need.
-- `Confidence: ??%` : Your confidence in solving the need.
-- `Progress: ??%` : Your progress toward completing the backlog item or task.
-- `Complexity: Low | Medium | High` : Effort/complexity classification.
-- `Theme: Combat | Items | Economy | UI | ...` : High-level theme/epic tag.
-
-Use the following indicators in product briefs:
-
-- `Date: YYYY-MM-DD` : The last meaningful framing date for this brief.
-- `Status: Draft | Proposed | Active | Validated | Rejected | Superseded | Archived` : Product maturity of the brief.
-- `Related request:` : Primary linked request ref when available.
-- `Related backlog:` : Primary linked backlog ref when available.
-- `Related task:` : Primary linked task ref when available.
-- `Related architecture:` : Linked ADR ref when the product framing depends on a technical decision.
-- `Reminder:` : Short maintenance instruction to keep the brief current.
-- Keep linked managed docs mirrored under `# References` as backticked relative paths, not only in indicator prose.
-
-Use the following indicators in architecture docs:
-
-- `Date: YYYY-MM-DD` : The date of the current ADR revision.
-- `Status: Draft | Proposed | Accepted | Rejected | Superseded | Archived` : Decision state.
-- `Drivers:` : Main technical or operational drivers behind the decision.
-- `Related request:` : Primary linked request ref when available.
-- `Related backlog:` : Primary linked backlog ref when available.
-- `Related task:` : Primary linked task ref when available.
-- `Reminder:` : Short maintenance instruction to keep the ADR current.
-- Keep linked managed docs mirrored under `# References` as backticked relative paths, not only in indicator prose.
-
-## Automation
-
-This repository uses a reusable Logics skills kit (usually imported as a submodule under `logics/skills/`).
-Canonical examples use `python ...`; if your environment only exposes `python3` or `py -3`, use that equivalent launcher instead.
-
-- Create/promote request/backlog/task docs: `python logics/skills/logics-flow-manager/scripts/logics_flow.py`
-- Lint Logics docs: `python logics/skills/logics-doc-linter/scripts/logics_lint.py`
-- Bootstrap folders (this script): `python logics/skills/logics-bootstrapper/scripts/logics_bootstrap.py`
-
-## MCP
-
-Available MCP skills include:
-
-- Chrome DevTools: `logics/skills/logics-mcp-chrome-devtools/SKILL.md`
-- Terminal: `logics/skills/logics-mcp-terminal/SKILL.md`
-- Figma: `logics/skills/logics-mcp-figma/SKILL.md`
-- Linear: `logics/skills/logics-mcp-linear/SKILL.md`
-- Notion: `logics/skills/logics-mcp-notion/SKILL.md`
-
-## Validation
-
-Project validation commands are project-specific.
-Add the relevant ones to task docs under `# Validation` (tests/lint/build/typecheck).
+Do not edit indicator lines, owner assignments, or workflow links by hand.
+During task execution, treat meaningful waves as ADR 009 checkpoints: update affected Logics docs inside the wave and leave the repo commit-ready; actual commits stay under operator control.
+When grooming or creating backlog items, set a deliberate `# Priority` tier (`High`, `Medium`, or `Low`) with a one-line rationale instead of leaving the default unreviewed.
+Sequence delivery plans and roadmaps by status priority order before lower-priority work when dependencies allow.
