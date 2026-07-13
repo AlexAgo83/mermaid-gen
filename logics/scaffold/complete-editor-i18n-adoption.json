@@ -1,0 +1,176 @@
+{
+  "title": "Complete semantic i18n adoption across editor and supporting dialogs",
+  "references": [
+    "src/App.tsx",
+    "src/components/PreviewPanel.tsx",
+    "src/components/SettingsModal.tsx",
+    "src/components/ExportModal.tsx",
+    "src/components/ChangelogModal.tsx"
+  ],
+  "request": {
+    "complexity": "Medium",
+    "theme": "Internationalization contract adoption",
+    "needs": [
+      "All remaining editor, preview, settings, export, and changelog product copy must use stable semantic catalog keys.",
+      "Dynamic warnings, errors, rendering states, export summaries, and provider states must use named placeholders.",
+      "Diagram source, prompts, generated diagrams, provider identity and credentials, file names, and changelog entry bodies must remain data.",
+      "The repository must enforce locale and placeholder parity and prevent new hardcoded product copy."
+    ],
+    "context": [
+      "An initial convention slice established the repository i18n contract and migrated representative navigation copy.",
+      "The main editor still contains hardcoded labels, prompt guidance, placeholders, warnings, errors, and accessibility help.",
+      "Preview controls expose hardcoded rendering, zoom, and help states.",
+      "Settings, export, and changelog dialogs contain product headings, controls, statuses, confirmations, and accessibility attributes.",
+      "Provider names and descriptions may be configured or supplied externally; API keys and credentials are sensitive data; diagram source, prompts, generated output, and changelog entries are content rather than catalog copy."
+    ],
+    "acceptance_criteria": [
+      "AC1: Editor, preview, settings, export, and changelog surfaces render all product-owned visible and accessibility copy from stable semantic keys with locale parity.",
+      "AC2: Dynamic messages use named placeholders and locale-aware formatting with no sentence-shaped or rendered-value keys.",
+      "AC3: Diagram source, prompts, generated output, provider data, credentials, file names, and changelog entry content remain untranslated and are covered by boundary tests.",
+      "AC4: A static inventory and guard detect newly hardcoded product copy outside a narrow reviewed allowlist.",
+      "AC5: Contract validation, unit and UI tests, type checks, and production build pass for every supported locale."
+    ]
+  },
+  "product": {
+    "title": "Complete localized diagram editing experience",
+    "overview": "Extend semantic localization to the complete editing workflow and its supporting dialogs while preserving authored, generated, configured, and sensitive values as data.",
+    "goals": [
+      "Catalog every stable editor and dialog label, action, state, and accessibility description.",
+      "Use explicit placeholders for dynamic rendering, provider, and export feedback.",
+      "Keep authored and generated diagram content outside translation catalogs.",
+      "Make localization completeness part of routine repository validation."
+    ],
+    "non_goals": [
+      "Translating diagram source, prompts, generated diagrams, file names, provider data, credentials, or changelog entry bodies.",
+      "Changing generation, rendering, export, storage, or provider behavior.",
+      "Adding new locales or a translation-management service.",
+      "Redesigning editor or modal layouts."
+    ]
+  },
+  "backlog_items": [
+    {
+      "title": "Migrate editor, prompt, preview, and accessibility chrome",
+      "priority": "High",
+      "complexity": "Medium",
+      "theme": "Internationalization contract adoption",
+      "request_acs": ["AC1", "AC2", "AC3", "AC5"],
+      "problem": [
+        "The core editing workflow still embeds product labels, guidance, warnings, errors, rendering states, zoom controls, and assistive descriptions in components.",
+        "Those strings surround authored and generated diagram content that must never be translated."
+      ],
+      "scope_in": [
+        "Migrate editor headings, prompt labels and guidance, placeholders, warnings, error framing, help text, preview states, zoom controls, actions, and accessibility attributes.",
+        "Use named placeholders for line or parse references, counts, zoom values, timing, and generation or rendering results.",
+        "Keep source text, prompts, generated diagram syntax, parser excerpts, and user-selected content as runtime data.",
+        "Add state-focused UI and accessibility tests for both locales."
+      ],
+      "scope_out": [
+        "Translation or modification of diagram source, prompts, generated output, or parser-provided excerpts.",
+        "Changes to editing, generation, or rendering behavior."
+      ],
+      "acceptance_criteria": [
+        "AC1: Core editor and preview product chrome is fully catalog-driven.",
+        "AC2: Dynamic feedback uses named placeholders and locale-aware formatting.",
+        "AC3: Authored and generated content remains byte-for-byte identical across locale switches.",
+        "AC4: UI and accessibility tests cover idle, generating, rendering, warning, and error states."
+      ]
+    },
+    {
+      "title": "Migrate settings and provider-control product copy",
+      "priority": "High",
+      "complexity": "Medium",
+      "theme": "Internationalization contract adoption",
+      "request_acs": ["AC1", "AC2", "AC3", "AC5"],
+      "problem": [
+        "Settings controls embed headings, instructions, statuses, credential actions, confirmations, and accessibility labels.",
+        "Provider metadata and credentials require a strict boundary from catalog-owned product copy."
+      ],
+      "scope_in": [
+        "Migrate settings headings, field labels, guidance, provider-state framing, credential visibility and removal actions, confirmations, errors, and accessibility attributes.",
+        "Use named placeholders for provider references and status results while passing provider metadata as data.",
+        "Keep provider names and descriptions configurable and never catalog credentials, API keys, endpoints, or user-entered values.",
+        "Add tests for missing, configured, revealed, hidden, invalid, and removed credential states without exposing secret values."
+      ],
+      "scope_out": [
+        "Changes to credential storage or provider integration.",
+        "Translation of provider brands, configured descriptions, endpoints, or secrets."
+      ],
+      "acceptance_criteria": [
+        "AC1: Settings product chrome uses semantic keys in every locale.",
+        "AC2: Provider statuses use named placeholders without turning provider metadata into keys.",
+        "AC3: No credential value is added to a catalog, log, fixture snapshot, or translation diagnostic.",
+        "AC4: Settings state tests pass in all supported locales."
+      ]
+    },
+    {
+      "title": "Migrate export and changelog dialog chrome",
+      "priority": "High",
+      "complexity": "Low",
+      "theme": "Internationalization contract adoption",
+      "request_acs": ["AC1", "AC2", "AC3", "AC5"],
+      "problem": [
+        "Export and changelog dialogs still contain product headings, format and scale labels, actions, help, loading, and empty states.",
+        "Export values and changelog entry bodies are content or data and must remain separate from stable dialog framing."
+      ],
+      "scope_in": [
+        "Migrate export headings, format and scale controls, share guidance, actions, success and error framing, changelog headings, loading and empty states, and accessibility attributes.",
+        "Use named placeholders for formats, scales, dimensions, file names, versions, and export results.",
+        "Keep diagram output, file names, configured format identifiers, generated links, version numbers, and changelog entry bodies as data.",
+        "Add dialog tests for representative export and changelog states."
+      ],
+      "scope_out": [
+        "Translation of exported diagram content or changelog entry bodies.",
+        "Changes to export or sharing behavior."
+      ],
+      "acceptance_criteria": [
+        "AC1: Export and changelog product chrome is fully catalog-driven.",
+        "AC2: Dynamic summaries use named placeholders.",
+        "AC3: Exported and versioned content remains unchanged across locales.",
+        "AC4: Dialog UI and accessibility tests pass in all locales."
+      ]
+    },
+    {
+      "title": "Enforce catalog coverage and close the editor migration",
+      "priority": "High",
+      "complexity": "Low",
+      "theme": "Internationalization contract adoption",
+      "request_acs": ["AC1", "AC2", "AC3", "AC4", "AC5"],
+      "problem": [
+        "Conditional warnings, error branches, placeholders, titles, and accessibility attributes can escape manual review.",
+        "Without a guard, future editor changes can bypass semantic localization."
+      ],
+      "scope_in": [
+        "Run a final inventory across source branches, attributes, notifications, dialogs, and helpers and classify every candidate.",
+        "Add a static guard with a narrow reviewed allowlist for tests, authored/generated content, provider data, technical literals, and credentials handling.",
+        "Validate semantic naming, catalog parity, placeholder parity, unused-key policy, and content-boundary fixtures.",
+        "Run contract validation and the complete repository test, type-check, and build matrix and record closure evidence."
+      ],
+      "scope_out": [
+        "Unrelated refactoring or dependency changes.",
+        "Translation-platform integration."
+      ],
+      "acceptance_criteria": [
+        "AC1: The final inventory has no unclassified product-owned copy.",
+        "AC2: A failing fixture proves the guard rejects newly hardcoded product copy.",
+        "AC3: Catalog, placeholder, and content-boundary checks pass.",
+        "AC4: Full validation passes and closure evidence is recorded in Logics."
+      ]
+    }
+  ],
+  "orchestration_task": {
+    "title": "Orchestrate completion of editor localization",
+    "plan": [
+      "Baseline remaining strings and classify stable product copy versus authored, generated, configured, sensitive, and versioned data.",
+      "Migrate the core editor and preview first so the most frequent workflow establishes shared actions and status vocabulary.",
+      "Migrate settings with explicit credential-safety and provider-data tests.",
+      "Migrate export and changelog dialogs while preserving output and entry content.",
+      "Run the final inventory, enable the hardcoded-copy guard, and execute contract and repository validation.",
+      "Update all Logics documents and close the request only with catalog coverage, secret-safety, and content-boundary evidence."
+    ]
+  },
+  "context_pack": {
+    "out": "logics/context-packs/complete-editor-i18n-adoption.json",
+    "mode": "summary-only",
+    "profile": "normal"
+  }
+}
