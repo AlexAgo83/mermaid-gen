@@ -2,10 +2,10 @@
 
 > From version: 0.4.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Productivity
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -89,6 +89,8 @@ flowchart LR
 - Urgency: Medium
 
 # Notes
+
+- Task `task_009_orchestrate_workspace_productivity_wave_for_templates_improvement_and_history` was finished via `logics-manager flow finish task` on 2026-09-09.
 
 - Derived from request `req_023_improve_workspace_productivity_with_guided_templates_diagram_improvement_and_local_history`.
 - This split isolates the safety-net and retention slice from the activation and diagram-improvement work.

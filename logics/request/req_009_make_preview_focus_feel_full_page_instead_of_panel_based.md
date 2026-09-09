@@ -2,7 +2,7 @@
 
 > From version: 0.1.0+focus-docs
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
 > Complexity: Medium
