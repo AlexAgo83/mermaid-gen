@@ -1,19 +1,16 @@
 {
   "budgets": {
-    "max_docs": 24,
-    "max_docs_per_ref": 4
+    "max_docs": 48,
+    "max_docs_per_ref": 8
   },
   "changed_paths": [],
-  "command": "logics-manager sync context-pack req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs item_060_migrate_editor_prompt_preview_and_accessibility_chrome item_061_migrate_settings_and_provider_control_product_copy item_062_migrate_export_and_changelog_dialog_chrome item_063_enforce_catalog_coverage_and_close_the_editor_migration task_011_orchestrate_completion_of_editor_localization --mode summary-only --profile normal --handoff",
+  "command": "logics-manager sync context-pack req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs item_060_migrate_editor_prompt_preview_and_accessibility_chrome item_061_migrate_settings_and_provider_control_product_copy item_062_migrate_export_and_changelog_dialog_chrome item_063_enforce_catalog_coverage_and_close_the_editor_migration task_011_orchestrate_completion_of_editor_localization --mode summary-only --profile deep --handoff",
   "companion_docs": [
     {
       "kind": "product",
       "linked_refs": {
         "item": [
-          "item_060_migrate_editor_prompt_preview_and_accessibility_chrome",
-          "item_061_migrate_settings_and_provider_control_product_copy",
-          "item_062_migrate_export_and_changelog_dialog_chrome",
-          "item_063_enforce_catalog_coverage_and_close_the_editor_migration"
+          "item_060_migrate_editor_prompt_preview_and_accessibility_chrome"
         ],
         "prod": ["prod_001_complete_localized_diagram_editing_experience"],
         "req": [
@@ -23,7 +20,7 @@
       },
       "path": "logics/product/prod_001_complete_localized_diagram_editing_experience.md",
       "ref": "prod_001_complete_localized_diagram_editing_experience",
-      "status": "Proposed",
+      "status": "Settled",
       "title": "Complete localized diagram editing experience"
     }
   ],
@@ -34,6 +31,11 @@
         "skip when": "The change is unrelated to this scaffolded request chain.",
         "summary": "Complete semantic i18n adoption across editor and supporting dialogs",
         "use when": "You need to implement or review the scaffolded workflow for Complete semantic i18n adoption across editor and supporting dialogs."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
       },
       "kind": "request",
       "linked_refs": {
@@ -51,7 +53,7 @@
       "path": "logics/request/req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs.md",
       "ref": "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs",
       "schema_version": "1.0",
-      "status": "Draft",
+      "status": "Done",
       "title": "Complete semantic i18n adoption across editor and supporting dialogs"
     },
     {
@@ -60,6 +62,11 @@
         "skip when": "The change belongs to another backlog slice.",
         "summary": "Migrate editor, prompt, preview, and accessibility chrome",
         "use when": "Implementing the scaffolded slice for Migrate editor, prompt, preview, and accessibility chrome."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
       },
       "kind": "backlog",
       "linked_refs": {
@@ -75,7 +82,7 @@
       "path": "logics/backlog/item_060_migrate_editor_prompt_preview_and_accessibility_chrome.md",
       "ref": "item_060_migrate_editor_prompt_preview_and_accessibility_chrome",
       "schema_version": "1.0",
-      "status": "Ready",
+      "status": "Done",
       "title": "Migrate editor, prompt, preview, and accessibility chrome"
     },
     {
@@ -84,6 +91,11 @@
         "skip when": "The change belongs to another backlog slice.",
         "summary": "Migrate settings and provider-control product copy",
         "use when": "Implementing the scaffolded slice for Migrate settings and provider-control product copy."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
       },
       "kind": "backlog",
       "linked_refs": {
@@ -97,7 +109,7 @@
       "path": "logics/backlog/item_061_migrate_settings_and_provider_control_product_copy.md",
       "ref": "item_061_migrate_settings_and_provider_control_product_copy",
       "schema_version": "1.0",
-      "status": "Ready",
+      "status": "Done",
       "title": "Migrate settings and provider-control product copy"
     },
     {
@@ -106,6 +118,11 @@
         "skip when": "The change belongs to another backlog slice.",
         "summary": "Migrate export and changelog dialog chrome",
         "use when": "Implementing the scaffolded slice for Migrate export and changelog dialog chrome."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
       },
       "kind": "backlog",
       "linked_refs": {
@@ -119,8 +136,61 @@
       "path": "logics/backlog/item_062_migrate_export_and_changelog_dialog_chrome.md",
       "ref": "item_062_migrate_export_and_changelog_dialog_chrome",
       "schema_version": "1.0",
-      "status": "Ready",
+      "status": "Done",
       "title": "Migrate export and changelog dialog chrome"
+    },
+    {
+      "ai_context": {
+        "keywords": "scaffolded-backlog, enforce catalog coverage and close the editor migration, implementation-ready",
+        "skip when": "The change belongs to another backlog slice.",
+        "summary": "Enforce catalog coverage and close the editor migration",
+        "use when": "Implementing the scaffolded slice for Enforce catalog coverage and close the editor migration."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_063_enforce_catalog_coverage_and_close_the_editor_migration"
+        ],
+        "prod": ["prod_001_complete_localized_diagram_editing_experience"],
+        "req": [
+          "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs"
+        ],
+        "task": ["task_011_orchestrate_completion_of_editor_localization"]
+      },
+      "path": "logics/backlog/item_063_enforce_catalog_coverage_and_close_the_editor_migration.md",
+      "ref": "item_063_enforce_catalog_coverage_and_close_the_editor_migration",
+      "schema_version": "1.0",
+      "status": "Done",
+      "title": "Enforce catalog coverage and close the editor migration"
+    },
+    {
+      "ai_context": {},
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
+      },
+      "kind": "product",
+      "linked_refs": {
+        "item": [
+          "item_060_migrate_editor_prompt_preview_and_accessibility_chrome"
+        ],
+        "prod": ["prod_001_complete_localized_diagram_editing_experience"],
+        "req": [
+          "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs"
+        ],
+        "task": ["task_011_orchestrate_completion_of_editor_localization"]
+      },
+      "path": "logics/product/prod_001_complete_localized_diagram_editing_experience.md",
+      "ref": "prod_001_complete_localized_diagram_editing_experience",
+      "schema_version": "1.0",
+      "status": "Settled",
+      "title": "Complete localized diagram editing experience"
     },
     {
       "ai_context": {
@@ -128,6 +198,11 @@
         "skip when": "Working on one isolated sibling slice.",
         "summary": "Orchestrate completion of editor localization",
         "use when": "Coordinating implementation of a scaffolded request chain."
+      },
+      "execution_table": "",
+      "executions": {
+        "older_count": 0,
+        "rows": []
       },
       "kind": "task",
       "linked_refs": {
@@ -146,40 +221,16 @@
       "path": "logics/tasks/task_011_orchestrate_completion_of_editor_localization.md",
       "ref": "task_011_orchestrate_completion_of_editor_localization",
       "schema_version": "1.0",
-      "status": "Ready",
+      "status": "Done",
       "title": "Orchestrate completion of editor localization"
-    },
-    {
-      "ai_context": {
-        "keywords": "scaffolded-backlog, enforce catalog coverage and close the editor migration, implementation-ready",
-        "skip when": "The change belongs to another backlog slice.",
-        "summary": "Enforce catalog coverage and close the editor migration",
-        "use when": "Implementing the scaffolded slice for Enforce catalog coverage and close the editor migration."
-      },
-      "kind": "backlog",
-      "linked_refs": {
-        "item": [
-          "item_063_enforce_catalog_coverage_and_close_the_editor_migration"
-        ],
-        "prod": ["prod_001_complete_localized_diagram_editing_experience"],
-        "req": [
-          "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs"
-        ],
-        "task": ["task_011_orchestrate_completion_of_editor_localization"]
-      },
-      "path": "logics/backlog/item_063_enforce_catalog_coverage_and_close_the_editor_migration.md",
-      "ref": "item_063_enforce_catalog_coverage_and_close_the_editor_migration",
-      "schema_version": "1.0",
-      "status": "Ready",
-      "title": "Enforce catalog coverage and close the editor migration"
     }
   ],
   "estimates": {
-    "char_count": 6856,
+    "char_count": 7755,
     "companion_doc_count": 1,
-    "doc_count": 6
+    "doc_count": 7
   },
-  "generated_at": "2026-07-13T10:14:19Z",
+  "generated_at": "2026-11-12T11:35:23Z",
   "handoff": {
     "companion_doc_count": 1,
     "enabled": true,
@@ -193,8 +244,34 @@
     ],
     "validation_summary_count": 1
   },
+  "i18n": {
+    "actions": [
+      "Keep catalogs valid with logics-manager i18n validate in the project quality gate."
+    ],
+    "applicable": true,
+    "catalogs": {
+      "en": 112
+    },
+    "configured": true,
+    "contract": {
+      "applicability": "applicable",
+      "catalog": {
+        "path": "src/i18n/{locale}.json"
+      },
+      "default_locale": "en",
+      "fallback_locale": "en",
+      "locales": ["en"],
+      "schema_version": "1.0",
+      "source_locale": "en"
+    },
+    "contract_path": "logics/i18n/contract.json",
+    "findings": [],
+    "next_action": "The i18n contract is valid.",
+    "ok": true,
+    "state": "valid"
+  },
   "mode": "summary-only",
-  "profile": "normal",
+  "profile": "deep",
   "ref": "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs,item_060_migrate_editor_prompt_preview_and_accessibility_chrome,item_061_migrate_settings_and_provider_control_product_copy,item_062_migrate_export_and_changelog_dialog_chrome,item_063_enforce_catalog_coverage_and_close_the_editor_migration,task_011_orchestrate_completion_of_editor_localization",
   "refs": [
     "req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs",
@@ -225,13 +302,21 @@
       "logics-manager release validate <version>"
     ],
     "state": "not_configured",
-    "target_version": null
+    "target_id": null,
+    "target_version": null,
+    "targets": []
   },
   "validation_summary": [
     {
       "items": [
-        "- Run `python3 -m logics_manager lint --require-status`.",
-        "- Run scaffold command tests."
+        "- ci:local and i18n contract validation passed; targeted flow validation found zero findings",
+        "- Finish workflow executed on 2026-07-13.",
+        "- Linked backlog/request close verification passed.",
+        "- `npm run ci:local` passed: ESLint, copy guard, TypeScript, 48 tests, production build, and PWA validation.",
+        "- The local Logics Manager source checkout reported `i18n: valid` without modifying the global installation.",
+        "- `logics-manager flow validate task_011_orchestrate_completion_of_editor_localization --fixable --explain` returned zero findings before closeout.",
+        "- Post-push CI exposed a WebKit-only contrast violation on a focused header tooltip behind the settings modal; hiding background tooltips while a modal is active makes the targeted WebKit accessibility E2E pass.",
+        "- The global audit still reports historical stale/closure findings in unrelated workflow chains; this task introduces no targeted audit finding."
       ],
       "path": "logics/tasks/task_011_orchestrate_completion_of_editor_localization.md",
       "ref": "task_011_orchestrate_completion_of_editor_localization"
