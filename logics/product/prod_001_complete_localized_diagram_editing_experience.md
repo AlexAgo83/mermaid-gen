@@ -1,7 +1,7 @@
 ## prod_001_complete_localized_diagram_editing_experience - Complete localized diagram editing experience
 
 > Date: 2026-07-13
-> Status: Proposed
+> Status: Settled
 > Related request: `req_025_complete_semantic_i18n_adoption_across_editor_and_supporting_dialogs`
 > Related backlog: `item_060_migrate_editor_prompt_preview_and_accessibility_chrome`
 > Related task: `task_011_orchestrate_completion_of_editor_localization`
@@ -53,6 +53,13 @@ flowchart LR
 - Locale and placeholder parity pass without sentence-shaped keys.
 - Boundary fixtures preserve authored/generated content and never expose credentials.
 - Contract checks, repository tests, type checks, and production build pass.
+
+# Closure decision
+
+Operator cleanup 2026-11-12: settled as delivered by commit `57550cc`.
+The editor, preview, settings, export, and changelog chrome use the semantic
+catalog. `scripts/quality/check-i18n-copy.mjs` and `src/tests/i18n.spec.ts`
+cover product copy and runtime-data boundaries. No further work is planned.
 
 # References
 
